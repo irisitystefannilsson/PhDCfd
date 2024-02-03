@@ -1,0 +1,8 @@
+object "default" class camera type orthographic
+ from       1.63671      0.582461       3.98442
+ to               0             0             0
+ up      -0.0270828      0.990653     -0.133693
+ resolution 464  width 1.11239  aspect 0.798491
+ color 0 0 0
+#
+end
