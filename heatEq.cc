@@ -17,6 +17,8 @@
 // declarations for gridFunctions
 // and their methods
 #include "GridFunc.hh"
+#include "P++.h"
+#include "partitioning.h"
 
 // This is necessary because Aztec defines
 // min|max macros
@@ -78,7 +80,6 @@ main(int argc, char** argv)
   //
   // Kimera is a composite grid built from P++ arrays
   //
-
   // It can be read from an ASCII file...
   // ...or from an HDF5-file
   char filename[100];

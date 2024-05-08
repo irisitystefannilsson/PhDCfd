@@ -14,8 +14,8 @@ LDFLAGS = $(LDFLAGS_$(ARCH))
 # points to the directory above the lib/include directories
 PPP_INCLUDE = -I$(HOME)/A++-P++/P++/install/include
 PPPLIB_DIR = $(HOME)/A++-P++/P++/install/lib
-PPP_INCLUDE_G = -I$(HOME)/A++-P++-Debug/P++/install/include
-PPPLIB_DIR_G = $(HOME)/A++-P++-Debug/P++/install/lib
+PPP_INCLUDE_G = -I$(HOME)/A++-P++-0.8.3-Debug/P++/install/include
+PPPLIB_DIR_G = $(HOME)/A++-P++-0.8.3-Debug/P++/install/lib
 
 AZTEC_INCLUDE = -I$(HOME)/Aztec/lib
 AZTEC_LIB = $(HOME)/Aztec/lib
@@ -34,9 +34,9 @@ LIBS_LINUX_G = -L$(PPPLIB_DIR_G) -L$(AZTEC_LIB) \
 	  -L$(HDF5_LIB) -lhdf5_openmpi -lpthread /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0 -lm -lmpi -lmpi_cxx /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0
 # INCLUDE SEARCH PATH GIVEN BELOW
 
-INCLUDES= $(PPP_INCLUDE) $(AZTEC_INCLUDE) $(HDF5_INCLUDE) -I/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/include -I/usr/lib/x86_64-linux-gnu/openmpi/include/
+INCLUDES= $(PPP_INCLUDE_G) $(AZTEC_INCLUDE) $(HDF5_INCLUDE) -I/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/include -I/usr/lib/x86_64-linux-gnu/openmpi/include/
 
-CPPFLAGS_LINUX = ${INCLUDES} -DHAVE_CONFIG_H -I. -DHAVE_CONFIG_H -I. -DAZ_MPI
+CPPFLAGS_LINUX = ${INCLUDES} -DHAVE_CONFIG_H -I. -DHAVE_CONFIG_H -I. -DAZ_MPI -fpermissive -std=c++1z
 CFLAGS_LINUX = -DHAVE_CONFIG_H -I. -DAZ_MPI
 
 CPPFLAGS = $(CPPFLAGS_$(ARCH)) -D$(ARCH)
@@ -78,7 +78,7 @@ my_auxiliary_routines_g.o: my_auxiliary_routines.cc my_auxiliary_routines.hh
 	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} my_auxiliary_routines.cc
 ins_sharp_g.o: ins_sharp.cc ins_sharp.hh
 	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} ins_sharp.cc
-heatEq_g.o: heatEq.cc
+heatEq_g.o: heatEq.cc ins_sharp.hh
 	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} heatEq.cc
 ins_g.o: ins.cc my_auxiliary_routines.hh
 	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} ins.cc

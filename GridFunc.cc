@@ -1258,22 +1258,22 @@ void gridFunction::dirichlet(int i, int k)
   //cout << "hi_s = " << hi_s << endl;
   if (i == 0) // low r 
     {
-      where (myGridM->flagValuesM[k](low_r, iyb) > 0)
+      //where (myGridM->flagValuesM[k](low_r, iyb) > 0)
         fieldValuesM[k](low_r, iyb) = boundaryValue((myGridM->xM[k])(low_r, iyb), (myGridM->yM[k])(low_r, iyb), timeM, k, i);  
     }
   else if (i == 1) // high r
     {
-      where (myGridM->flagValuesM[k](hi_r, iyb) > 0)
+      //where (myGridM->flagValuesM[k](hi_r, iyb) > 0)
         fieldValuesM[k](hi_r, iyb) = boundaryValue((myGridM->xM[k])(hi_r, iyb), (myGridM->yM[k])(hi_r, iyb), timeM, k, i);
     }
   else if (i == 2) // low s
     {
-      where (myGridM->flagValuesM[k](ixb, low_s) > 0)
+      //where (myGridM->flagValuesM[k](ixb, low_s) > 0)
         fieldValuesM[k](ixb, low_s) = boundaryValue((myGridM->xM[k])(ixb, low_s), (myGridM->yM[k])(ixb, low_s), timeM, k, i);
     }
   else if (i == 3) // high s
     {
-      where (myGridM->flagValuesM[k](ixb, hi_s) > 0)
+      //where (myGridM->flagValuesM[k](ixb, hi_s) > 0)
         fieldValuesM[k](ixb, hi_s) = boundaryValue((myGridM->xM[k])(ixb, hi_s), (myGridM->yM[k])(ixb, hi_s), timeM, k, i);
     }
 }
@@ -1287,22 +1287,22 @@ void gridFunction::dirichlet(int i, int k, gridFunction & F)
 
   if (i==0) // low r 
     {
-      where (myGridM->flagValuesM[k](low_r,iyb) > 0) 
+      //where (myGridM->flagValuesM[k](low_r,iyb) > 0) 
         F.fieldValuesM[k](low_r,iyb) = boundaryValue((myGridM->xM[k])(low_r,iyb), (myGridM->yM[k])(low_r,iyb), timeM, k, i);  
     }
   else if (i==1) // high r
     {
-      where (myGridM->flagValuesM[k](hi_r,iyb) > 0)
+      //where (myGridM->flagValuesM[k](hi_r,iyb) > 0)
         F.fieldValuesM[k](hi_r,iyb) = boundaryValue((myGridM->xM[k])(hi_r,iyb), (myGridM->yM[k])(hi_r,iyb), timeM, k, i) * myGridM->maskM[k](hi_r,iyb);
     }
   else if (i==2) // low s
     {
-      where (myGridM->flagValuesM[k](ixb,low_s) > 0)
+      //where (myGridM->flagValuesM[k](ixb,low_s) > 0)
         F.fieldValuesM[k](ixb,low_s) = boundaryValue((myGridM->xM[k])(ixb,low_s), (myGridM->yM[k])(ixb,low_s), timeM, k, i);
     }
   else if (i==3) // high s
     {
-      where (myGridM->flagValuesM[k](ixb,hi_s) > 0)
+      //where (myGridM->flagValuesM[k](ixb,hi_s) > 0)
         F.fieldValuesM[k](ixb,hi_s) = boundaryValue((myGridM->xM[k])(ixb,hi_s), (myGridM->yM[k])(ixb,hi_s), timeM, k, i);
     }
 }
@@ -2990,14 +2990,12 @@ double gridFunction::l_h()
   return totSum;
 }
 
-doubleArray
-GridFunction::zero(const doubleArray & x, 
-     const doubleArray & y, 
-     const double t, 
-     int grid, 
-     int side)
+doubleArray GridFunction::zero(const doubleArray& x, 
+			       const doubleArray& y, 
+			       const double t, 
+			       int grid, 
+			       int side)
 {
   doubleArray retA = sin(x*0);
-  
   return retA;
 }

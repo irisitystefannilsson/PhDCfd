@@ -237,8 +237,9 @@ namespace ins
       {
         if (t <= 1.)
           {
-            doubleArray retA = 
-              30*(pow(t,5.)/5. + pow(t,3.)/3. - pow(t,4.)/2) *cos(y*0);
+            doubleArray retA(y);
+	    retA = 
+              30*(pow(t,5.)/5. + pow(t,3.)/3. - pow(t,4.)/2)*cos(y*0);
             return retA;
           }
         else if (t > 1. && t <= 1 + pertTime)

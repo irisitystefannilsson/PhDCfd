@@ -3,7 +3,10 @@
 
 #define COMPGRID_H
 
+#include <vector>
 #include "A++.h"
+
+using std::vector;
 
 enum FileType
 {
