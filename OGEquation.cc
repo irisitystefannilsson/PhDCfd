@@ -14,7 +14,7 @@ DMSRMatrix::DMSRMatrix()
 }
 
 DMSRMatrix::~DMSRMatrix()
-{/*
+{
   if (matTypeM == Aztec)
     {
       delete []aM;
@@ -31,7 +31,6 @@ DMSRMatrix::~DMSRMatrix()
       delete []petscStartIndexM;
     }
   delete []rowScalingM;
- */
 }
 
 

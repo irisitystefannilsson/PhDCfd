@@ -1302,45 +1302,23 @@ CompositeGrid::CompositeGrid(int dim1, int dim2, Partitioning_Type gridDistribut
 
 CompositeGrid::~CompositeGrid()
 {
-  /*
-  cout << "0 " << ddM << " \n";
-
-  cout << "1 " << yM << " \n";
-  yM[0].display();
-  delete []yM;
-  cout << "2 " << xM << " \n";
   delete []xM;
-  cout << "3\n";
+  delete []yM;
   delete []flagValuesM;
-  cout << "4\n";
   delete []maskM;
-  cout << "5\n";
   delete []xrM;
-  cout << "6\n";
   delete []xsM;
-  cout << "7\n";
   delete []yrM;
-  cout << "8\n";
   delete []ysM;
-  cout << "9\n";
   delete []xrrM;
-  cout << "10\n";
   delete []xssM;
-  cout << "11\n";
   delete []yrrM;
-  cout << "12\n";
   delete []yssM;
-  cout << "13\n";
   delete []sqrtOfGM;
-  cout << "14\n";
   delete []myIntPointsM;
-  cout << "15\n";
   delete []r_stepM;
-  cout << "16\n";
   delete []s_stepM;
-  cout << "17\n";
   delete []bcsM;
-  cout << "18\n";
   if (fromFileM)
   {
     delete []receiveTypeM;
@@ -1352,7 +1330,6 @@ CompositeGrid::~CompositeGrid()
     delete []interpolationCoordinatesM;
   }
   delete[] ddM;
-  */
 }
 
 void CompositeGrid::setBoundaryType()
