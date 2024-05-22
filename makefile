@@ -12,8 +12,8 @@ LDFLAGS = $(LDFLAGS_$(ARCH))
 
 # PPlusPlus is an environment variable that
 # points to the directory above the lib/include directories
-PPP_INCLUDE = -I$(HOME)/A++-P++/P++/install/include
-PPPLIB_DIR = $(HOME)/A++-P++/P++/install/lib
+PPP_INCLUDE = -I$(HOME)/A++-P++-0.8.3/P++/install/include
+PPPLIB_DIR = $(HOME)/A++-P++-0.8.3/P++/install/lib
 PPP_INCLUDE_G = -I$(HOME)/A++-P++-0.8.3-Debug/P++/install/include
 PPPLIB_DIR_G = $(HOME)/A++-P++-0.8.3-Debug/P++/install/lib
 
@@ -36,7 +36,7 @@ LIBS_LINUX_G = -L$(PPPLIB_DIR_G) -L$(AZTEC_LIB) \
 
 INCLUDES= $(PPP_INCLUDE_G) $(AZTEC_INCLUDE) $(HDF5_INCLUDE) -I/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/include -I/usr/lib/x86_64-linux-gnu/openmpi/include/
 
-CPPFLAGS_LINUX = ${INCLUDES} -DHAVE_CONFIG_H -I. -DHAVE_CONFIG_H -I. -DAZ_MPI -fpermissive -std=c++1z
+CPPFLAGS_LINUX = ${INCLUDES} -DHAVE_CONFIG_H -I. -DHAVE_CONFIG_H -I. -DAZ_MPI -fpermissive -std=c++17
 CFLAGS_LINUX = -DHAVE_CONFIG_H -I. -DAZ_MPI
 
 CPPFLAGS = $(CPPFLAGS_$(ARCH)) -D$(ARCH)
@@ -105,3 +105,6 @@ heatEq: heatEq.o $(objs)
 
 heatEq_g: heatEq_g.o $(objs_g)
 	${CLINKER} -o $@ $(LDFLAGS) heatEq_g.o $(objs_g) $(LIBRARIES_G)
+
+clean:
+	rm *.o heatEq heatEq_g ins ins_g ins_sharp ins_sharp_g

@@ -82,6 +82,8 @@ private :
 
   Partitioning_Type *ddM;
 
+  bool fromFileM;
+
   void getLocalInterp(int *nr_int_point, intSerialArray *i_point, 
                       intSerialArray *j_point, intSerialArray *i_loc, 
                       intSerialArray *j_loc, intSerialArray *gridLoc, 

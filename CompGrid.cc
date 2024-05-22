@@ -14,6 +14,7 @@ using std::vector;
 CompositeGrid::CompositeGrid(std::string xcogFileName, 
                              Partitioning_Type gridDistribution[])
 {
+  fromFileM = true;
   int *nr_int_point = 0x0, nrProcs, lineSkip, dim1, dim2;
   intSerialArray *i_point = 0x0, *j_point = 0x0, *i_loc = 0x0, *j_loc = 0x0, *gridLoc = 0x0;
   doubleSerialArray *r_loc = 0x0, *s_loc = 0x0;
@@ -1176,6 +1177,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 
 CompositeGrid::CompositeGrid(int dim1, int dim2, Partitioning_Type gridDistribution[])
 {
+  fromFileM = false;
   int *nr_int_point;
   
   boundaryWidthM = 2;
@@ -1300,30 +1302,57 @@ CompositeGrid::CompositeGrid(int dim1, int dim2, Partitioning_Type gridDistribut
 
 CompositeGrid::~CompositeGrid()
 {
-  delete []ddM;
+  /*
+  cout << "0 " << ddM << " \n";
+
+  cout << "1 " << yM << " \n";
+  yM[0].display();
   delete []yM;
+  cout << "2 " << xM << " \n";
+  delete []xM;
+  cout << "3\n";
   delete []flagValuesM;
+  cout << "4\n";
   delete []maskM;
+  cout << "5\n";
   delete []xrM;
+  cout << "6\n";
   delete []xsM;
+  cout << "7\n";
   delete []yrM;
+  cout << "8\n";
   delete []ysM;
+  cout << "9\n";
   delete []xrrM;
+  cout << "10\n";
   delete []xssM;
+  cout << "11\n";
   delete []yrrM;
+  cout << "12\n";
   delete []yssM;
+  cout << "13\n";
   delete []sqrtOfGM;
-  delete []receiveTypeM;
-  delete []sendTypeM;
+  cout << "14\n";
   delete []myIntPointsM;
-  delete []My_i_LM;
-  delete []My_j_LM;
-  delete []intInterpolationLocationM;
-  delete []doubleInterpolationLocationM;
-  delete []interpolationCoordinatesM;
+  cout << "15\n";
   delete []r_stepM;
+  cout << "16\n";
   delete []s_stepM;
+  cout << "17\n";
   delete []bcsM;
+  cout << "18\n";
+  if (fromFileM)
+  {
+    delete []receiveTypeM;
+    delete []sendTypeM;
+    delete []My_i_LM;
+    delete []My_j_LM;
+    delete []intInterpolationLocationM;
+    delete []doubleInterpolationLocationM;
+    delete []interpolationCoordinatesM;
+  }
+  delete[] ddM;
+  */
 }
 
 void CompositeGrid::setBoundaryType()

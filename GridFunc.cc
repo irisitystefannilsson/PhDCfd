@@ -596,7 +596,6 @@ void gridFunction::saveToHDF5File(const char *fileName, const char *varName)
       H5Eset_auto(error_stack, NULL, NULL);
 
       dataset1 = H5Dopen(group_id, varName, H5P_DEFAULT);      
-
       //----------------------------------------
       // Restore previous error handler 
       //----------------------------------------
