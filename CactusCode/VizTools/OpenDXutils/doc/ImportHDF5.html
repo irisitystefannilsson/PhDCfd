@@ -1,0 +1,405 @@
+<HTML>
+<HEAD>
+  <TITLE>User's Reference - ImportHDF5</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF">
+<H3>ImportHDF5</H3>
+<P><STRONG>Category</STRONG><P>
+Import and Export
+
+<P><STRONG>Function</STRONG><P>
+Imports datasets from an external HDF5 data file.
+
+<P><STRONG>Syntax</STRONG>
+<PRE>
+<STRONG>result, max_index</STRONG> = ImportHDF5 (<STRONG>filename, origin, thickness, stride, index,
+                                reopen, single_precision, user, password,
+                                subject, num_streams, vectorimport</STRONG>);
+</PRE>
+
+<P><STRONG>Inputs</STRONG>
+<BR>
+<TABLE BORDER>
+<TR>
+<TH ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">Name
+</TH><TH ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">Type
+</TH><TH ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">Default
+</TH><TH ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">Description
+</TH></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>filename</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">string
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">(none)
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">filename or URL of the HDF5 file to import datasets from
+</TD></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>origin</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">integer list or vector
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">NULL
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">lower-left corner grid point of the slab to read
+</TD></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>thickness</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">integer list or vector
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">NULL
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">thickness in grid points of the slab to read
+</TD></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>stride</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">integer list or vector
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">NULL
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">include every &lt;stride&gt;-th grid point in the slab to read
+</TD></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>index</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">integer or string
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">0
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">index or name of the dataset to import
+</TD></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>reopen</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">flag
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">0
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">reopen file on each execution
+</TD></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>single_precision</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">flag
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">1
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">import double precision floating-point datasets as single precision
+</TD></TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>user</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">string
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">(none)
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">user name for standard Ftp authentification during remote file access
+</TD></TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>password</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">string
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">(none)
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">password for standard Ftp authentification during remote file access
+</TD></TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>subject</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">string
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">(none)
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">subject name for GSI authentification during remote file access
+</TD></TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>num_streams</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">integer
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">1
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">number of parallel streams to use during remote file access
+</TD></TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%"><TT><STRONG>vectorimport</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">flag
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="20%">0
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="40%">import the dataset as a vector array
+</TD></TR>
+</TABLE>
+
+<P><STRONG>Outputs</STRONG>
+<BR>
+<TABLE BORDER>
+<TR>
+<TH ALIGN="LEFT" VALIGN="TOP" WIDTH="25%">Name
+</TH><TH ALIGN="LEFT" VALIGN="TOP" WIDTH="25%">Type
+</TH><TH ALIGN="LEFT" VALIGN="TOP" WIDTH="50%">Description
+</TH></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="25%"><TT><STRONG>result</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="25%">field
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="50%">the dataset imported as a field with regular positions and connections
+</TD></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="25%"><TT><STRONG>max_index</STRONG></TT>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="25%">integer
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="50%">largest possible dataset index
+</TD></TR>
+</TABLE>
+
+<P><STRONG>Functional Details</STRONG><P>
+The module imports data from a single dataset of an HDF5 datafile and
+provides it as a field with a position-dependent data component described
+on a regular grid.
+<P>
+
+The imported data can comprise the full N-dimensional dataset in the file
+or just a slab of it. A slab is an orthogonal subregion within the full dataset,
+potentially with less than N dimensions, and defined by its <TT>origin</TT>,
+<TT>thickness</TT>, and <TT>stride</TT> parameters. If the <TT>vectorimport</TT>
+flag is set, the last dimension of the dataset is treated as a vector index, and
+the dataset is imported as (N-1)-dimensional array (or less, if a slab is
+selected), with each element being a vector.
+<P>
+
+There might be several datasets in an HDF5 datafile which are identfied by
+a unique index starting from 0. The ImportHDF5 module imports data from one
+dataset at a time, selected by its index or name.
+<P>
+
+The datafile can be either an HDF5 file on a local filesystem or a remote HDF5
+file streamed via a live socket connection or provided by a remote GridFtp
+server.
+Each HDF5 datafile must satisfy the following conditions:
+
+<OL> 
+
+<LI>there must exist at least one dataset in the file
+<P>
+
+<LI>datasets must contain either integer or floating-point data (ie. the data
+class of the datasets' data type must be <TT>H5T_INTEGER</TT>, <TT>H5T_FLOAT</TT>, or <TT>H5T_COMPOUND</TT> with two <TT>H5T_FLOAT</TT> membertypes to represent
+complex data)
+<P>
+Since OpenDX fields require their data component to be either <TT>TYPE_INT</TT>,
+<TT>TYPE_FLOAT</TT>, or <TT>TYPE_DOUBLE</TT>, the ImportHDF5 module silently
+ignores any other types of datasets found within the HDF5 datafile.
+<P>
+Depending on a dataset's floating-point precision the data component in the
+created OpenDX field will have a data type of either <TT>float</TT> (for
+single-precision data) or <TT>double</TT> (for double-precision data).
+Double-precision data can also be converted on-the-fly into single precision
+data during the import.
+<P>
+
+<LI>a dataset should have attached to it two attributes named <TT>origin</TT>
+and <TT>delta</TT>
+<P>
+The <TT>origin</TT> and <TT>delta</TT> attributes must be vectors of <TT>N</TT>
+floating-point numbers where <TT>N</TT> denotes the number of dimensions of the
+dataset. Their values should describe the dataset's underlying sample space
+as a regular grid.
+<P>
+The ImportHDF5 module uses the attributes's values as <TT>N</TT>-dimensional
+regular arrays in order to construct the positions and bounding box components
+for the imported field.
+If a dataset has no <TT>origin</TT> or <TT>delta</TT> attribute, the module
+will use a vector with default values of <TT>N</TT> zeros or <TT>N</TT> ones
+repectively.
+<P>
+<B>Note:</B>
+The connections component for the imported field will be constructed from
+the actual dimensions of the selected slab to read (not from the dataset's
+dimensions). If a slab was selected with a thickness of 1 in a given dimension
+the connections between points in that dimension will be eliminated (thus
+effectively decreasing the connection component's dimensions and changing the
+imported field's connections type accordingly).
+</OL>	 
+
+For efficiency reasons, the ImportHDF5 module will keep the HDF5 datafile open
+until a new filename was given or a flag was set to reopen the current file
+for the next execution.
+<P>
+When an HDF5 datafile is opened, the module browses through its contents
+in order to build a list of all floating-point datasets available in the file.
+Individual datasets can then be addressed by their index into that list.
+Additionally, if datasets have a <TT>time</TT> attribute attached to them
+(as is usually the case for a time series HDF5 datafile) the list will be
+sorted by their values.
+The value of the largest possible dataset index is available on the
+<TT>max_index</TT> output tab of the module.
+<P>
+
+On each module's execution, the data from a single dataset, as selected either
+by its index or name,
+is read from the HDF5 datafile - either completely as a full dataset or
+as a slab according to the <TT>origin</TT>, <TT>thickness</TT>, and
+<TT>stride</TT> slab parameters as explained below.
+<P>
+
+In addition to the four data, positions, connections, and bounding box
+components, the imported field will also get a copy of all the attributes
+attached to the selected dataset, with the same values, data type, and
+dimensions as their original.
+Additionally, if no <TT>name</TT> attribute existed in the selected dataset
+the ImportHDF5 module will create a string attribute with the name of the
+dataset as found in the HDF5 datafile and also add it to the imported field.
+<P>
+
+<TABLE CELLPADDING="3">
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>filename</STRONG></TT></B></TD>
+<TD><P>
+A required string parameter to specify the name of the HDF5 file to import
+datasets from.
+<P>
+The HDF5 file can be
+<OL>
+<LI>a file on a local file system<P>
+A local file is identified by its filename, optionally prefixed by a pathname.
+If the name contains an absolute path, the file will be loaded from there,
+otherwise the module will start searching for the file in the current working
+directory.
+<P>
+<B>Note:</B> At the moment the DXDATA environment variable is not used, and the
+directories listed there are not searched for the given file.
+</LI>
+<P>
+<LI>a remote HDF5 file streamed via a socket connection
+<P>
+Streamed HDF5 files are identified by <TT>"&lt;host&gt;:&lt;port&gt;"</TT>
+where <TT>host</TT> is the hostname or IP address of the machine to receive the
+streamed HDF5 file from, and <TT>port</TT> is the TCP port to connect to on that
+host.
+<P>
+<B>Note:</B> In order to support data import from streamed HDF5 files, the
+ImportHDF5 module must to be compiled and linked against an HDF5 installation
+which has the Stream Virtual File Driver built in.
+</LI>
+<P>
+<LI>a remote HDF5 file located on a GridFtp server
+<P>
+Remote HDF5 files on a GridFtp server are identified by a URL
+<TT>"{ftp|gsiftp}://&lt;host&gt;&lt;pathname&gt;"</TT> where <TT>host</TT> is
+the hostname or IP address of the GridFtp server, and <TT>pathname</TT> is the
+absolute pathname of the HDF5 file on that server.
+User authentification on the GridFtp server is done according to the prefix
+used in the URL by following the standard Ftp protocol (using a user name and
+clear-text password), or the GSI protocol (using a GSI proxy and subject name)
+respectively.
+<P>
+<B>Note:</B> In order to support HDF5 data import from remote GridFtp servers,
+the ImportHDF5 module must to be compiled and linked against an HDF5
+installation which has the GridFtp Virtual File Driver built in.
+</LI>
+</OL>
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>origin</STRONG></TT></B></TD>
+<TD><P>
+An optional parameter to specify the origin of a slab to read from a requested
+dataset. This parameter must be a list of integers or a vector of integer
+elements, giving the coordinates in grid points of the slab's start positions
+within the dataset. The positions are counted starting at 0 and must be in
+the range <TT>[0, dims<SUB>i</SUB>-1]</TT> where <TT>dims<SUB>i</SUB></TT>
+is the size of the dataset in dimension <TT>i</TT>.
+<P>
+For each dataset dimension, a separate position coordinate can be specified;
+0 is taken as the default coordinate for unspecified dimensions;
+if <STRONG>origin</STRONG> has more elements than the number of dataset
+dimensions, exceeding elements are ignored and a warning message is printed.
+If <STRONG>origin</STRONG> is given as NULL (which is the default value for
+this parameter) then the slab's origin is taken as all zeros (ie. the slab
+starts at the dataset's origin).
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>thickness</STRONG></TT></B></TD>
+<TD><P>
+An optional parameter to specify the thickness of a slab to read from a
+requested dataset. This parameter must be a list of integers or a vector of
+integer elements, giving the slab's size in grid points.
+The values for <STRONG>thickness</STRONG> must be in the range
+<TT>[0, dims<SUB>i</SUB>-origin<SUB>i</SUB>]</TT> where
+<TT>dims<SUB>i</SUB></TT> is the size of the dataset in dimension <TT>i</TT>,
+and <TT>origin<SUB>i</SUB></TT> is the slab's origin in that dimension.
+<P>
+For each dataset dimension, a separate thickness can be specified;
+if <STRONG>thickness</STRONG> has more elements than the number of dataset
+dimensions, exceeding elements are ignored and a warning message is printed.
+For unspecified dimensions, if <TT>thickness<SUB>i</SUB></TT> is given as zero,
+or if <STRONG>thickness</STRONG> is given as NULL (which is the default value
+for this parameter), the slab's thickness defaults to
+<TT>dims<SUB>i</SUB>-origin<SUB>i</SUB></TT>.
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>stride</STRONG></TT></B></TD>
+<TD><P>
+An optional parameter to specify downsampling factors for a slab to read from
+a requested dataset.
+The parameter must be a list of integers or a vector of integer elements,
+giving the number of grid points to move in each dimension to get to the next
+grid point to be included in the slab. The values for <STRONG>stride</STRONG>
+must be &gt;= 1 so that at least one grid point will be included.
+<P>
+For each dataset dimension, a separate stride can be specified;
+1 is taken as the default stride for unspecified dimensions;
+if <STRONG>stride</STRONG> has more elements than the number of dataset
+dimensions, exceeding elements are ignored and a warning message is printed.
+If <STRONG>stride</STRONG> is given as NULL (which is the default value for
+this parameter) then the slab's stride is taken as all ones (ie. the slab
+includes <TT>thickness<SUB>i</SUB></TT> grid points).
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>index</STRONG></TT></B></TD>
+<TD><P>
+A required integer parameter to specify the index of the dataset to import,
+or a string parameter to specify the name of the dataset to import. If
+<STRONG>index</STRONG> is an integer, its value must be in the range <TT>[0, 
+max_index]</TT> where <TT>max_index</TT> is the total number of datasets
+found in the HDF5 file, minus 1. This value is available on the
+<STRONG>max_index</STRONG> output.
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>reopen</STRONG></TT></B></TD>
+<TD><P>
+An optional hidden flag parameter to specify whether the HDF5 file
+as given by <STRONG>filename</STRONG> should be reopened at each module
+execution (disabled by default).
+<P>
+The <STRONG>reopen</STRONG> flag should be set for HDF5 files which contents
+might change during time (as is usually the case for streamed HDF5 files).
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>single_precision</STRONG></TT></B></TD>
+<TD><P>
+An optional hidden flag parameter to specify whether double-precision
+floating-point datasets should be converted into single precision during the
+import (enabled by default).
+<P>
+The <STRONG>single_precision</STRONG> flag must be reset in order to preserve
+the floating-point precision during an import of double-precision datasets.
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>user</STRONG></TT></B></TD>
+<TD><P>
+An optional hidden string parameter to specify the user name for standard Ftp
+authentification during remote file access to a GridFTP server.
+If no user name is specified, <tt>ftp</tt> (for the anonymous user)
+will be used.
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>password</STRONG></TT></B></TD>
+<TD><P>
+An optional hidden string parameter to specify the password for standard Ftp
+authentification during remote file access to a GridFTP server.
+The password must be given in clear text. If no password is specified,
+<tt>anonymous</tt> (for the anonymous user) will be used.
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>subject</STRONG></TT></B></TD>
+<TD><P>
+An optional hidden string parameter to specify the subject name for GSI
+authentification during remote file access to a GridFTP server.
+If no subject name is specified, the subject name of the user's GSI proxy
+will be used.
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>num_streams</STRONG></TT></B></TD>
+<TD><P>
+An optional hidden integer parameter to specify the number of parallel streams to use during remote file access. By default only a single stream will be used
+for each connection to a GridFtp server.
+</TD></TR>
+
+<TR VALIGN="TOP"><TD><P><B><TT><STRONG>vectorimport</STRONG></TT></B></TD>
+<TD><P>
+An optional hidden flag parameter to specify whether the dataset should be
+imported as a vector array (diabled by default)
+<P>
+The <STRONG>vectorimport</STRONG> flag must be set in order to preserve
+dimension during an import of vector datasets (e.g., position, velocity, ...
+etc.).
+</TD></TR>
+
+</TABLE>
+
+
+<P><STRONG>See Also</STRONG>
+<P>Import, Slab
+
+<P><STRONG>Example Visual Programs</STRONG>
+<P><PRE>SlabViz.net</PRE><P>
+
+The example program is contained in the <TT>net/</TT> subdirectory of the
+OpenDXutils package. Please make sure that you change into this directory
+before running the program because it uses an HDF5 sample data file
+located relative to that directory.
+
+
+<P><STRONG>Further Documentation</STRONG>
+<P>
+The ImportHDF5 data import module is provided by the OpenDXutils package.
+More information about this package can be found on the
+<A href=http://www.cactuscode.org/VizTools/OpenDX.html>Cactus Code visualization page for OpenDX</A>.
+
+<PRE>Last modified: $Header: /cactus/VizTools/OpenDXutils/doc/ImportHDF5.html,v 1.6 2006/09/12 08:52:32 tradke Exp $</PRE>
+</BODY>
+</HTML>

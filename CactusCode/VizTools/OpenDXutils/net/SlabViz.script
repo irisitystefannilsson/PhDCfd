@@ -1,0 +1,30 @@
+macro DisplayTimestep (frame)
+{
+  data = ImportHDF5 (filename = "../data/phi.h5",
+                     origin = 3,
+                     thickness = 15,
+                     index = @frame);
+
+  bbox = ShowBox (data);
+  camera = AutoCamera (data, [0.4 0.2 0.2]);
+  axes = AutoAxes (input = bbox,
+                   camera = camera,
+                   labelscale = 0.7,
+                   labels = {"x", "y", "z"});
+  time = Attribute (data, attribute = "time");
+  time = Format ("T = %.2f M", time);
+  caption = Caption (string = time,
+                     position = [0.04 0.04],
+                     font = "italic_t",
+                     height = 23);
+  data = Isosurface (data, value = 0.11);
+  data = AutoColor (data);
+  collection = Collect (bbox, axes, caption, data);
+  Display (collection, camera);
+}
+
+@startframe = 0;
+@endframe = 150;
+@nextframe = @startframe;
+sequence DisplayTimestep (@frame);
+play;
