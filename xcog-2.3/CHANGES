@@ -1,0 +1,37 @@
+Version    Date          Notes
+------------------------------------
+2.3        Feb 10, 1999  Added C-grid topology to the hyperbolic grid generator. A few 
+                         variables have been added to the overlapping grid files (ASCII
+                         and HDF) to distinguish the C-topology from normal grids. See
+                         the documentation for details.     
+
+2.2        Nov 25, 1998  The installation procedure has been re-worked completely. An 
+                         installation script has been added to take care of the machine
+                         dependent settings of the makefiles. Pre-compiled executables
+                         are also provided to further simplify the installation procedure
+                         on some common architectures. The functionality of the program
+                         has been improved by allowing grids to grow out in both 
+                         directions from a curve in the hyperbolic mapping. It is now
+                         also possible to project a side of a hyperbolic grid onto a 
+                         curve.
+
+2.1b      Sept 29, 1998  The drawing of a title caused the program to crash on SUN's
+                         running Solaris 2.x when the native compiler (cc) was used
+                         to make the program. A compiler directive has been added to
+                         avoid this problem, at the price of having no titles on the
+                         plots.
+
+2.1a        Jul 2, 1998  Fixed a little bug that made the command interpreter crash
+                         on some Linux systems. Also changed the compressed tar-
+                         file with the source code so that the code will be un-
+                         packed in a new directory `xcog-2.1a'.
+
+2.1        May 22, 1998  The major improvement of this version is the addition of a 
+                         "hyperbolic" mapping that allows the user to construct a 
+                         component grid starting from a curve and growing in the 
+                         direction normal to the curve. This mapping is more flexible 
+                         than the existing normal-curve mapping, since the transverse 
+                         grid lines are allowed to bend. This mapping is therefore 
+                         smoother than the normal-curve mapping and it can also be 
+                         made thicker close to concave corners.
+

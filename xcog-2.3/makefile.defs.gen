@@ -1,0 +1,63 @@
+.SUFFIXES:
+.SUFFIXES: .c .c,v .f .f,v .o 
+
+#
+# Set the location of the hdf library and include files here.
+#
+HDF_HOME=~
+
+# To use the theodorsen-garrick mapping, define THE_GAR in TG_FLAGS and set TGLIB
+# as below
+# To exclude the Theodorsen-Garrick mapping, do not include anything in TG_FLAGS or
+# TGLIB.
+TG_FLAGS=-DTHE_GAR
+TGLIB=$(MAPPINGS)/theodorsen_garrick/theodorsen_garrick.a 
+
+# Generic HDF variables
+HDF_LIB_HOME = $(HDF_HOME)/lib
+HDF_INC      = $(HDF_HOME)/include
+
+HDFLIB = -L$(HDF_LIB_HOME) -lmfhdf -ldf -ljpeg -lz
+
+#
+# Edit these settins:
+#
+# do `uname' and set the result to ARCH
+ARCH =             
+CC = cc
+CFLAGS= -O -I../include -I../brief_help -I/usr/openwin/include  \
+	-I$(HDF_INC) $(HDF_FLAGS) $(TG_FLAGS)
+FC      = f77
+FFLAGS  = -c -fast
+# Libraries to make it possible to call fortran routines from C. Only necessary
+# when the Theodorsen-Garrick mapping is included. Very machine dependent stuff!
+FORTRAN_LIB =
+LD=cc
+RANLIB= touch
+AR= ar r
+XLIBS= -L/usr/openwin/lib -R/usr/openwin/lib -lX11
+XCOG= xcog.$(ARCH)
+#
+# Leave things below this line
+#
+
+
+UTIL= ../util
+OVERLAP= ../overlap
+CURVES= ../curves
+MAPPINGS= ../mappings
+STRETCHINGS= ../stretchings
+
+CLIBS= $(OVERLAP)/overlap.a $(CURVES)/curves.a $(MAPPINGS)/mappings.a $(STRETCHINGS)/stretchings.a $(UTIL)/util.a $(HDFLIB) $(TGLIB) $(FORTRAN_LIB) -lm
+
+.c.o:
+	$(CC) -c $(CFLAGS) $<
+
+.c,v.c:
+	co $*.c
+
+.f.o:
+	$(FC) $(FFLAGS) $<
+
+.f,v.f:
+	co $*.f

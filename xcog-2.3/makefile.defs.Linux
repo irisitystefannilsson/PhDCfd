@@ -1,0 +1,58 @@
+# Linux
+.SUFFIXES:
+.SUFFIXES: .c .c,v .f .f,v .o 
+
+#
+# Set the location of the hdf library and include files here.
+#
+HDF_HOME=~
+
+# To use the theodorsen-garrick mapping, define THE_GAR in TG_FLAGS and set TGLIB
+# as below
+# To exclude the Theodorsen-Garrick mapping, do not include anything in TG_FLAGS or
+# TGLIB.
+TG_FLAGS=-DTHE_GAR
+TGLIB=$(MAPPINGS)/theodorsen_garrick/theodorsen_garrick.a 
+
+# Generic HDF variables
+
+HDF_LIB_HOME = $(HDF_HOME)/lib
+HDF_INC      = $(HDF_HOME)/include
+
+HDFLIB = -L$(HDF_LIB_HOME) -lmfhdf -ldf -ljpeg -lz
+
+# Add -DSINGLE if you want single (32 bits) floating point precision.
+HDF_FLAGS =
+CC= gcc
+CFLAGS= -O -Wall -ffast-math -DLINUX -I../include -I../brief_help -I/usr/include \
+        -I$(HDF_INC) -I/usr/X11R6/include $(HDF_FLAGS) $(TG_FLAGS)
+FC      = g77
+FFLAGS  = -c -O -fno-globals
+# Libraries to make it possible to call fortran routines from C. Only necessary
+# when the Theodorsen-Garrick mapping is included. Very machine dependent stuff!
+FORTRAN_LIB = /usr/lib/libf2c.a
+LD=g77
+RANLIB= ranlib
+AR= ar r
+XLIBS= -L/usr/X11R6/lib -lX11
+XCOG= xcog.Linux
+
+UTIL= ../util
+OVERLAP= ../overlap
+CURVES= ../curves
+MAPPINGS= ../mappings
+STRETCHINGS= ../stretchings
+
+CLIBS= $(OVERLAP)/overlap.a $(CURVES)/curves.a $(MAPPINGS)/mappings.a $(STRETCHINGS)/stretchings.a $(UTIL)/util.a $(HDFLIB) $(TGLIB) $(FORTRAN_LIB) -lm
+
+.c.o:
+	$(CC) -c $(CFLAGS) $<
+
+.c,v.c:
+	co $*.c
+
+.f.o:
+	$(FC) $(FFLAGS) $<
+
+.f,v.f:
+	co $*.f

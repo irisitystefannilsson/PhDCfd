@@ -1,0 +1,65 @@
+#!/bin/sh
+
+if [ -f "bin/xcog.uninitialized" ]; then
+
+# Make sure all the executables have execute permission
+	chmod +x bin/xcog.*
+
+	XCOG_HOME=`pwd`
+	echo "Setting XCOG_HOME in bin/xcog to " $XCOG_HOME
+
+# sed script for setting XCOG_HOME in bin/xcog
+	sed "s,XCOG_HOME=.,XCOG_HOME=$XCOG_HOME," bin/xcog.uninitialized > bin/xcog
+
+	chmod 755 bin/xcog
+else
+	echo "Error: the file bin/xcog.uninitialized does not exist!"
+	echo "You are probably not in the top xcog directory!"
+	return 1
+fi
+
+# Copy the specific makefile.defs.UNAME to makefile.defs. (if there is one)
+if [ -f "Makefile" ]; then
+    ARCH=`uname`
+    if [ -f "makefile.defs.$ARCH" ]; then
+#
+	echo ""
+	echo "Please enter the absolute search path to the HDF library:"
+	read HDF_HOME
+# Check the directory
+	while [ ! -d $HDF_HOME -o ! -d $HDF_HOME/include -o ! -d $HDF_HOME/lib ]
+	do
+	    echo "Can not find all of the directories:"
+	    echo $HDF_HOME, $HDF_HOME/include, $HDF_HOME/lib
+	    echo "Please re-enter the absolute search path to the HDF library:"
+	    read HDF_HOME
+	done
+
+# Set HDF_HOME in makefile.defs
+	rm -f makefile.defs
+	sed "s,HDF_HOME=~,HDF_HOME=$HDF_HOME," makefile.defs.$ARCH > makefile.defs
+#
+# Ask if the theodorssen garrick mapping should be included
+#
+	echo ""
+	echo "Do you want to include the Theodorssen-Garrick mapping, which requires a Fortran compiler (y/n):"
+	read USE_THEO
+	if [ "$USE_THEO" = "y" -o "$USE_THEO" = "Y" ]; then
+		echo "Including the Theodorssen-Garrick mapping!"
+	else
+		echo "Not including the Theodorssen-Garrick mapping!"
+		mv makefile.defs makefile.defs.tmp
+		sed "s/TG_FLAGS=-DTHE_GAR/TG_FLAGS=/" makefile.defs.tmp |
+		sed "s/TGLIB=\$(MAPPINGS)\/theodorsen_garrick\/theodorsen_garrick.a/TGLIB=/" \
+		> makefile.defs
+		rm -f makefile.defs.tmp
+	fi
+	echo ""
+	echo "Compile xcog by executing make in this directory."
+    else
+	echo ""
+	echo "Sorry, there is no specific version of makefile.defs for your architecture!"
+	echo "You will get a generic makefile.defs that you must edit to suit your system"
+	cp makefile.defs.gen makefile.defs
+    fi
+fi

@@ -1,0 +1,17 @@
+#!/bin/sh
+# Start script for Xcog
+XCOG_HOME=/home/stefan/LLNLfiles/xcog-2.3
+export XCOG_HOME
+
+ARCH=`uname`
+
+EXE=$XCOG_HOME/bin/xcog.$ARCH
+
+if [ -x $EXE ]; then
+# Pass all the arguments to the executable
+  $EXE $*
+else
+  echo "Sorry, there is no version of xcog compiled for your architecture: " $ARCH
+  exit 1
+fi
+

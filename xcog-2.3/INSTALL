@@ -1,0 +1,63 @@
+Follow these steps to unpack xcog version 2.3:
+
+If there is a precompiled version of xcog available for your architecture,
+you follow these steps:
+
+A1. Get the compressed tar file with the executables from
+http://www.na.chalmers.se/~andersp/xcog/xcog.html.
+
+A2. Uncompress and untar the package (gzcat xcog-2.3-EXE.tar.gz | tar xvf -), 
+where EXE is the name of your architecture. This command will create a new directory, 
+`xcog-2.3', where it will put all the files.
+
+A3. Go to the xcog-2.3 directory (cd xcog-2.3) and update the start script by
+executing the install_xcog script (./install_xcog).
+
+A4. Add the xcog-2.3/bin directory to your PATH.
+
+
+If there is no precompiled version that suits your architecture, you will have 
+to compile the source code:
+
+B1. Since Xcog uses HDF from NCSA for saving overlapping grids, you
+must make sure that the HDF-library is installed on your system. You
+should use version 4.0r1, or later. You can obtain the library by
+anonymous ftp from ftp.ncsa.uiuc.edu. Also see the HDF home-page
+http://hdf.ncsa.uiuc.edu/. 
+
+B2. Get the compressed tar file with the source code from
+http://www.na.chalmers.se/~andersp/xcog/xcog.html.
+
+B3. Uncompress and untar the package by `gzcat xcog-2.3.tar.gz | tar xf -'.
+This command will create a new directory, `xcog-2.3', where it will put all 
+the source code.
+
+B4. Go to the xcog-2.3 directory (cd xcog-2.3) and update the start script 
+by executing the install_xcog script (./install_xcog). This will also generate 
+a file `makefile.defs' that contains typical settings for compiling xcog on your
+type of architecture.
+
+B5. Type `make xcog' to construct the executable code for xcog. If this
+succeeds, the executable code is placed in the bin directory. If the 
+make process results in error, follow the suggestions below.
+
+B6. If the make process fails, there is probably something wrong
+with the makefile.defs file. One common problem is that `ranlib' is
+only used on some systems, so the RANLIB variable might have to be set
+to `echo'. Another common problem is that the include files for X11
+can not be located by the compiler. In that case, you must add the
+directory where they reside as the argument to an -I flag in
+CFLAGS. If the linking step results in unresolved references, the
+problem could be that the linker can not find the library
+libX11.a. You should then add the directory as the argument to a -L
+flag in XLIBS. A third difficulty is to properly call Fortran routines
+from C. Some compilers append an underscore to the subroutine name,
+and this case is treated as the default. If the compiler does not
+append an underscore, you should define the variable F_NO_UNDERSCORE
+in CFLAGS, as in the example for the HP machine. A fourth problem is
+to give the right flags to FORTRAN_LIB to include all necessary
+Fortran run-time libraries. If you wish to avoid the Fortran code completely,
+you can undefine the variables TG_FLAGS and TGLIB as is shown in
+makefile.defs.
+
+B7. Add the xcog-2.3/bin directory to your PATH.

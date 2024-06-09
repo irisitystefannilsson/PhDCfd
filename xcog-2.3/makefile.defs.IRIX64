@@ -1,0 +1,57 @@
+# SGI machines running IRIX64 version 6.4
+.SUFFIXES:
+.SUFFIXES: .c .c,v .f .f,v .o 
+
+#
+# Set the location of the hdf library and include files here.
+#
+HDF_HOME=~
+
+# To use the theodorsen-garrick mapping, define THE_GAR in TG_FLAGS and set TGLIB
+# as below
+TG_FLAGS=-DTHE_GAR
+TGLIB=$(MAPPINGS)/theodorsen_garrick/theodorsen_garrick.a 
+
+# To exclude the Theodorsen-Garrick mapping, do not include anything in TG_FLAGS or
+# TGLIB.
+#TG_FLAGS =
+#TGLIB =
+
+# Generic HDF variables
+
+HDF_LIB_HOME = $(HDF_HOME)/lib
+HDF_INC      = $(HDF_HOME)/include
+
+HDFLIB = -L$(HDF_LIB_HOME) -lmfhdf -ldf -ljpeg -lz
+
+HDF_FLAGS =
+CC= cc
+CFLAGS= $(HDF_FLAGS) $(TG_FLAGS) -I../include -I../brief_help -I$(HDF_INC) -I/usr/include/X11 -O -mips4 -64
+FC= f77
+FFLAGS= -c -O -mips4 -64
+FORTRAN_LIB= 
+LD=f77
+RANLIB= echo
+AR= ar r
+XLIBS= -lX11
+XCOG= xcog.IRIX64
+
+UTIL= ../util
+OVERLAP= ../overlap
+CURVES= ../curves
+MAPPINGS= ../mappings
+STRETCHINGS= ../stretchings
+
+CLIBS= $(OVERLAP)/overlap.a $(CURVES)/curves.a $(MAPPINGS)/mappings.a $(STRETCHINGS)/stretchings.a $(UTIL)/util.a $(HDFLIB) $(TGLIB) $(FORTRAN_LIB) -lm
+
+.c.o:
+	$(CC) -c $(CFLAGS) $<
+
+.c,v.c:
+	co $*.c
+
+.f.o:
+	$(FC) $(FFLAGS) $<
+
+.f,v.f:
+	co $*.f
