@@ -1,54 +1,47 @@
 # -*-makefile-*-
-# Compile using gmake ARCH=<arch> BOPT=<opt> <target>
 
-ARCH             = LINUX
-BOPT             = O_c++
+ARCH=LINUX
 HOME=/home/stefan/LLNLfiles
 # LINKER FLAGS GIVEN BELOW
 LDFLAGS_LINUX = 
-CC = g++
-CLINKER = g++
-LDFLAGS = $(LDFLAGS_$(ARCH))
+CC=g++
+CLINKER=g++
+LDFLAGS=$(LDFLAGS_$(ARCH))
 
 # PPlusPlus is an environment variable that
 # points to the directory above the lib/include directories
-PPP_INCLUDE = -I$(HOME)/A++-P++-0.8.3/P++/install/include
-PPPLIB_DIR = $(HOME)/A++-P++-0.8.3/P++/install/lib
-PPP_INCLUDE_G = -I$(HOME)/A++-P++-0.8.3-Debug/P++/install/include
-PPPLIB_DIR_G = $(HOME)/A++-P++-0.8.3-Debug/P++/install/lib
+PPP_INCLUDE=-I$(HOME)/A++-P++-0.8.3/P++/install/include
+PPPLIB_DIR=$(HOME)/A++-P++-0.8.3/P++/install/lib
+PPP_INCLUDE_G=-I$(HOME)/A++-P++-0.8.3-Debug/P++/install/include
+PPPLIB_DIR_G=$(HOME)/A++-P++-0.8.3-Debug/P++/install/lib
 
-AZTEC_INCLUDE = -I$(HOME)/Aztec/lib
-AZTEC_LIB = $(HOME)/Aztec/lib
+AZTEC_INCLUDE=-I$(HOME)/Aztec/lib
+AZTEC_LIB=$(HOME)/Aztec/lib
 
 # HDF5_DIR is an environment variable that
 # points to the directory above the lib/include directories
-HDF5_DIR = /usr/include/hdf5/openmpi
-HDF5_INCLUDE = -I/usr/include/hdf5/openmpi/
-HDF5_LIB = -L/usr/lib/x86_64-linux-gnu
+HDF5_DIR=/usr/include/hdf5/openmpi
+HDF5_INCLUDE=-I/usr/include/hdf5/openmpi/
+HDF5_LIB=-L/usr/lib/x86_64-linux-gnu
 
-LIBS_LINUX = -L$(PPPLIB_DIR) -L$(AZTEC_LIB) \
+LIBS_LINUX=-L$(PPPLIB_DIR) -L$(AZTEC_LIB) \
 	  -lPpp -lPpp_static -laztec \
 	  -L$(HDF5_LIB) -lhdf5_openmpi -lpthread /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0 -lm -lmpi -lmpi_cxx /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0
-LIBS_LINUX_G = -L$(PPPLIB_DIR_G) -L$(AZTEC_LIB) \
+LIBS_LINUX_G=-L$(PPPLIB_DIR_G) -L$(AZTEC_LIB) \
 	  -lPpp -lPpp_static -laztec \
 	  -L$(HDF5_LIB) -lhdf5_openmpi -lpthread /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0 -lm -lmpi -lmpi_cxx /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0
 # INCLUDE SEARCH PATH GIVEN BELOW
 
 INCLUDES= $(PPP_INCLUDE_G) $(AZTEC_INCLUDE) $(HDF5_INCLUDE) -I/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/include -I/usr/lib/x86_64-linux-gnu/openmpi/include/
 
-CPPFLAGS_LINUX = ${INCLUDES} -DHAVE_CONFIG_H -I. -DHAVE_CONFIG_H -I. -DAZ_MPI -fpermissive -std=c++17
-CFLAGS_LINUX = -DHAVE_CONFIG_H -I. -DAZ_MPI
+CPPFLAGS_LINUX=${INCLUDES} -DHAVE_CONFIG_H -I. -DHAVE_CONFIG_H -I. -DAZ_MPI -fpermissive -std=c++17
+CFLAGS_LINUX=-DHAVE_CONFIG_H -I. -DAZ_MPI
 
-CPPFLAGS = $(CPPFLAGS_$(ARCH)) -D$(ARCH)
-CFLAGS = $(CFLAGS_$(ARCH)) 
-
-#include ${PETSC_DIR}/bmake/common/base
+CPPFLAGS=$(CPPFLAGS_$(ARCH)) -D$(ARCH)
+CFLAGS=$(CFLAGS_$(ARCH)) 
 
 LIBRARIES= $(LIBS_$(ARCH)) -L/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/lib -lpetsc_real
 LIBRARIES_G= $(LIBS_$(ARCH)_G) -L/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/lib -lpetsc_real
-
-MAKEDEPEND_LINUX=makedepend
-MAKEDEPEND = $(MAKEDEPEND_$(ARCH))
 
 # SOURCES GIVEN BELOW
 
@@ -88,6 +81,7 @@ OGEquation_g.o: OGEquation.cc OGEquation.hh
 	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} OGEquation.cc
 CompGrid_g.o: CompGrid.cc CompGrid.hh
 	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} CompGrid.cc
+
 ins: ins.o my_auxiliary_routines.o $(objs)
 	${CLINKER} -o $@ $(LDFLAGS) ins.o my_auxiliary_routines.o $(objs) $(LIBRARIES)
 

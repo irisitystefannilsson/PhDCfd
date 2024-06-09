@@ -5,13 +5,13 @@
 //
 //
 //
-// macro reference (direct): XCOGCompGrid /home/stefan/LLNLfiles/Miniature/ReadCompGrid.net
+// macro reference (direct): XCOGCompGrid /home/stefan/LLNLfiles/Miniature/PhDCfd/OpenDXFiles/ReadCompGrid.net
 include "ReadCompGrid.net"
 //
-// macro reference (direct): divergence /home/stefan/LLNLfiles/Miniature/div.net
+// macro reference (direct): divergence /home/stefan/LLNLfiles/Miniature/PhDCfd/OpenDXFiles/div.net
 include "div.net"
 //
-// macro reference (direct): curl /home/stefan/LLNLfiles/Miniature/curl.net
+// macro reference (direct): curl /home/stefan/LLNLfiles/Miniature/PhDCfd/OpenDXFiles/curl.net
 include "curl.net"
 //
 // MODULE main
