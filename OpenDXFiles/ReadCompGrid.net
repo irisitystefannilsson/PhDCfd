@@ -1,0 +1,460 @@
+//
+// time: Sun Feb 22 14:50:05 2009
+//
+// version: 3.2.0 (format), 4.4.4 (DX)
+//
+//
+// Begin MDF
+// MODULE XCOGCompGrid
+// CATEGORY Macros
+// DESCRIPTION new macro
+// INPUT input_1; string; (no default);  
+// INPUT input_2; integer or string; (no default);  
+// INPUT input_3; integer or string; (no default);  
+// INPUT input_4; integer or string; (no default);  
+// OUTPUT output_1; field;  
+// OUTPUT output_2; field;  
+// End MDF
+// workspace: width = 715, height = 733
+// layout: snap = 0, width = 50, height = 50, align = NN
+//
+macro XCOGCompGrid(
+ input_1
+,input_2
+,input_3
+,input_4
+) -> (
+ output_1
+,output_2
+) {
+    // 
+    // node Input[22]: x = 52, y = 7, inputs = 0, label = Input
+    // parameter: position = 1, name = 'input_1', value = '(no default)', descriptive = 1, description = ' ', required = 0, visible = 1
+    //
+XCOGCompGrid_Input_22_out_1 = input_1;
+    // 
+    // node Input[23]: x = 199, y = 13, inputs = 0, label = Input
+    // parameter: position = 2, name = 'input_2', value = '(no default)', descriptive = 1, description = ' ', required = 0, visible = 1
+    //
+XCOGCompGrid_Input_23_out_1 = input_2;
+    // 
+    // node ImportHDF5[1]: x = 15, y = 135, inputs = 12, label = ImportHDF5
+    // input[2]: visible = 0
+    // input[3]: visible = 0
+    // input[4]: visible = 0
+    //
+XCOGCompGrid_ImportHDF5_1_out_1,
+XCOGCompGrid_ImportHDF5_1_out_2 = 
+    ImportHDF5(
+    XCOGCompGrid_Input_22_out_1,
+    NULL,
+    NULL,
+    NULL,
+    XCOGCompGrid_Input_23_out_1,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+    ) [instance: 1, cache: 1];
+    // 
+    // node Extract[5]: x = 25, y = 285, inputs = 2, label = Extract
+    //
+XCOGCompGrid_Extract_5_out_1 = 
+    Extract(
+    XCOGCompGrid_ImportHDF5_1_out_1,
+    NULL
+    ) [instance: 5, cache: 1];
+    // 
+    // node Compute[12]: x = 149, y = 115, inputs = 2, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "$0+1"
+    // expression: value = a+1
+    // name[2]: value = a
+    //
+XCOGCompGrid_Compute_12_out_1 = 
+    Compute(
+    "$0+1",
+    XCOGCompGrid_Input_23_out_1
+    ) [instance: 12, cache: 1];
+    // 
+    // node ImportHDF5[2]: x = 119, y = 197, inputs = 12, label = ImportHDF5
+    // input[2]: visible = 0
+    // input[3]: visible = 0
+    // input[4]: visible = 0
+    //
+XCOGCompGrid_ImportHDF5_2_out_1,
+XCOGCompGrid_ImportHDF5_2_out_2 = 
+    ImportHDF5(
+    XCOGCompGrid_Input_22_out_1,
+    NULL,
+    NULL,
+    NULL,
+    XCOGCompGrid_Compute_12_out_1,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+    ) [instance: 2, cache: 1];
+    // 
+    // node Extract[6]: x = 133, y = 273, inputs = 2, label = Extract
+    //
+XCOGCompGrid_Extract_6_out_1 = 
+    Extract(
+    XCOGCompGrid_ImportHDF5_2_out_1,
+    NULL
+    ) [instance: 6, cache: 1];
+    // 
+    // node Compute[2]: x = 100, y = 337, inputs = 3, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "[float($0), float($1)]"
+    // expression: value = [float(a), float(b)]
+    // name[2]: value = a
+    // name[3]: value = b
+    //
+XCOGCompGrid_Compute_2_out_1 = 
+    Compute(
+    "[float($0), float($1)]",
+    XCOGCompGrid_Extract_5_out_1,
+    XCOGCompGrid_Extract_6_out_1
+    ) [instance: 2, cache: 1];
+    // 
+    // node Input[24]: x = 331, y = 14, inputs = 0, label = Input
+    // parameter: position = 3, name = 'input_3', value = '(no default)', descriptive = 1, description = ' ', required = 0, visible = 1
+    //
+XCOGCompGrid_Input_24_out_1 = input_3;
+    // 
+    // node ImportHDF5[3]: x = 225, y = 175, inputs = 12, label = ImportHDF5
+    // input[2]: visible = 0
+    // input[3]: visible = 0
+    // input[4]: visible = 0
+    //
+XCOGCompGrid_ImportHDF5_3_out_1,
+XCOGCompGrid_ImportHDF5_3_out_2 = 
+    ImportHDF5(
+    XCOGCompGrid_Input_22_out_1,
+    NULL,
+    NULL,
+    NULL,
+    XCOGCompGrid_Input_24_out_1,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+    ) [instance: 3, cache: 1];
+    // 
+    // node Compute[13]: x = 397, y = 91, inputs = 2, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "$0-4"
+    // expression: value = a-4
+    // name[2]: value = a
+    //
+XCOGCompGrid_Compute_13_out_1 = 
+    Compute(
+    "$0-4",
+    XCOGCompGrid_Input_23_out_1
+    ) [instance: 13, cache: 1];
+    // 
+    // node ImportHDF5[4]: x = 320, y = 176, inputs = 12, label = ImportHDF5
+    // input[2]: visible = 0
+    // input[3]: visible = 0
+    // input[4]: visible = 0
+    //
+XCOGCompGrid_ImportHDF5_4_out_1,
+XCOGCompGrid_ImportHDF5_4_out_2 = 
+    ImportHDF5(
+    XCOGCompGrid_Input_22_out_1,
+    NULL,
+    NULL,
+    NULL,
+    XCOGCompGrid_Compute_13_out_1,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+    ) [instance: 4, cache: 1];
+    // 
+    // node Compute[38]: x = 366, y = 248, inputs = 2, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "int($0)"
+    // expression: value = int(a)
+    // name[2]: value = a
+    //
+XCOGCompGrid_Compute_38_out_1 = 
+    Compute(
+    "int($0)",
+    XCOGCompGrid_ImportHDF5_4_out_1
+    ) [instance: 38, cache: 1];
+    // 
+    // node Compute[7]: x = 329, y = 309, inputs = 3, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "$1?$0:$0+1000000"
+    // expression: value = b?a:a+1000000
+    // name[2]: value = a
+    // name[3]: value = b
+    //
+XCOGCompGrid_Compute_7_out_1 = 
+    Compute(
+    "$1?$0:$0+1000000",
+    XCOGCompGrid_ImportHDF5_3_out_1,
+    XCOGCompGrid_Compute_38_out_1
+    ) [instance: 7, cache: 1];
+    // 
+    // node Compute[14]: x = 628, y = 93, inputs = 2, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "$0-4"
+    // expression: value = a-4
+    // name[2]: value = a
+    //
+XCOGCompGrid_Compute_14_out_1 = 
+    Compute(
+    "$0-4",
+    XCOGCompGrid_Input_23_out_1
+    ) [instance: 14, cache: 1];
+    // 
+    // node Input[30]: x = 457, y = 6, inputs = 0, label = Input
+    // parameter: position = 4, name = 'input_4', value = '(no default)', descriptive = 1, description = ' ', required = 0, visible = 1
+    //
+XCOGCompGrid_Input_30_out_1 = input_4;
+    // 
+    // node ImportHDF5[5]: x = 416, y = 183, inputs = 12, label = ImportHDF5
+    // input[2]: visible = 0
+    // input[3]: visible = 0
+    // input[4]: visible = 0
+    //
+XCOGCompGrid_ImportHDF5_5_out_1,
+XCOGCompGrid_ImportHDF5_5_out_2 = 
+    ImportHDF5(
+    XCOGCompGrid_Input_22_out_1,
+    NULL,
+    NULL,
+    NULL,
+    XCOGCompGrid_Input_30_out_1,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+    ) [instance: 5, cache: 1];
+    // 
+    // node Compute[36]: x = 499, y = 101, inputs = 2, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "$0+1"
+    // expression: value = a+1
+    // name[2]: value = a
+    //
+XCOGCompGrid_Compute_36_out_1 = 
+    Compute(
+    "$0+1",
+    XCOGCompGrid_Input_30_out_1
+    ) [instance: 36, cache: 1];
+    // 
+    // node ImportHDF5[6]: x = 525, y = 212, inputs = 12, label = ImportHDF5
+    // input[2]: visible = 0
+    // input[3]: visible = 0
+    // input[4]: visible = 0
+    //
+XCOGCompGrid_ImportHDF5_6_out_1,
+XCOGCompGrid_ImportHDF5_6_out_2 = 
+    ImportHDF5(
+    XCOGCompGrid_Input_22_out_1,
+    NULL,
+    NULL,
+    NULL,
+    XCOGCompGrid_Compute_36_out_1,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+    ) [instance: 6, cache: 1];
+    // 
+    // node Compute[35]: x = 479, y = 282, inputs = 3, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "[float($0), float($1)]"
+    // expression: value = [float(a), float(b)]
+    // name[2]: value = a
+    // name[3]: value = b
+    //
+XCOGCompGrid_Compute_35_out_1 = 
+    Compute(
+    "[float($0), float($1)]",
+    XCOGCompGrid_ImportHDF5_5_out_1,
+    XCOGCompGrid_ImportHDF5_6_out_1
+    ) [instance: 35, cache: 1];
+    // 
+    // node ImportHDF5[7]: x = 639, y = 197, inputs = 12, label = ImportHDF5
+    // input[2]: visible = 0
+    // input[3]: visible = 0
+    // input[4]: visible = 0
+    //
+XCOGCompGrid_ImportHDF5_7_out_1,
+XCOGCompGrid_ImportHDF5_7_out_2 = 
+    ImportHDF5(
+    XCOGCompGrid_Input_22_out_1,
+    NULL,
+    NULL,
+    NULL,
+    XCOGCompGrid_Compute_14_out_1,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+    ) [instance: 7, cache: 1];
+    // 
+    // node Compute[37]: x = 614, y = 268, inputs = 2, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "int($0)"
+    // expression: value = int(a)
+    // name[2]: value = a
+    //
+XCOGCompGrid_Compute_37_out_1 = 
+    Compute(
+    "int($0)",
+    XCOGCompGrid_ImportHDF5_7_out_1
+    ) [instance: 37, cache: 1];
+    // 
+    // node Compute[15]: x = 542, y = 330, inputs = 3, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "$1?$0:$0+1000000"
+    // expression: value = b?a:a+1000000
+    // name[2]: value = a
+    // name[3]: value = b
+    //
+XCOGCompGrid_Compute_15_out_1 = 
+    Compute(
+    "$1?$0:$0+1000000",
+    XCOGCompGrid_Compute_35_out_1,
+    XCOGCompGrid_Compute_37_out_1
+    ) [instance: 15, cache: 1];
+    // 
+    // node Inquire[4]: x = 250, y = 283, inputs = 3, label = Inquire
+    // input[2]: defaulting = 0, visible = 0, type = 32, value = "connection gridcounts"
+    // input[3]: defaulting = 0, visible = 1, type = 32, value = NULL
+    //
+XCOGCompGrid_Inquire_4_out_1 = 
+    Inquire(
+    XCOGCompGrid_ImportHDF5_1_out_1,
+    "connection gridcounts",
+    NULL
+    ) [instance: 4, cache: 1];
+    // 
+    // node Extract[3]: x = 297, y = 370, inputs = 2, label = Extract
+    // input[2]: visible = 0
+    //
+XCOGCompGrid_Extract_3_out_1 = 
+    Extract(
+    XCOGCompGrid_Compute_7_out_1,
+    NULL
+    ) [instance: 3, cache: 1];
+    // 
+    // node Construct[1]: x = 20, y = 455, inputs = 4, label = Construct
+    // input[1]: defaulting = 1, visible = 1, type = 16777224, value = NULL
+    // input[2]: defaulting = 0, visible = 0, type = 16777224, value = NULL
+    // input[3]: defaulting = 1, visible = 1, type = 1, value = NULL
+    //
+XCOGCompGrid_Construct_1_out_1 = 
+    Construct(
+    XCOGCompGrid_Compute_2_out_1,
+    NULL,
+    XCOGCompGrid_Inquire_4_out_1,
+    XCOGCompGrid_Extract_3_out_1
+    ) [instance: 1, cache: 1];
+    // 
+    // node Extract[4]: x = 461, y = 431, inputs = 2, label = Extract
+    // input[2]: visible = 0
+    //
+XCOGCompGrid_Extract_4_out_1 = 
+    Extract(
+    XCOGCompGrid_Compute_15_out_1,
+    NULL
+    ) [instance: 4, cache: 1];
+    // 
+    // node Construct[2]: x = 366, y = 505, inputs = 4, label = Construct
+    // input[1]: defaulting = 1, visible = 1, type = 16777224, value = NULL
+    // input[2]: defaulting = 0, visible = 0, type = 16777224, value = NULL
+    // input[3]: defaulting = 1, visible = 1, type = 1, value = NULL
+    //
+XCOGCompGrid_Construct_2_out_1 = 
+    Construct(
+    XCOGCompGrid_Compute_2_out_1,
+    NULL,
+    XCOGCompGrid_Inquire_4_out_1,
+    XCOGCompGrid_Extract_4_out_1
+    ) [instance: 2, cache: 1];
+    // 
+    // node Include[4]: x = 41, y = 535, inputs = 6, label = Include
+    // input[3]: defaulting = 0, visible = 1, type = 5, value = 100000.0
+    //
+XCOGCompGrid_Include_4_out_1 = 
+    Include(
+    XCOGCompGrid_Construct_1_out_1,
+    NULL,
+    100000.0,
+    NULL,
+    NULL,
+    NULL
+    ) [instance: 4, cache: 1];
+    // 
+    // node Include[5]: x = 361, y = 585, inputs = 6, label = Include
+    // input[3]: defaulting = 0, visible = 1, type = 5, value = 100000.0
+    //
+XCOGCompGrid_Include_5_out_1 = 
+    Include(
+    XCOGCompGrid_Construct_2_out_1,
+    NULL,
+    100000.0,
+    NULL,
+    NULL,
+    NULL
+    ) [instance: 5, cache: 1];
+    // 
+    // node Output[5]: x = 42, y = 635, inputs = 1, label = Output
+    // parameter: position = 1, name = 'output_1', value = ' ', descriptive = 0, description = ' ', required = 0, visible = 1
+    //
+output_1 = XCOGCompGrid_Include_4_out_1;
+    // 
+    // node Output[6]: x = 332, y = 674, inputs = 1, label = Output
+    // parameter: position = 2, name = 'output_2', value = ' ', descriptive = 0, description = ' ', required = 0, visible = 1
+    //
+output_2 = XCOGCompGrid_Include_5_out_1;
+// network: end of macro body
+}
+XCOGCompGrid_Input_22_out_1 = NULL;
+XCOGCompGrid_Input_23_out_1 = NULL;
+XCOGCompGrid_ImportHDF5_1_out_1 = NULL;
+XCOGCompGrid_Extract_5_out_1 = NULL;
+XCOGCompGrid_Compute_12_out_1 = NULL;
+XCOGCompGrid_ImportHDF5_2_out_1 = NULL;
+XCOGCompGrid_Extract_6_out_1 = NULL;
+XCOGCompGrid_Compute_2_out_1 = NULL;
+XCOGCompGrid_Input_24_out_1 = NULL;
+XCOGCompGrid_ImportHDF5_3_out_1 = NULL;
+XCOGCompGrid_Compute_13_out_1 = NULL;
+XCOGCompGrid_ImportHDF5_4_out_1 = NULL;
+XCOGCompGrid_Compute_38_out_1 = NULL;
+XCOGCompGrid_Compute_7_out_1 = NULL;
+XCOGCompGrid_Compute_14_out_1 = NULL;
+XCOGCompGrid_Input_30_out_1 = NULL;
+XCOGCompGrid_ImportHDF5_5_out_1 = NULL;
+XCOGCompGrid_Compute_36_out_1 = NULL;
+XCOGCompGrid_ImportHDF5_6_out_1 = NULL;
+XCOGCompGrid_Compute_35_out_1 = NULL;
+XCOGCompGrid_ImportHDF5_7_out_1 = NULL;
+XCOGCompGrid_Compute_37_out_1 = NULL;
+XCOGCompGrid_Compute_15_out_1 = NULL;
+XCOGCompGrid_Inquire_4_out_1 = NULL;
+XCOGCompGrid_Extract_3_out_1 = NULL;
+XCOGCompGrid_Construct_1_out_1 = NULL;
+XCOGCompGrid_Extract_4_out_1 = NULL;
+XCOGCompGrid_Construct_2_out_1 = NULL;
+XCOGCompGrid_Include_4_out_1 = NULL;
+XCOGCompGrid_Include_5_out_1 = NULL;

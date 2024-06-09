@@ -1,0 +1,1101 @@
+//
+// time: Wed May 29 17:42:53 2024
+//
+// version: 3.2.0 (format), 4.4.4 (DX)
+//
+//
+//
+// macro reference (direct): XCOGCompGrid /home/stefan/LLNLfiles/Miniature/ReadCompGrid.net
+include "ReadCompGrid.net"
+//
+// macro reference (direct): divergence /home/stefan/LLNLfiles/Miniature/div.net
+include "div.net"
+//
+// macro reference (direct): curl /home/stefan/LLNLfiles/Miniature/curl.net
+include "curl.net"
+//
+// MODULE main
+// workspace: width = 701, height = 725
+// layout: snap = 0, width = 50, height = 50, align = NN
+//
+macro main(
+) -> (
+) {
+    // 
+    // node FileSelector[1]: x = 19, y = 27, inputs = 0, label = FileSelector
+    // output[1]: visible = 1, type = 32, value = "/home/stefan/LLNLfiles/Miniature/BackWardStep/INS_data.5.h5"
+    // output[2]: visible = 1, type = 32, value = "INS_data.5.h5"
+    //
+    // 
+    // node Integer[2]: x = 147, y = 30, inputs = 11, label = Integer
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "Integer_2"
+    // input[3]: defaulting = 0, visible = 0, type = 1, value = 4 
+    // input[5]: defaulting = 1, visible = 0, type = 1, value = -1000000
+    // input[6]: defaulting = 1, visible = 0, type = 1, value = 1000000
+    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
+    // input[9]: defaulting = 1, visible = 0, type = 1, value = 0
+    // output[1]: visible = 1, type = 1, value = 4 
+    //
+    // 
+    // node Integer[7]: x = 471, y = 6, inputs = 11, label = Integer
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "Integer_7"
+    // input[3]: defaulting = 0, visible = 0, type = 1, value = 1 
+    // input[5]: defaulting = 1, visible = 0, type = 1, value = -1000000
+    // input[6]: defaulting = 1, visible = 0, type = 1, value = 1000000
+    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
+    // input[9]: defaulting = 1, visible = 0, type = 1, value = 0
+    // output[1]: visible = 1, type = 1, value = 1 
+    //
+    // 
+    // node ForEachN[1]: x = 483, y = 77, inputs = 3, label = ForEachN
+    // input[1]: defaulting = 0, visible = 1, type = 1, value = 0
+    // input[2]: defaulting = 1, visible = 1, type = 1, value = 1
+    //
+main_ForEachN_1_out_1,
+main_ForEachN_1_out_2 = 
+    ForEachN(
+    main_ForEachN_1_in_1,
+    main_Integer_7_out_1,
+    main_ForEachN_1_in_3
+    ) [instance: 1, cache: 1];
+    // 
+    // node Integer[6]: x = 529, y = 153, inputs = 11, label = Integer
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "Integer_6"
+    // input[3]: defaulting = 0, visible = 0, type = 1, value = 6 
+    // input[5]: defaulting = 1, visible = 0, type = 1, value = -1000000
+    // input[6]: defaulting = 1, visible = 0, type = 1, value = 1000000
+    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
+    // input[9]: defaulting = 1, visible = 0, type = 1, value = 0
+    // output[1]: visible = 1, type = 1, value = 6 
+    //
+    // 
+    // node Compute[1]: x = 222, y = 150, inputs = 4, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "$0+$1*$2"
+    // expression: value = a+b*c
+    // name[2]: value = a
+    // name[3]: value = b
+    // name[4]: value = c
+    //
+main_Compute_1_out_1 = 
+    Compute(
+    main_Compute_1_in_1,
+    main_Integer_2_out_1,
+    main_ForEachN_1_out_1,
+    main_Integer_6_out_1
+    ) [instance: 1, cache: 1];
+    // 
+    // node Integer[1]: x = 304, y = 68, inputs = 11, label = Integer
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "Integer_1"
+    // input[3]: defaulting = 0, visible = 0, type = 1, value = 1 
+    // input[5]: defaulting = 1, visible = 0, type = 1, value = -1000000
+    // input[6]: defaulting = 1, visible = 0, type = 1, value = 1000000
+    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
+    // input[9]: defaulting = 1, visible = 0, type = 1, value = 0
+    // output[1]: visible = 1, type = 1, value = 1 
+    //
+    // 
+    // node Compute[2]: x = 316, y = 147, inputs = 4, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "$0+$1*$2"
+    // expression: value = a+b*c
+    // name[2]: value = a
+    // name[3]: value = b
+    // name[4]: value = c
+    //
+main_Compute_2_out_1 = 
+    Compute(
+    main_Compute_2_in_1,
+    main_Integer_1_out_1,
+    main_ForEachN_1_out_1,
+    main_Integer_6_out_1
+    ) [instance: 2, cache: 1];
+    // 
+    // node Integer[5]: x = 389, y = 67, inputs = 11, label = Integer
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "Integer_5"
+    // input[3]: defaulting = 0, visible = 0, type = 1, value = 2 
+    // input[5]: defaulting = 1, visible = 0, type = 1, value = -1000000
+    // input[6]: defaulting = 1, visible = 0, type = 1, value = 1000000
+    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
+    // input[9]: defaulting = 1, visible = 0, type = 1, value = 0
+    // output[1]: visible = 1, type = 1, value = 2 
+    //
+    // 
+    // node Compute[3]: x = 398, y = 153, inputs = 4, label = Compute
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "$0+$1*$2"
+    // expression: value = a+b*c
+    // name[2]: value = a
+    // name[3]: value = b
+    // name[4]: value = c
+    //
+main_Compute_3_out_1 = 
+    Compute(
+    main_Compute_3_in_1,
+    main_Integer_5_out_1,
+    main_ForEachN_1_out_1,
+    main_Integer_6_out_1
+    ) [instance: 3, cache: 1];
+    // 
+    // node XCOGCompGrid[1]: x = 50, y = 165, inputs = 4, label = XCOGCompGrid
+    //
+main_XCOGCompGrid_1_out_1,
+main_XCOGCompGrid_1_out_2 = 
+    XCOGCompGrid(
+    main_FileSelector_1_out_1,
+    main_Compute_1_out_1,
+    main_Compute_2_out_1,
+    main_Compute_3_out_1
+    ) [instance: 1, cache: 1];
+    // 
+    // node CollectMultiGrid[2]: x = 19, y = 267, inputs = 4, label = CollectMultiGrid
+    //
+main_CollectMultiGrid_2_out_1 = 
+    CollectMultiGrid(
+    main_XCOGCompGrid_1_out_2,
+    main_CollectMultiGrid_2_in_2,
+    main_CollectMultiGrid_2_in_3,
+    main_CollectMultiGrid_2_in_4
+    ) [instance: 2, cache: 1];
+    // 
+    // node GetLocal[4]: x = 181, y = 351, inputs = 3, label = GetLocal
+    //
+main_GetLocal_4_out_1,
+main_GetLocal_4_out_2 = 
+    GetLocal(
+    main_GetLocal_4_in_1,
+    main_GetLocal_4_in_2,
+    main_GetLocal_4_in_3
+    ) [instance: 4, cache: 1];
+    // 
+    // node Append[1]: x = 212, y = 274, inputs = 5, label = Append
+    //
+main_Append_1_out_1 = 
+    Append(
+    main_CollectMultiGrid_2_out_1,
+    main_GetLocal_4_out_1,
+    main_Append_1_in_3,
+    main_Append_1_in_4,
+    main_Append_1_in_5
+    ) [instance: 1, cache: 1];
+    // 
+    // node CollectMultiGrid[1]: x = 382, y = 249, inputs = 4, label = CollectMultiGrid
+    //
+main_CollectMultiGrid_1_out_1 = 
+    CollectMultiGrid(
+    main_XCOGCompGrid_1_out_1,
+    main_CollectMultiGrid_1_in_2,
+    main_CollectMultiGrid_1_in_3,
+    main_CollectMultiGrid_1_in_4
+    ) [instance: 1, cache: 1];
+    // 
+    // node GetLocal[5]: x = 516, y = 366, inputs = 3, label = GetLocal
+    //
+main_GetLocal_5_out_1,
+main_GetLocal_5_out_2 = 
+    GetLocal(
+    main_GetLocal_5_in_1,
+    main_GetLocal_5_in_2,
+    main_GetLocal_5_in_3
+    ) [instance: 5, cache: 1];
+    // 
+    // node Append[2]: x = 534, y = 280, inputs = 5, label = Append
+    //
+main_Append_2_out_1 = 
+    Append(
+    main_CollectMultiGrid_1_out_1,
+    main_GetLocal_5_out_1,
+    main_Append_2_in_3,
+    main_Append_2_in_4,
+    main_Append_2_in_5
+    ) [instance: 2, cache: 1];
+    // 
+    // node divergence[1]: x = 413, y = 386, inputs = 1, label = divergence
+    //
+main_divergence_1_out_1 = 
+    divergence(
+    main_Append_1_out_1
+    ) [instance: 1, cache: 1];
+    // 
+    // node RubberSheet[1]: x = 314, y = 531, inputs = 4, label = RubberSheet
+    // input[2]: visible = 0
+    //
+main_RubberSheet_1_out_1 = 
+    RubberSheet(
+    main_divergence_1_out_1,
+    main_RubberSheet_1_in_2,
+    main_RubberSheet_1_in_3,
+    main_RubberSheet_1_in_4
+    ) [instance: 1, cache: 1];
+    // 
+    // node AutoColor[2]: x = 191, y = 537, inputs = 10, label = AutoColor
+    // input[7]: defaulting = 1, visible = 1, type = 5, value = -20.0
+    // input[8]: defaulting = 1, visible = 0, type = 5, value = 5.0
+    //
+main_AutoColor_2_out_1,
+main_AutoColor_2_out_2 = 
+    AutoColor(
+    main_RubberSheet_1_out_1,
+    main_AutoColor_2_in_2,
+    main_AutoColor_2_in_3,
+    main_AutoColor_2_in_4,
+    main_AutoColor_2_in_5,
+    main_AutoColor_2_in_6,
+    main_AutoColor_2_in_7,
+    main_AutoColor_2_in_8,
+    main_AutoColor_2_in_9,
+    main_AutoColor_2_in_10
+    ) [instance: 2, cache: 1];
+    // 
+    // node AutoGlyph[1]: x = 15, y = 503, inputs = 7, label = AutoGlyph
+    // input[2]: defaulting = 0, visible = 1, type = 32, value = "arrow2D"
+    // input[3]: defaulting = 0, visible = 1, type = 5, value = 1.0
+    // input[4]: defaulting = 0, visible = 1, type = 5, value = .15
+    // input[7]: defaulting = 0, visible = 0, type = 5, value = 1.0
+    //
+main_AutoGlyph_1_out_1 = 
+    AutoGlyph(
+    main_Append_1_out_1,
+    main_AutoGlyph_1_in_2,
+    main_AutoGlyph_1_in_3,
+    main_AutoGlyph_1_in_4,
+    main_AutoGlyph_1_in_5,
+    main_AutoGlyph_1_in_6,
+    main_AutoGlyph_1_in_7
+    ) [instance: 1, cache: 1];
+    // 
+    // node AutoColor[3]: x = 45, y = 586, inputs = 10, label = AutoColor
+    //
+main_AutoColor_3_out_1,
+main_AutoColor_3_out_2 = 
+    AutoColor(
+    main_AutoGlyph_1_out_1,
+    main_AutoColor_3_in_2,
+    main_AutoColor_3_in_3,
+    main_AutoColor_3_in_4,
+    main_AutoColor_3_in_5,
+    main_AutoColor_3_in_6,
+    main_AutoColor_3_in_7,
+    main_AutoColor_3_in_8,
+    main_AutoColor_3_in_9,
+    main_AutoColor_3_in_10
+    ) [instance: 3, cache: 1];
+    // 
+    // node Collect[9]: x = 449, y = 526, inputs = 3, label = Collect
+    //
+main_Collect_9_out_1 = 
+    Collect(
+    main_Append_2_out_1,
+    main_Collect_9_in_2,
+    main_Collect_9_in_3
+    ) [instance: 9, cache: 1];
+    // 
+    // node ColorBar[1]: x = 444, y = 630, inputs = 16, label = ColorBar
+    //
+main_ColorBar_1_out_1 = 
+    ColorBar(
+    main_AutoColor_2_out_2,
+    main_ColorBar_1_in_2,
+    main_ColorBar_1_in_3,
+    main_ColorBar_1_in_4,
+    main_ColorBar_1_in_5,
+    main_ColorBar_1_in_6,
+    main_ColorBar_1_in_7,
+    main_ColorBar_1_in_8,
+    main_ColorBar_1_in_9,
+    main_ColorBar_1_in_10,
+    main_ColorBar_1_in_11,
+    main_ColorBar_1_in_12,
+    main_ColorBar_1_in_13,
+    main_ColorBar_1_in_14,
+    main_ColorBar_1_in_15,
+    main_ColorBar_1_in_16
+    ) [instance: 1, cache: 1];
+    // 
+    // node Collect[10]: x = 342, y = 625, inputs = 2, label = Collect
+    //
+main_Collect_10_out_1 = 
+    Collect(
+    main_AutoColor_2_out_1,
+    main_ColorBar_1_out_1
+    ) [instance: 10, cache: 1];
+    // 
+    // node Extract[8]: x = 64, y = 400, inputs = 2, label = Extract
+    // input[2]: defaulting = 0, visible = 0, type = 32, value = "vector field"
+    //
+main_Extract_8_out_1 = 
+    Extract(
+    main_Extract_8_in_1,
+    main_Extract_8_in_2
+    ) [instance: 8, cache: 1];
+    // 
+    // node Image[1]: x = 216, y = 660, inputs = 49, label = Image
+    // input[1]: defaulting = 0, visible = 0, type = 67108863, value = "Image_1"
+    // input[4]: defaulting = 0, visible = 0, type = 1, value = 1
+    // input[5]: defaulting = 0, visible = 0, type = 8, value = [-0.862566 -0.533789 -0.0665894]
+    // input[6]: defaulting = 0, visible = 0, type = 8, value = [-13.1907 1.35241 3.16852]
+    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.08843
+    // input[8]: defaulting = 0, visible = 0, type = 1, value = 1154
+    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.569757
+    // input[10]: defaulting = 0, visible = 0, type = 8, value = [0.190302 0.968516 0.160505]
+    // input[11]: defaulting = 0, visible = 0, type = 5, value = 4.83728
+    // input[12]: defaulting = 0, visible = 0, type = 1, value = 1
+    // input[14]: defaulting = 0, visible = 0, type = 1, value = 1
+    // input[15]: defaulting = 1, visible = 0, type = 32, value = "none"
+    // input[16]: defaulting = 1, visible = 0, type = 32, value = "none"
+    // input[17]: defaulting = 0, visible = 0, type = 1, value = 1
+    // input[18]: defaulting = 0, visible = 0, type = 1, value = 1
+    // input[19]: defaulting = 0, visible = 0, type = 3, value = 1
+    // input[29]: defaulting = 1, visible = 0, type = 3, value = 0
+    // input[41]: defaulting = 0, visible = 0, type = 32, value = "none"
+    // depth: value = 24
+    // window: position = (0.0401,0.0898), size = 0.6083x0.6472
+    // internal caching: 1
+    //
+main_Image_1_out_1,
+main_Image_1_out_2,
+main_Image_1_out_3 = 
+    Image(
+    main_Image_1_in_1,
+    main_Collect_10_out_1,
+    main_Image_1_in_3,
+    main_Image_1_in_4,
+    main_Image_1_in_5,
+    main_Image_1_in_6,
+    main_Image_1_in_7,
+    main_Image_1_in_8,
+    main_Image_1_in_9,
+    main_Image_1_in_10,
+    main_Image_1_in_11,
+    main_Image_1_in_12,
+    main_Image_1_in_13,
+    main_Image_1_in_14,
+    main_Image_1_in_15,
+    main_Image_1_in_16,
+    main_Image_1_in_17,
+    main_Image_1_in_18,
+    main_Image_1_in_19,
+    main_Image_1_in_20,
+    main_Image_1_in_21,
+    main_Image_1_in_22,
+    main_Image_1_in_23,
+    main_Image_1_in_24,
+    main_Image_1_in_25,
+    main_Image_1_in_26,
+    main_Image_1_in_27,
+    main_Image_1_in_28,
+    main_Image_1_in_29,
+    main_Image_1_in_30,
+    main_Image_1_in_31,
+    main_Image_1_in_32,
+    main_Image_1_in_33,
+    main_Image_1_in_34,
+    main_Image_1_in_35,
+    main_Image_1_in_36,
+    main_Image_1_in_37,
+    main_Image_1_in_38,
+    main_Image_1_in_39,
+    main_Image_1_in_40,
+    main_Image_1_in_41,
+    main_Image_1_in_42,
+    main_Image_1_in_43,
+    main_Image_1_in_44,
+    main_Image_1_in_45,
+    main_Image_1_in_46,
+    main_Image_1_in_47,
+    main_Image_1_in_48,
+    main_Image_1_in_49
+    ) [instance: 1, cache: 1];
+    // 
+    // node Image[2]: x = 44, y = 663, inputs = 49, label = Image
+    // input[1]: defaulting = 0, visible = 0, type = 67108863, value = "Image_2"
+    // input[4]: defaulting = 0, visible = 0, type = 1, value = 1
+    // input[5]: defaulting = 0, visible = 0, type = 8, value = [-0.996293 -0.485296 0]
+    // input[6]: defaulting = 0, visible = 0, type = 8, value = [-0.996293 -0.485296 16.0979]
+    // input[7]: defaulting = 0, visible = 0, type = 5, value = 0.0225882
+    // input[8]: defaulting = 0, visible = 0, type = 1, value = 1252
+    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.455671
+    // input[10]: defaulting = 0, visible = 0, type = 8, value = [0 1 0]
+    // input[11]: defaulting = 1, visible = 0, type = 5, value = 0.0803961
+    // input[12]: defaulting = 0, visible = 0, type = 1, value = 0
+    // input[14]: defaulting = 0, visible = 0, type = 1, value = 1
+    // input[15]: defaulting = 1, visible = 0, type = 32, value = "none"
+    // input[16]: defaulting = 1, visible = 0, type = 32, value = "none"
+    // input[17]: defaulting = 1, visible = 0, type = 1, value = 1
+    // input[18]: defaulting = 1, visible = 0, type = 1, value = 1
+    // input[19]: defaulting = 0, visible = 0, type = 3, value = 0
+    // input[29]: defaulting = 1, visible = 0, type = 3, value = 0
+    // input[41]: defaulting = 0, visible = 0, type = 32, value = "panzoom"
+    // depth: value = 24
+    // window: position = (0.3339,0.3083), size = 0.6594x0.5667
+    // internal caching: 1
+    //
+main_Image_2_out_1,
+main_Image_2_out_2,
+main_Image_2_out_3 = 
+    Image(
+    main_Image_2_in_1,
+    main_AutoColor_3_out_1,
+    main_Image_2_in_3,
+    main_Image_2_in_4,
+    main_Image_2_in_5,
+    main_Image_2_in_6,
+    main_Image_2_in_7,
+    main_Image_2_in_8,
+    main_Image_2_in_9,
+    main_Image_2_in_10,
+    main_Image_2_in_11,
+    main_Image_2_in_12,
+    main_Image_2_in_13,
+    main_Image_2_in_14,
+    main_Image_2_in_15,
+    main_Image_2_in_16,
+    main_Image_2_in_17,
+    main_Image_2_in_18,
+    main_Image_2_in_19,
+    main_Image_2_in_20,
+    main_Image_2_in_21,
+    main_Image_2_in_22,
+    main_Image_2_in_23,
+    main_Image_2_in_24,
+    main_Image_2_in_25,
+    main_Image_2_in_26,
+    main_Image_2_in_27,
+    main_Image_2_in_28,
+    main_Image_2_in_29,
+    main_Image_2_in_30,
+    main_Image_2_in_31,
+    main_Image_2_in_32,
+    main_Image_2_in_33,
+    main_Image_2_in_34,
+    main_Image_2_in_35,
+    main_Image_2_in_36,
+    main_Image_2_in_37,
+    main_Image_2_in_38,
+    main_Image_2_in_39,
+    main_Image_2_in_40,
+    main_Image_2_in_41,
+    main_Image_2_in_42,
+    main_Image_2_in_43,
+    main_Image_2_in_44,
+    main_Image_2_in_45,
+    main_Image_2_in_46,
+    main_Image_2_in_47,
+    main_Image_2_in_48,
+    main_Image_2_in_49
+    ) [instance: 2, cache: 1];
+    // 
+    // node SetLocal[4]: x = 268, y = 345, inputs = 3, label = SetLocal
+    //
+    SetLocal(
+    main_Append_1_out_1,
+    main_GetLocal_4_out_2,
+    main_SetLocal_4_in_3
+    ) [instance: 4, cache: 1];
+    // 
+    // node SetLocal[5]: x = 635, y = 366, inputs = 3, label = SetLocal
+    //
+    SetLocal(
+    main_Append_2_out_1,
+    main_GetLocal_5_out_2,
+    main_SetLocal_5_in_3
+    ) [instance: 5, cache: 1];
+    // 
+    // node Streamline[1]: x = 185, y = 452, inputs = 7, label = Streamline
+    // input[2]: defaulting = 0, visible = 1, type = 16777224, value = {[-0.4, 0.1][-0.4, 0.4][-0.4,-0.4][-0.4,0.5][-0.4,-0.2][-0.4, 0.5][-0.5,-0.125][-0.5,0.6125][-0.5,-0.6125][-0.5,0.06125][-0.5,-0.06125][-0.5,0.02][-0.5,-0.02][0.5,0.02][0.5,-0.02][0.5,0.1][0.5,-0.1][0.4,0.03][0.4,-0.03][0.4,0.05][0.4,-0.05]}
+    //
+main_Streamline_1_out_1 = 
+    Streamline(
+    main_CollectMultiGrid_2_out_1,
+    main_Streamline_1_in_2,
+    main_Streamline_1_in_3,
+    main_Streamline_1_in_4,
+    main_Streamline_1_in_5,
+    main_Streamline_1_in_6,
+    main_Streamline_1_in_7
+    ) [instance: 1, cache: 1];
+    // 
+    // node curl[1]: x = 369, y = 384, inputs = 1, label = curl
+    //
+main_curl_1_out_1 = 
+    curl(
+    main_Append_1_out_1
+    ) [instance: 1, cache: 1];
+    //
+    // decorator Annotate	pos=(208,24) size=79x76 style(Label), value = <NULL>
+    // annotation user_begin: 37
+    // annotation user: Index of 
+    // annotation user: first mask
+    // annotation user: field in h5
+    // annotation user: file
+    // annotation user_end: <NULL>
+// network: end of macro body
+CacheScene(main_Image_1_in_1, main_Image_1_out_1, main_Image_1_out_2);
+CacheScene(main_Image_2_in_1, main_Image_2_out_1, main_Image_2_out_2);
+}
+main_FileSelector_1_out_1 = "/home/stefan/LLNLfiles/Miniature/BackWardStep/INS_data.5.h5";
+main_Integer_2_in_1 = "Integer_2";
+main_Integer_2_in_2 = NULL;
+main_Integer_2_in_3 = 4 ;
+main_Integer_2_in_4 = NULL;
+main_Integer_2_in_5 = NULL;
+main_Integer_2_in_6 = NULL;
+main_Integer_2_in_7 = NULL;
+main_Integer_2_in_8 = NULL;
+main_Integer_2_in_9 = NULL;
+main_Integer_2_in_10 = NULL;
+main_Integer_2_in_11 = NULL;
+main_Integer_2_out_1 = 4 ;
+main_Integer_7_in_1 = "Integer_7";
+main_Integer_7_in_2 = NULL;
+main_Integer_7_in_3 = 1 ;
+main_Integer_7_in_4 = NULL;
+main_Integer_7_in_5 = NULL;
+main_Integer_7_in_6 = NULL;
+main_Integer_7_in_7 = NULL;
+main_Integer_7_in_8 = NULL;
+main_Integer_7_in_9 = NULL;
+main_Integer_7_in_10 = NULL;
+main_Integer_7_in_11 = NULL;
+main_Integer_7_out_1 = 1 ;
+main_ForEachN_1_in_1 = 0;
+main_ForEachN_1_in_3 = NULL;
+main_ForEachN_1_out_1 = NULL;
+main_Integer_6_in_1 = "Integer_6";
+main_Integer_6_in_2 = NULL;
+main_Integer_6_in_3 = 6 ;
+main_Integer_6_in_4 = NULL;
+main_Integer_6_in_5 = NULL;
+main_Integer_6_in_6 = NULL;
+main_Integer_6_in_7 = NULL;
+main_Integer_6_in_8 = NULL;
+main_Integer_6_in_9 = NULL;
+main_Integer_6_in_10 = NULL;
+main_Integer_6_in_11 = NULL;
+main_Integer_6_out_1 = 6 ;
+main_Compute_1_in_1 = "$0+$1*$2";
+main_Compute_1_out_1 = NULL;
+main_Integer_1_in_1 = "Integer_1";
+main_Integer_1_in_2 = NULL;
+main_Integer_1_in_3 = 1 ;
+main_Integer_1_in_4 = NULL;
+main_Integer_1_in_5 = NULL;
+main_Integer_1_in_6 = NULL;
+main_Integer_1_in_7 = NULL;
+main_Integer_1_in_8 = NULL;
+main_Integer_1_in_9 = NULL;
+main_Integer_1_in_10 = NULL;
+main_Integer_1_in_11 = NULL;
+main_Integer_1_out_1 = 1 ;
+main_Compute_2_in_1 = "$0+$1*$2";
+main_Compute_2_out_1 = NULL;
+main_Integer_5_in_1 = "Integer_5";
+main_Integer_5_in_2 = NULL;
+main_Integer_5_in_3 = 2 ;
+main_Integer_5_in_4 = NULL;
+main_Integer_5_in_5 = NULL;
+main_Integer_5_in_6 = NULL;
+main_Integer_5_in_7 = NULL;
+main_Integer_5_in_8 = NULL;
+main_Integer_5_in_9 = NULL;
+main_Integer_5_in_10 = NULL;
+main_Integer_5_in_11 = NULL;
+main_Integer_5_out_1 = 2 ;
+main_Compute_3_in_1 = "$0+$1*$2";
+main_Compute_3_out_1 = NULL;
+main_XCOGCompGrid_1_out_1 = NULL;
+main_XCOGCompGrid_1_out_2 = NULL;
+main_CollectMultiGrid_2_in_2 = NULL;
+main_CollectMultiGrid_2_in_3 = NULL;
+main_CollectMultiGrid_2_in_4 = NULL;
+main_CollectMultiGrid_2_out_1 = NULL;
+main_GetLocal_4_in_1 = NULL;
+main_GetLocal_4_in_2 = NULL;
+main_GetLocal_4_in_3 = NULL;
+main_GetLocal_4_out_1 = NULL;
+main_GetLocal_4_out_2 = NULL;
+main_Append_1_in_3 = NULL;
+main_Append_1_in_4 = NULL;
+main_Append_1_in_5 = NULL;
+main_Append_1_out_1 = NULL;
+main_CollectMultiGrid_1_in_2 = NULL;
+main_CollectMultiGrid_1_in_3 = NULL;
+main_CollectMultiGrid_1_in_4 = NULL;
+main_CollectMultiGrid_1_out_1 = NULL;
+main_GetLocal_5_in_1 = NULL;
+main_GetLocal_5_in_2 = NULL;
+main_GetLocal_5_in_3 = NULL;
+main_GetLocal_5_out_1 = NULL;
+main_GetLocal_5_out_2 = NULL;
+main_Append_2_in_3 = NULL;
+main_Append_2_in_4 = NULL;
+main_Append_2_in_5 = NULL;
+main_Append_2_out_1 = NULL;
+main_divergence_1_out_1 = NULL;
+main_RubberSheet_1_in_2 = NULL;
+main_RubberSheet_1_in_3 = NULL;
+main_RubberSheet_1_in_4 = NULL;
+main_RubberSheet_1_out_1 = NULL;
+main_AutoColor_2_in_2 = NULL;
+main_AutoColor_2_in_3 = NULL;
+main_AutoColor_2_in_4 = NULL;
+main_AutoColor_2_in_5 = NULL;
+main_AutoColor_2_in_6 = NULL;
+main_AutoColor_2_in_7 = NULL;
+main_AutoColor_2_in_8 = NULL;
+main_AutoColor_2_in_9 = NULL;
+main_AutoColor_2_in_10 = NULL;
+main_AutoColor_2_out_1 = NULL;
+main_AutoColor_2_out_2 = NULL;
+main_AutoGlyph_1_in_2 = "arrow2D";
+main_AutoGlyph_1_in_3 = 1.0;
+main_AutoGlyph_1_in_4 = .15;
+main_AutoGlyph_1_in_5 = NULL;
+main_AutoGlyph_1_in_6 = NULL;
+main_AutoGlyph_1_in_7 = 1.0;
+main_AutoGlyph_1_out_1 = NULL;
+main_AutoColor_3_in_2 = NULL;
+main_AutoColor_3_in_3 = NULL;
+main_AutoColor_3_in_4 = NULL;
+main_AutoColor_3_in_5 = NULL;
+main_AutoColor_3_in_6 = NULL;
+main_AutoColor_3_in_7 = NULL;
+main_AutoColor_3_in_8 = NULL;
+main_AutoColor_3_in_9 = NULL;
+main_AutoColor_3_in_10 = NULL;
+main_AutoColor_3_out_1 = NULL;
+main_Collect_9_in_2 = NULL;
+main_Collect_9_in_3 = NULL;
+main_ColorBar_1_in_2 = NULL;
+main_ColorBar_1_in_3 = NULL;
+main_ColorBar_1_in_4 = NULL;
+main_ColorBar_1_in_5 = NULL;
+main_ColorBar_1_in_6 = NULL;
+main_ColorBar_1_in_7 = NULL;
+main_ColorBar_1_in_8 = NULL;
+main_ColorBar_1_in_9 = NULL;
+main_ColorBar_1_in_10 = NULL;
+main_ColorBar_1_in_11 = NULL;
+main_ColorBar_1_in_12 = NULL;
+main_ColorBar_1_in_13 = NULL;
+main_ColorBar_1_in_14 = NULL;
+main_ColorBar_1_in_15 = NULL;
+main_ColorBar_1_in_16 = NULL;
+main_ColorBar_1_out_1 = NULL;
+main_Collect_10_out_1 = NULL;
+main_Extract_8_in_1 = NULL;
+main_Extract_8_in_2 = "vector field";
+macro Image(
+        id,
+        object,
+        where,
+        useVector,
+        to,
+        from,
+        width,
+        resolution,
+        aspect,
+        up,
+        viewAngle,
+        perspective,
+        options,
+        buttonState = 1,
+        buttonUpApprox = "none",
+        buttonDownApprox = "none",
+        buttonUpDensity = 1,
+        buttonDownDensity = 1,
+        renderMode = 0,
+        defaultCamera,
+        reset,
+        backgroundColor,
+        throttle,
+        RECenable = 0,
+        RECfile,
+        RECformat,
+        RECresolution,
+        RECaspect,
+        AAenable = 0,
+        AAlabels,
+        AAticks,
+        AAcorners,
+        AAframe,
+        AAadjust,
+        AAcursor,
+        AAgrid,
+        AAcolors,
+        AAannotation,
+        AAlabelscale,
+        AAfont,
+        interactionMode,
+        title,
+        AAxTickLocs,
+        AAyTickLocs,
+        AAzTickLocs,
+        AAxTickLabels,
+        AAyTickLabels,
+        AAzTickLabels,
+        webOptions) -> (
+        object,
+        camera,
+        where)
+{
+    ImageMessage(
+        id,
+        backgroundColor,
+        throttle,
+        RECenable,
+        RECfile,
+        RECformat,
+        RECresolution,
+        RECaspect,
+        AAenable,
+        AAlabels,
+        AAticks,
+        AAcorners,
+        AAframe,
+        AAadjust,
+        AAcursor,
+        AAgrid,
+        AAcolors,
+        AAannotation,
+        AAlabelscale,
+        AAfont,
+        AAxTickLocs,
+        AAyTickLocs,
+        AAzTickLocs,
+        AAxTickLabels,
+        AAyTickLabels,
+        AAzTickLabels,
+        interactionMode,
+        title,
+        renderMode,
+        buttonUpApprox,
+        buttonDownApprox,
+        buttonUpDensity,
+        buttonDownDensity) [instance: 1, cache: 1];
+    autoCamera =
+        AutoCamera(
+            object,
+            "front",
+            object,
+            resolution,
+            aspect,
+            [0,1,0],
+            perspective,
+            viewAngle,
+            backgroundColor) [instance: 1, cache: 1];
+    realCamera =
+        Camera(
+            to,
+            from,
+            width,
+            resolution,
+            aspect,
+            up,
+            perspective,
+            viewAngle,
+            backgroundColor) [instance: 1, cache: 1];
+    coloredDefaultCamera = 
+	 UpdateCamera(defaultCamera,
+            background=backgroundColor) [instance: 1, cache: 1];
+    nullDefaultCamera =
+        Inquire(defaultCamera,
+            "is null + 1") [instance: 1, cache: 1];
+    resetCamera =
+        Switch(
+            nullDefaultCamera,
+            coloredDefaultCamera,
+            autoCamera) [instance: 1, cache: 1];
+    resetNull = 
+        Inquire(
+            reset,
+            "is null + 1") [instance: 2, cache: 1];
+    reset =
+        Switch(
+            resetNull,
+            reset,
+            0) [instance: 2, cache: 1];
+    whichCamera =
+        Compute(
+            "($0 != 0 || $1 == 0) ? 1 : 2",
+            reset,
+            useVector) [instance: 1, cache: 1];
+    camera = Switch(
+            whichCamera,
+            resetCamera,
+            realCamera) [instance: 3, cache: 1];
+    AAobject =
+        AutoAxes(
+            object,
+            camera,
+            AAlabels,
+            AAticks,
+            AAcorners,
+            AAframe,
+            AAadjust,
+            AAcursor,
+            AAgrid,
+            AAcolors,
+            AAannotation,
+            AAlabelscale,
+            AAfont,
+            AAxTickLocs,
+            AAyTickLocs,
+            AAzTickLocs,
+            AAxTickLabels,
+            AAyTickLabels,
+            AAzTickLabels) [instance: 1, cache: 1];
+    switchAAenable = Compute("$0+1",
+	     AAenable) [instance: 2, cache: 1];
+    object = Switch(
+	     switchAAenable,
+	     object,
+	     AAobject) [instance:4, cache: 1];
+    SWapproximation_options =
+        Switch(
+            buttonState,
+            buttonUpApprox,
+            buttonDownApprox) [instance: 5, cache: 1];
+    SWdensity_options =
+        Switch(
+            buttonState,
+            buttonUpDensity,
+            buttonDownDensity) [instance: 6, cache: 1];
+    HWapproximation_options =
+        Format(
+            "%s,%s",
+            buttonDownApprox,
+            buttonUpApprox) [instance: 1, cache: 1];
+    HWdensity_options =
+        Format(
+            "%d,%d",
+            buttonDownDensity,
+            buttonUpDensity) [instance: 2, cache: 1];
+    switchRenderMode = Compute(
+	     "$0+1",
+	     renderMode) [instance: 3, cache: 1];
+    approximation_options = Switch(
+	     switchRenderMode,
+            SWapproximation_options,
+	     HWapproximation_options) [instance: 7, cache: 1];
+    density_options = Switch(
+	     switchRenderMode,
+            SWdensity_options,
+            HWdensity_options) [instance: 8, cache: 1];
+    renderModeString = Switch(
+            switchRenderMode,
+            "software",
+            "hardware")[instance: 9, cache: 1];
+    object_tag = Inquire(
+            object,
+            "object tag")[instance: 3, cache: 1];
+    annoted_object =
+        Options(
+            object,
+            "send boxes",
+            0,
+            "cache",
+            1,
+            "object tag",
+            object_tag,
+            "ddcamera",
+            whichCamera,
+            "rendering approximation",
+            approximation_options,
+            "render every",
+            density_options,
+            "button state",
+            buttonState,
+            "rendering mode",
+            renderModeString) [instance: 1, cache: 1];
+    RECresNull =
+        Inquire(
+            RECresolution,
+            "is null + 1") [instance: 4, cache: 1];
+    ImageResolution =
+        Inquire(
+            camera,
+            "camera resolution") [instance: 5, cache: 1];
+    RECresolution =
+        Switch(
+            RECresNull,
+            RECresolution,
+            ImageResolution) [instance: 10, cache: 1];
+    RECaspectNull =
+        Inquire(
+            RECaspect,
+            "is null + 1") [instance: 6, cache: 1];
+    ImageAspect =
+        Inquire(
+            camera,
+            "camera aspect") [instance: 7, cache: 1];
+    RECaspect =
+        Switch(
+            RECaspectNull,
+            RECaspect,
+            ImageAspect) [instance: 11, cache: 1];
+    switchRECenable = Compute(
+          "$0 == 0 ? 1 : (($2 == $3) && ($4 == $5)) ? ($1 == 1 ? 2 : 3) : 4",
+            RECenable,
+            switchRenderMode,
+            RECresolution,
+            ImageResolution,
+            RECaspect,
+	     ImageAspect) [instance: 4, cache: 1];
+    NoRECobject, RECNoRerenderObject, RECNoRerHW, RECRerenderObject = Route(switchRECenable, annoted_object);
+    Display(
+        NoRECobject,
+        camera,
+        where,
+        throttle) [instance: 1, cache: 1];
+    image =
+        Render(
+            RECNoRerenderObject,
+            camera) [instance: 1, cache: 1];
+    Display(
+        image,
+        NULL,
+        where,
+        throttle) [instance: 2, cache: 1];
+    WriteImage(
+        image,
+        RECfile,
+        RECformat) [instance: 1, cache: 1];
+    rec_where = Display(
+        RECNoRerHW,
+        camera,
+        where,
+        throttle) [instance: 1, cache: 0];
+    rec_image = ReadImageWindow(
+        rec_where) [instance: 1, cache: 1];
+    WriteImage(
+        rec_image,
+        RECfile,
+        RECformat) [instance: 1, cache: 1];
+    RECupdateCamera =
+	UpdateCamera(
+	    camera,
+	    resolution=RECresolution,
+	    aspect=RECaspect) [instance: 2, cache: 1];
+    Display(
+        RECRerenderObject,
+        camera,
+        where,
+        throttle) [instance: 1, cache: 1];
+    RECRerenderObject =
+	ScaleScreen(
+	    RECRerenderObject,
+	    NULL,
+	    RECresolution,
+	    camera) [instance: 1, cache: 1];
+    image =
+        Render(
+            RECRerenderObject,
+            RECupdateCamera) [instance: 2, cache: 1];
+    WriteImage(
+        image,
+        RECfile,
+        RECformat) [instance: 2, cache: 1];
+}
+main_Image_1_in_1 = "Image_1";
+main_Image_1_in_3 = "X24,,";
+main_Image_1_in_4 = 1;
+main_Image_1_in_5 = [-0.862566 -0.533789 -0.0665894];
+main_Image_1_in_6 = [-13.1907 1.35241 3.16852];
+main_Image_1_in_7 = NULL;
+main_Image_1_in_8 = 1154;
+main_Image_1_in_9 = 0.569757;
+main_Image_1_in_10 = [0.190302 0.968516 0.160505];
+main_Image_1_in_11 = 4.83728;
+main_Image_1_in_12 = 1;
+main_Image_1_in_13 = NULL;
+main_Image_1_in_14 = 1;
+main_Image_1_in_15 = NULL;
+main_Image_1_in_16 = NULL;
+main_Image_1_in_17 = 1;
+main_Image_1_in_18 = 1;
+main_Image_1_in_19 = 1;
+main_Image_1_in_20 = NULL;
+main_Image_1_in_21 = NULL;
+main_Image_1_in_22 = NULL;
+main_Image_1_in_23 = NULL;
+main_Image_1_in_25 = NULL;
+main_Image_1_in_26 = NULL;
+main_Image_1_in_27 = NULL;
+main_Image_1_in_28 = NULL;
+main_Image_1_in_29 = NULL;
+main_Image_1_in_30 = NULL;
+main_Image_1_in_31 = NULL;
+main_Image_1_in_32 = NULL;
+main_Image_1_in_33 = NULL;
+main_Image_1_in_34 = NULL;
+main_Image_1_in_35 = NULL;
+main_Image_1_in_36 = NULL;
+main_Image_1_in_37 = NULL;
+main_Image_1_in_38 = NULL;
+main_Image_1_in_39 = NULL;
+main_Image_1_in_40 = NULL;
+main_Image_1_in_41 = "none";
+main_Image_1_in_42 = NULL;
+main_Image_1_in_43 = NULL;
+main_Image_1_in_44 = NULL;
+main_Image_1_in_45 = NULL;
+main_Image_1_in_46 = NULL;
+main_Image_1_in_47 = NULL;
+main_Image_1_in_48 = NULL;
+main_Image_1_in_49 = NULL;
+main_Image_2_in_1 = "Image_2";
+main_Image_2_in_3 = "X24,,";
+main_Image_2_in_4 = 1;
+main_Image_2_in_5 = [-0.996293 -0.485296 0];
+main_Image_2_in_6 = [-0.996293 -0.485296 16.0979];
+main_Image_2_in_7 = 0.0225882;
+main_Image_2_in_8 = 1252;
+main_Image_2_in_9 = 0.455671;
+main_Image_2_in_10 = [0 1 0];
+main_Image_2_in_11 = NULL;
+main_Image_2_in_12 = 0;
+main_Image_2_in_13 = NULL;
+main_Image_2_in_14 = 1;
+main_Image_2_in_15 = NULL;
+main_Image_2_in_16 = NULL;
+main_Image_2_in_17 = NULL;
+main_Image_2_in_18 = NULL;
+main_Image_2_in_19 = 0;
+main_Image_2_in_20 = NULL;
+main_Image_2_in_21 = NULL;
+main_Image_2_in_22 = NULL;
+main_Image_2_in_23 = NULL;
+main_Image_2_in_25 = NULL;
+main_Image_2_in_26 = NULL;
+main_Image_2_in_27 = NULL;
+main_Image_2_in_28 = NULL;
+main_Image_2_in_29 = NULL;
+main_Image_2_in_30 = NULL;
+main_Image_2_in_31 = NULL;
+main_Image_2_in_32 = NULL;
+main_Image_2_in_33 = NULL;
+main_Image_2_in_34 = NULL;
+main_Image_2_in_35 = NULL;
+main_Image_2_in_36 = NULL;
+main_Image_2_in_37 = NULL;
+main_Image_2_in_38 = NULL;
+main_Image_2_in_39 = NULL;
+main_Image_2_in_40 = NULL;
+main_Image_2_in_41 = "panzoom";
+main_Image_2_in_42 = NULL;
+main_Image_2_in_43 = NULL;
+main_Image_2_in_44 = NULL;
+main_Image_2_in_45 = NULL;
+main_Image_2_in_46 = NULL;
+main_Image_2_in_47 = NULL;
+main_Image_2_in_48 = NULL;
+main_Image_2_in_49 = NULL;
+main_SetLocal_4_in_3 = NULL;
+main_SetLocal_5_in_3 = NULL;
+main_Streamline_1_in_2 = {[-0.4, 0.1][-0.4, 0.4][-0.4,-0.4][-0.4,0.5][-0.4,-0.2][-0.4, 0.5][-0.5,-0.125][-0.5,0.6125][-0.5,-0.6125][-0.5,0.06125][-0.5,-0.06125][-0.5,0.02][-0.5,-0.02][0.5,0.02][0.5,-0.02][0.5,0.1][0.5,-0.1][0.4,0.03][0.4,-0.03][0.4,0.05][0.4,-0.05]};
+main_Streamline_1_in_3 = NULL;
+main_Streamline_1_in_4 = NULL;
+main_Streamline_1_in_5 = NULL;
+main_Streamline_1_in_6 = NULL;
+main_Streamline_1_in_7 = NULL;
+Executive("product version 4 4 4");
+$sync
+main();
