@@ -45,7 +45,7 @@ using std::endl;
 int
 main(int argc, char** argv)
 {
-  ios::sync_with_stdio();
+  std::ios::sync_with_stdio();
   
   int Number_of_Processors = 0;
   
@@ -272,7 +272,7 @@ main(int argc, char** argv)
   int saveIntervall = 20;
   int fileCounter = 0;
   double cfl = 0.5;
-  stringstream fileString;
+  std::stringstream fileString;
   
   double stoptime = 0.1, startTime = MPI_Wtime();
   
@@ -353,7 +353,7 @@ main(int argc, char** argv)
     }
     if (myid == 0)
     {
-      cout << "\n New time step, time is; " << U.getTime() << ", dt: " << dt << endl;
+      cout << "\n New time step (" << it << "), time is; " << U.getTime() << ", dt: " << dt << endl;
     }
     
     tempU = U;
@@ -406,14 +406,13 @@ main(int argc, char** argv)
     if (it % printIntervall == 0 && myid == 0)
     {
       st = MPI_Wtime();
-      cout << " Solving for pressure now " << endl;
+      cout << " Solving for pressure now";
     }
     // Solve the pressure equation
     pressurePoisson.solve(RHS, &Kimera, 0, allNeumann, noBC);
     if (it % printIntervall == 0 && myid == 0)
     {
-      cout << "  : solution time for pressure-equation was " 
-	   << MPI_Wtime() - st << endl;
+      cout << ", solution time was: " << MPI_Wtime() - st << " [s]" << endl;
     }
     pressure.addTime(dt);
     if (it == 0)
@@ -461,24 +460,24 @@ main(int argc, char** argv)
     if (it % printIntervall == 0 && myid == 0)
     {
       st = MPI_Wtime();
-      cout << " Solving for U now " << endl;
+      cout << " Solving for U now";
     }
     U_momentum.solve(U, &Kimera, 0.5*ins::viscosityG*dt);
 
     if (it % printIntervall == 0 && myid == 0)
     {
-      cout << "  : solution time for U-equation was " << MPI_Wtime() - st << endl;
+      cout << ", solution time was: " << MPI_Wtime() - st << " [s]" << endl;
     }
     if (it % printIntervall == 0 && myid == 0)
     {
       st = MPI_Wtime();
-      cout << " Solving for V now " << endl;
+      cout << " Solving for V now";
     }
     V_momentum.solve(V, &Kimera, 0.5*ins::viscosityG*dt);
     
     if (it % printIntervall == 0 && myid == 0)
     {
-      cout << "  : solution time for V-equation was " << MPI_Wtime() - st << endl;
+      cout << ", solution time was: " << MPI_Wtime() - st << " [s]" << endl;
     }
     //
     // The predictor step is finished here
@@ -524,13 +523,12 @@ main(int argc, char** argv)
     if (it % printIntervall == 0 && myid == 0)
     {
       st = MPI_Wtime();
-      cout << " Solving for pressure now " << endl;
+      cout << " Solving for pressure now";
     }
     pressurePoisson.solve(RHS, &Kimera, 0, allNeumann, noBC);
     if (it % printIntervall == 0 && myid == 0)
     {
-      cout << "  : solution time for pressure-equation was " 
-	   << MPI_Wtime() - st << endl;
+      cout << ", solution time was: " << MPI_Wtime() - st << " [s]" << endl;
     }
     // 
     // Then a corrected velocity field
@@ -563,24 +561,24 @@ main(int argc, char** argv)
     if (it % printIntervall == 0 && myid == 0)
     {
       st = MPI_Wtime();
-      cout << " Solving for U now " << endl;
+      cout << " Solving for U now";
     }
     U_momentum.solve(U, &Kimera, 0.5*ins::viscosityG*dt);
     
     if (it % printIntervall == 0 && myid == 0)
     {
-      cout << "  : solution time for U-equation was " << MPI_Wtime() - st << endl;
+      cout << ", solution time was: " << MPI_Wtime() - st << " [s]" << endl;
     }
     if (it % printIntervall == 0 && myid == 0)
     {
       st = MPI_Wtime();
-      cout << " Solving for V now " << endl;
+      cout << " Solving for V now";
     }
     V_momentum.solve(V, &Kimera, 0.5*ins::viscosityG*dt);
 
     if (it % printIntervall == 0 && myid == 0)
     {
-      cout << "  : solution time for V-equation was " << MPI_Wtime() - st << endl;
+      cout << ", solution time was: " << MPI_Wtime() - st << " [s]" << endl;
     }
     // check if simulation can be stopped
     if (U.getTime() > stoptime)
