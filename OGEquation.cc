@@ -1,12 +1,14 @@
-#include <mpi.h>
-
-
-#include "OGEquation.hh"
 #ifdef _OLD_STL_
 #include <math.h>
 #else
 #include <cmath>
 #endif
+
+#include <mpi.h>
+#include "petscsys.h"
+#include "petscsystypes.h"
+
+#include "OGEquation.hh"
 
 
 DMSRMatrix::DMSRMatrix()
@@ -92,17 +94,29 @@ DMSRMatrix::setupMatrix(CompositeGrid *Kimera, MatrixOperator operatorType, int 
     }
   }
   if (package == PETSc && !reset)
+  {
+    PetscInt* nnz = new PetscInt[N_update];
+    PetscInt* o_nnz = new PetscInt[N_update];
+    for (int i = 0; i < N_update; ++i)
     {
-      MatCreateAIJ(PETSC_COMM_WORLD,N_update,N_update,
-		   PETSC_DETERMINE,PETSC_DETERMINE,10,
-		   PETSC_NULL,0,PETSC_NULL,&PmatM);
-      MatGetOwnershipRange(PmatM, &startRow, &endRow); 
+      nnz[i] = 10;
+      o_nnz[i] = 9;
     }
+    if (allNeumann && me == nrProcs-1)
+    {
+      nnz[N_update - 1] = N_update;
+      o_nnz[N_update - 1] = Total_N_update - N_update;
+    }
+    MatCreateAIJ(PETSC_COMM_WORLD,N_update,N_update,
+		 PETSC_DETERMINE,PETSC_DETERMINE,0,
+		 nnz,0,o_nnz,&PmatM);
+    MatGetOwnershipRange(PmatM, &startRow, &endRow); 
+  }
   if (package == PETSc)
-    {
-      localToGlobalM = new intArray[Kimera->nrGrids()];
-      getLocalToGlobal(Kimera);
-    }
+  {
+    localToGlobalM = new intArray[Kimera->nrGrids()];
+    getLocalToGlobal(Kimera);
+  }
 
   if (!reset)
     {
@@ -140,7 +154,7 @@ DMSRMatrix::setupMatrix(CompositeGrid *Kimera, MatrixOperator operatorType, int 
     int sdim = Kimera->sdimM[grid];
 
     intSerialArray *Flag = flagValues[grid].getSerialArrayPointer();
-
+    
     doubleSerialArray *X = Kimera->xM[grid].getSerialArrayPointer();
     doubleSerialArray *Y = Kimera->yM[grid].getSerialArrayPointer();
 

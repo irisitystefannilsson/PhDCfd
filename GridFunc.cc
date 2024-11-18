@@ -1,21 +1,25 @@
-#include <mpi.h>
+#include <assert.h>
+#include <cmath>
+#include <algorithm>
 
+#include <mpi.h>
+#include "hdf5.h"
 
 #include "GridFunc.hh"
-#include <cmath>
 
 #undef min
 #undef max
 
-#include <algorithm>
-
-#include "hdf5.h"
-#include <assert.h>
 #define FAIL -1
 
-doubleArray gridFunction::boundaryDiff(int i, int gType, const double t, const doubleArray & xIn, const doubleArray & yIn, const doubleArray & xr = doubleArray(), const doubleArray & xs = doubleArray(), const doubleArray & yr = doubleArray(), const doubleArray & ys = doubleArray())
-{
-  
+doubleArray gridFunction::boundaryDiff(int i, int gType, const double t,
+				       const doubleArray& xIn,
+				       const doubleArray& yIn,
+				       const doubleArray& xr = doubleArray(),
+				       const doubleArray& xs = doubleArray(),
+				       const doubleArray& yr = doubleArray(),
+				       const doubleArray& ys = doubleArray())
+{  
   if (i == 0) // low r 
     {
       if (gType == 1)
@@ -2068,7 +2072,6 @@ void gridFunction::interpolate(int gridToUpdate, gridFunction *target)
       else
 	MPI_Irecv(theReceiveArray, 1, myGridM->receiveTypeM[p], p, recHandle, myComm, &(Request2[p]));
     }
-  
   currIndex = 0;
   myGridM->offsetsM = 0;
   for (k=0; k<myGridM->nrGrids(); k++)
@@ -2086,40 +2089,38 @@ void gridFunction::interpolate(int gridToUpdate, gridFunction *target)
 	      
 	      for (grid=0; grid<currGrid; grid++)
 		myGridM->offsetsM(p,k,currGrid) += myGridM->nrOfPointsToComputeM(k,grid,p);
-	      
 	    }
-      
 	}
       Index sendIndex(currIndex, (myGridM->intInterpolationLocationM[k]).getLength(0));
       myGridM->theSendBufferM(sendIndex) = computeInterpolationPoints(k);
       currIndex += (myGridM->intInterpolationLocationM[k]).getLength(0);
     }
-  
   /*
     Send all data to correct process
   */
   int sendHandle;
   for (p=0; p<nrProcs; p++)
+  {
+    int index = 0;
+    for (int i=0; i<myGridM->nrGrids(); i++)
     {
-      int index = 0;
-      for (int i=0; i<myGridM->nrGrids(); i++)
-	for (int j=0; j<myGridM->nrGrids(); j++)
-	  {
-	    block_lengths[index] = myGridM->nrOfPointsToComputeM(j,i,p);
-	    displacements[index] = myGridM->offsetsM(p,j,i);
-	    index++;
-	  }
-      
-      MPI_Type_indexed((myGridM->nrGrids())*(myGridM->nrGrids()),block_lengths,displacements,MPI_DOUBLE, &(myGridM->sendTypeM[p]));
-      MPI_Type_commit(&(myGridM->sendTypeM[p]));
-      
-      sendHandle = 4;
-      double *spoint = 0x0;
-      if (theSendArray == 0) // message of len=0
-	MPI_Isend(spoint, 1, myGridM->sendTypeM[p], p, sendHandle, myComm, &(Request1[p]));
-      else
-	MPI_Isend(theSendArray, 1, myGridM->sendTypeM[p], p, sendHandle, myComm, &(Request1[p]));
-    }
+      for (int j=0; j<myGridM->nrGrids(); j++)
+      {
+	block_lengths[index] = myGridM->nrOfPointsToComputeM(j,i,p);
+	displacements[index] = myGridM->offsetsM(p,j,i);
+	index++;
+      }
+    }  
+    MPI_Type_indexed((myGridM->nrGrids())*(myGridM->nrGrids()),block_lengths,displacements,MPI_DOUBLE, &(myGridM->sendTypeM[p]));
+    MPI_Type_commit(&(myGridM->sendTypeM[p]));
+    
+    sendHandle = 4;
+    double *spoint = 0x0;
+    if (theSendArray == 0) // message of len=0
+      MPI_Isend(spoint, 1, myGridM->sendTypeM[p], p, sendHandle, myComm, &(Request1[p]));
+    else
+      MPI_Isend(theSendArray, 1, myGridM->sendTypeM[p], p, sendHandle, myComm, &(Request1[p]));
+  }
   
   delete[] block_lengths;
   delete[] displacements;
@@ -2135,17 +2136,17 @@ void gridFunction::interpolate(int gridToUpdate, gridFunction *target)
     correct places in the gridFunction
   */
   if (target == 0)
-    {
-      target = this;
-    }
+  {
+    target = this;
+  }
 
   fillIntElements(myGridM->theReceiveBufferM, target, gridToUpdate);
   
   for (p=0; p<nrProcs; p++)
-    {
-      MPI_Type_free(&(myGridM->sendTypeM[p]));
-      MPI_Type_free(&(myGridM->receiveTypeM[p]));
-    }
+  {
+    MPI_Type_free(&(myGridM->sendTypeM[p]));
+    MPI_Type_free(&(myGridM->receiveTypeM[p]));
+  }
   delete[] Request1;
   delete[] Request2;
   delete[] status1;
@@ -2532,33 +2533,37 @@ void gridFunction::setFlagValues()
       //----------------------------------------
       // Fix the no-slip (Dirichlet) extremal
       // points
+      // 2024-11-18 This seems unnecessary
+      // commenting out but leaving for now (SN)
       //----------------------------------------
-      if (getBoundaryType(grid,(Side) 0) == DIRICHLET)
-	{
-	  flagValuesM[grid](low_i+1,low_j) = grid + 1 + 1000;
-	  flagValuesM[grid](low_i+1,hi_j) = grid + 1 + 1000;
-	}
+      // if (getBoundaryType(grid,(Side) 0) == DIRICHLET)
+      // 	{
+      // 	  flagValuesM[grid](low_i+1,low_j) = grid + 1 + 1000;
+      // 	  flagValuesM[grid](low_i+1,hi_j) = grid + 1 + 1000;
+      // 	}
       
-      if (getBoundaryType(grid,(Side) 1) == DIRICHLET)
-	{
-	  flagValuesM[grid](hi_i-1,low_j) = grid + 1 + 2000;
-	  flagValuesM[grid](hi_i-1,hi_j) = grid + 1 + 2000;
-	}
+      // if (getBoundaryType(grid,(Side) 1) == DIRICHLET)
+      // 	{
+      // 	  flagValuesM[grid](hi_i-1,low_j) = grid + 1 + 2000;
+      // 	  flagValuesM[grid](hi_i-1,hi_j) = grid + 1 + 2000;
+      // 	}
       
-      if (getBoundaryType(grid,(Side) 2) == DIRICHLET)
-	{
-	  flagValuesM[grid](low_i,low_j+1) = grid + 1 + 3000;
-	  flagValuesM[grid](hi_i,low_j+1) = grid + 1 + 3000;
-	}
+      // if (getBoundaryType(grid,(Side) 2) == DIRICHLET)
+      // 	{
+      // 	  flagValuesM[grid](low_i,low_j+1) = grid + 1 + 3000;
+      // 	  flagValuesM[grid](hi_i,low_j+1) = grid + 1 + 3000;
+      // 	}
       
-      if (getBoundaryType(grid,(Side) 3) == DIRICHLET)
-	{
-	  flagValuesM[grid](low_i,hi_j-1) = grid + 1 + 4000;
-	  flagValuesM[grid](hi_i,hi_j-1) = grid + 1 + 4000;
-	}
+      // if (getBoundaryType(grid,(Side) 3) == DIRICHLET)
+      // 	{
+      // 	  flagValuesM[grid](low_i,hi_j-1) = grid + 1 + 4000;
+      // 	  flagValuesM[grid](hi_i,hi_j-1) = grid + 1 + 4000;
+      // 	}
+      
       //     flagValuesM[grid].display();exit(1);
     }
 
+  // What is this. Probably some old debug code (SN)
   /*  for (int cuG=0;cuG<nmbrOfGrids; cuG++)
       {
       FDmask[cuG].redim(rdimM[cuG],sdimM[cuG]);

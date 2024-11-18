@@ -1,5 +1,5 @@
 //
-// time: Wed May 29 17:42:53 2024
+// time: Fri Nov  1 17:59:08 2024
 //
 // version: 3.2.0 (format), 4.4.4 (DX)
 //
@@ -22,9 +22,9 @@ macro main(
 ) -> (
 ) {
     // 
-    // node FileSelector[1]: x = 19, y = 27, inputs = 0, label = FileSelector
-    // output[1]: visible = 1, type = 32, value = "/home/stefan/LLNLfiles/Miniature/BackWardStep/INS_data.5.h5"
-    // output[2]: visible = 1, type = 32, value = "INS_data.5.h5"
+    // node FileSelector[1]: x = 18, y = 29, inputs = 0, label = FileSelector
+    // output[1]: visible = 1, type = 32, value = "/home/stefan/LLNLfiles/Miniature/PhDCfd/XcogGrids/INS_data.89.h5"
+    // output[2]: visible = 1, type = 32, value = "INS_data.89.h5"
     //
     // 
     // node Integer[2]: x = 147, y = 30, inputs = 11, label = Integer
@@ -39,12 +39,12 @@ macro main(
     // 
     // node Integer[7]: x = 471, y = 6, inputs = 11, label = Integer
     // input[1]: defaulting = 0, visible = 0, type = 32, value = "Integer_7"
-    // input[3]: defaulting = 0, visible = 0, type = 1, value = 1 
+    // input[3]: defaulting = 0, visible = 0, type = 1, value = 0 
     // input[5]: defaulting = 1, visible = 0, type = 1, value = -1000000
     // input[6]: defaulting = 1, visible = 0, type = 1, value = 1000000
     // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
     // input[9]: defaulting = 1, visible = 0, type = 1, value = 0
-    // output[1]: visible = 1, type = 1, value = 1 
+    // output[1]: visible = 1, type = 1, value = 0 
     //
     // 
     // node ForEachN[1]: x = 483, y = 77, inputs = 3, label = ForEachN
@@ -145,7 +145,7 @@ main_XCOGCompGrid_1_out_2 =
     main_Compute_3_out_1
     ) [instance: 1, cache: 1];
     // 
-    // node CollectMultiGrid[2]: x = 19, y = 267, inputs = 4, label = CollectMultiGrid
+    // node CollectMultiGrid[2]: x = 7, y = 246, inputs = 4, label = CollectMultiGrid
     //
 main_CollectMultiGrid_2_out_1 = 
     CollectMultiGrid(
@@ -329,24 +329,24 @@ main_Extract_8_out_1 =
     // node Image[1]: x = 216, y = 660, inputs = 49, label = Image
     // input[1]: defaulting = 0, visible = 0, type = 67108863, value = "Image_1"
     // input[4]: defaulting = 0, visible = 0, type = 1, value = 1
-    // input[5]: defaulting = 0, visible = 0, type = 8, value = [-0.862566 -0.533789 -0.0665894]
-    // input[6]: defaulting = 0, visible = 0, type = 8, value = [-13.1907 1.35241 3.16852]
-    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.08843
+    // input[5]: defaulting = 0, visible = 0, type = 8, value = [0 0 0.000137389]
+    // input[6]: defaulting = 0, visible = 0, type = 8, value = [0 0 9.40286]
+    // input[7]: defaulting = 0, visible = 0, type = 5, value = 5.03892
     // input[8]: defaulting = 0, visible = 0, type = 1, value = 1154
     // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.569757
-    // input[10]: defaulting = 0, visible = 0, type = 8, value = [0.190302 0.968516 0.160505]
-    // input[11]: defaulting = 0, visible = 0, type = 5, value = 4.83728
-    // input[12]: defaulting = 0, visible = 0, type = 1, value = 1
+    // input[10]: defaulting = 0, visible = 0, type = 8, value = [0 1 0]
+    // input[11]: defaulting = 0, visible = 0, type = 5, value = 30.0001
+    // input[12]: defaulting = 0, visible = 0, type = 1, value = 0
     // input[14]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[15]: defaulting = 1, visible = 0, type = 32, value = "none"
     // input[16]: defaulting = 1, visible = 0, type = 32, value = "none"
     // input[17]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[18]: defaulting = 0, visible = 0, type = 1, value = 1
-    // input[19]: defaulting = 0, visible = 0, type = 3, value = 1
+    // input[19]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[29]: defaulting = 1, visible = 0, type = 3, value = 0
     // input[41]: defaulting = 0, visible = 0, type = 32, value = "none"
     // depth: value = 24
-    // window: position = (0.0401,0.0898), size = 0.6083x0.6472
+    // window: position = (0.0370,0.2241), size = 0.6083x0.6472
     // internal caching: 1
     //
 main_Image_1_out_1,
@@ -407,24 +407,24 @@ main_Image_1_out_3 =
     // node Image[2]: x = 44, y = 663, inputs = 49, label = Image
     // input[1]: defaulting = 0, visible = 0, type = 67108863, value = "Image_2"
     // input[4]: defaulting = 0, visible = 0, type = 1, value = 1
-    // input[5]: defaulting = 0, visible = 0, type = 8, value = [-0.996293 -0.485296 0]
-    // input[6]: defaulting = 0, visible = 0, type = 8, value = [-0.996293 -0.485296 16.0979]
-    // input[7]: defaulting = 0, visible = 0, type = 5, value = 0.0225882
+    // input[5]: defaulting = 0, visible = 0, type = 8, value = [0 0 0]
+    // input[6]: defaulting = 0, visible = 0, type = 8, value = [0 0 11.7052]
+    // input[7]: defaulting = 0, visible = 0, type = 5, value = 6.27281
     // input[8]: defaulting = 0, visible = 0, type = 1, value = 1252
-    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.455671
+    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.456
     // input[10]: defaulting = 0, visible = 0, type = 8, value = [0 1 0]
-    // input[11]: defaulting = 1, visible = 0, type = 5, value = 0.0803961
+    // input[11]: defaulting = 1, visible = 0, type = 5, value = 30.0001
     // input[12]: defaulting = 0, visible = 0, type = 1, value = 0
     // input[14]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[15]: defaulting = 1, visible = 0, type = 32, value = "none"
     // input[16]: defaulting = 1, visible = 0, type = 32, value = "none"
     // input[17]: defaulting = 1, visible = 0, type = 1, value = 1
     // input[18]: defaulting = 1, visible = 0, type = 1, value = 1
-    // input[19]: defaulting = 0, visible = 0, type = 3, value = 0
+    // input[19]: defaulting = 0, visible = 0, type = 1, value = 0
     // input[29]: defaulting = 1, visible = 0, type = 3, value = 0
-    // input[41]: defaulting = 0, visible = 0, type = 32, value = "panzoom"
+    // input[41]: defaulting = 0, visible = 0, type = 32, value = "none"
     // depth: value = 24
-    // window: position = (0.3339,0.3083), size = 0.6594x0.5667
+    // window: position = (0.3146,0.2639), size = 0.6594x0.5667
     // internal caching: 1
     //
 main_Image_2_out_1,
@@ -530,7 +530,7 @@ main_curl_1_out_1 =
 CacheScene(main_Image_1_in_1, main_Image_1_out_1, main_Image_1_out_2);
 CacheScene(main_Image_2_in_1, main_Image_2_out_1, main_Image_2_out_2);
 }
-main_FileSelector_1_out_1 = "/home/stefan/LLNLfiles/Miniature/BackWardStep/INS_data.5.h5";
+main_FileSelector_1_out_1 = "/home/stefan/LLNLfiles/Miniature/PhDCfd/XcogGrids/INS_data.89.h5";
 main_Integer_2_in_1 = "Integer_2";
 main_Integer_2_in_2 = NULL;
 main_Integer_2_in_3 = 4 ;
@@ -545,7 +545,7 @@ main_Integer_2_in_11 = NULL;
 main_Integer_2_out_1 = 4 ;
 main_Integer_7_in_1 = "Integer_7";
 main_Integer_7_in_2 = NULL;
-main_Integer_7_in_3 = 1 ;
+main_Integer_7_in_3 = 0 ;
 main_Integer_7_in_4 = NULL;
 main_Integer_7_in_5 = NULL;
 main_Integer_7_in_6 = NULL;
@@ -554,7 +554,7 @@ main_Integer_7_in_8 = NULL;
 main_Integer_7_in_9 = NULL;
 main_Integer_7_in_10 = NULL;
 main_Integer_7_in_11 = NULL;
-main_Integer_7_out_1 = 1 ;
+main_Integer_7_out_1 = 0 ;
 main_ForEachN_1_in_1 = 0;
 main_ForEachN_1_in_3 = NULL;
 main_ForEachN_1_out_1 = NULL;
@@ -997,14 +997,14 @@ macro Image(
 main_Image_1_in_1 = "Image_1";
 main_Image_1_in_3 = "X24,,";
 main_Image_1_in_4 = 1;
-main_Image_1_in_5 = [-0.862566 -0.533789 -0.0665894];
-main_Image_1_in_6 = [-13.1907 1.35241 3.16852];
-main_Image_1_in_7 = NULL;
+main_Image_1_in_5 = [0 0 0.000137389];
+main_Image_1_in_6 = [0 0 9.40286];
+main_Image_1_in_7 = 5.03892;
 main_Image_1_in_8 = 1154;
 main_Image_1_in_9 = 0.569757;
-main_Image_1_in_10 = [0.190302 0.968516 0.160505];
-main_Image_1_in_11 = 4.83728;
-main_Image_1_in_12 = 1;
+main_Image_1_in_10 = [0 1 0];
+main_Image_1_in_11 = 30.0001;
+main_Image_1_in_12 = 0;
 main_Image_1_in_13 = NULL;
 main_Image_1_in_14 = 1;
 main_Image_1_in_15 = NULL;
@@ -1044,11 +1044,11 @@ main_Image_1_in_49 = NULL;
 main_Image_2_in_1 = "Image_2";
 main_Image_2_in_3 = "X24,,";
 main_Image_2_in_4 = 1;
-main_Image_2_in_5 = [-0.996293 -0.485296 0];
-main_Image_2_in_6 = [-0.996293 -0.485296 16.0979];
-main_Image_2_in_7 = 0.0225882;
+main_Image_2_in_5 = [0 0 0];
+main_Image_2_in_6 = [0 0 11.7052];
+main_Image_2_in_7 = 6.27281;
 main_Image_2_in_8 = 1252;
-main_Image_2_in_9 = 0.455671;
+main_Image_2_in_9 = 0.456;
 main_Image_2_in_10 = [0 1 0];
 main_Image_2_in_11 = NULL;
 main_Image_2_in_12 = 0;
@@ -1079,7 +1079,7 @@ main_Image_2_in_37 = NULL;
 main_Image_2_in_38 = NULL;
 main_Image_2_in_39 = NULL;
 main_Image_2_in_40 = NULL;
-main_Image_2_in_41 = "panzoom";
+main_Image_2_in_41 = "none";
 main_Image_2_in_42 = NULL;
 main_Image_2_in_43 = NULL;
 main_Image_2_in_44 = NULL;

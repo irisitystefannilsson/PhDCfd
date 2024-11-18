@@ -8,17 +8,22 @@
 //                                    //
 ////////////////////////////////////////
 
+#include <algorithm>
+#include <sstream>
+
+#include <mpi.h>
+#include "petscsystypes.h"
+
 // OGEquation.hh contains declarations  
 // for implicit equations Ax=b
-#include <mpi.h>
-
 #include "OGEquation.hh"
-
 // GridFunc.hh contains
 // declarations for gridFunctions
 // and their methods
 #include "GridFunc.hh"
-#include "petscsystypes.h"
+// ins_sharp contains some functions
+// and constants used in the simulation
+#include "ins_sharp.hh"
 
 // This is necessary because Aztec defines
 // min|max macros
@@ -28,13 +33,8 @@
 // File to save data to
 #define RESULTS "INS_data"
 
-#include <algorithm>
-
-#include <sstream>
-
-// ins_sharp contains some functions
-// and constants used in the simulation
-#include "ins_sharp.hh"
+using std::cout;
+using std::endl;
 
 ////////////////////////////////////////
 //                                    //
@@ -42,7 +42,7 @@
 //                                    //
 ////////////////////////////////////////
 
-int 
+int
 main(int argc, char** argv)
 {
   ios::sync_with_stdio();
@@ -82,16 +82,15 @@ main(int argc, char** argv)
   //
   // Kimera is a composite grid built from P++ arrays
   //
-
   // It can be read from an ASCII file...
   // ...or from an HDF5-file
   char filename[100];
   PetscOptionsGetString(PETSC_NULL, PETSC_NULL, "--filename", filename, 100, &flg);
   if (flg != PETSC_TRUE)
-    {
-      std::cerr << "Hey!, we need a grid from somewhere (no filename given, exiting...)... \n\n";
-      MPI_Abort(MPI_COMM_WORLD, 1);
-    }
+  {
+    std::cerr << "Hey!, we need a grid from somewhere (no filename given, exiting...)... \n\n";
+    MPI_Abort(MPI_COMM_WORLD, 1);
+  }
   CompositeGrid Kimera(filename);
 
   //
@@ -105,33 +104,37 @@ main(int argc, char** argv)
   bool twilightFlow = false;
   PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--twilight", &flg);
   if (flg == PETSC_TRUE)
+  {
     twilightFlow = true;
-
+  }
   ins::drivers inflow = ins::constantInflow;
   char driverName[100];
   PetscOptionsGetString(PETSC_NULL, PETSC_NULL, "--inflow", driverName, 100, &flg);
   if (flg == PETSC_TRUE)
-    {
-      if (!strcmp("parabolic", driverName))
-        inflow = ins::parabolicInflow;
-      else if (!strcmp("lid", driverName))
-        inflow = ins::drivenLid;
-      else if (!strcmp("constant", driverName))
-        inflow = ins::constantInflow;
-    }
-  PetscOptionsGetInt(PETSC_NULL, PETSC_NULL, "--ingrid", &ins::grid, &flg);
-  PetscOptionsGetInt(PETSC_NULL, PETSC_NULL, "--inside", &ins::side, &flg);  
+  {
+    if (!strcmp("parabolic", driverName))
+      inflow = ins::parabolicInflow;
+    else if (!strcmp("lid", driverName))
+      inflow = ins::drivenLid;
+    else if (!strcmp("constant", driverName))
+      inflow = ins::constantInflow;
+  }
   // restart decides if we are
   // restarting the simulation
   // from an old result
   bool restart = false;
   PetscOptionsGetReal(PETSC_NULL, PETSC_NULL, "--restart", &starttime, &flg);
-  if (flg == PETSC_TRUE) restart = true;  
+  if (flg == PETSC_TRUE)
+  {
+    restart = true;
+  }
 
   PetscOptionsGetReal(PETSC_NULL, PETSC_NULL, "--viscosity", &ins::viscosityG, &flg);
 
   if (twilightFlow)
+  {
     ins::viscosityG = 1;
+  }
 
   // 
   //  Declare some gridfunctions living on the Kimera grid
@@ -167,7 +170,6 @@ main(int argc, char** argv)
   OGEquation pressurePoisson(&Kimera, PETSc);
   OGEquation U_momentum(&Kimera, Aztec), V_momentum(&Kimera, Aztec);
 
-  
   // Set the type of boundary condition to be used
   // for the gridFunctions (to be used together
   // with information from the Xcog-file)
@@ -182,90 +184,88 @@ main(int argc, char** argv)
   functionType pressureType = scalar;
 
   PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--allDir", &flg);
-  if (flg == PETSC_TRUE) pressureType = DirichletAllOver;
-
+  if (flg == PETSC_TRUE)
+  {
+    pressureType = DirichletAllOver;
+  }
   RHS.setBC(scalar); 
   pressure.setBC(pressureType); 
   div.setBC(DirichletAllOver);
-
   // Set flag values for all grid points the
   // gridFunctions are
   // defined on
   pressure.setFlagValues(); 
   U.setFlagValues(); 
   V.setFlagValues();
-
   // Attach gridFunctions to the
   // Overlapping grid equations
   pressurePoisson.setUnknown(pressure); 
   U_momentum.setUnknown(U); 
   V_momentum.setUnknown(V);
-  
   // allNeumann should be set to true
   // if Neumann conditions are
   // used for the pressure on all 
   // boundaries
   bool allNeumann = false;
   PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--allNeumann", &flg);
-  if (flg == PETSC_TRUE && !(pressureType == DirichletAllOver) ) 
+  if (flg == PETSC_TRUE && !(pressureType == DirichletAllOver) )
+  {
     allNeumann = true;  
-  
+  }
   // Set type of equation system for the
   // Overlapping grid equations
   // Heat-eqations for U,V
-  U_momentum.setOperator(Poisson_with_TD_diagonal); 
-  V_momentum.setOperator(Poisson_with_TD_diagonal); 
+  U_momentum.setOperator(Poisson_with_TD_diagonal);
+  V_momentum.setOperator(Poisson_with_TD_diagonal);
   // Poisson equation for the pressure
   pressurePoisson.setOperator(Poisson, allNeumann);
-  
   // Set boundary value functions
   // for the gridFunctions
   if (inflow == ins::constantInflow)
-    {
-      U.set_Dirichlet(& ins::inlet_U); U.set_bc_x(& ins::zero); U.set_bc_y(& ins::zero);
-      U.set_Dirichlet_time_derivative(& ins::inlet_U_dt);
-      V.set_Dirichlet(& ins::inlet_V); V.set_bc_x(& ins::zero); V.set_bc_y(& ins::zero);
-      V.set_Dirichlet_time_derivative(& ins::inlet_V_dt);
-      oldU.set_Dirichlet(& ins::inlet_U); oldU.set_bc_x(& ins::zero); oldU.set_bc_y(& ins::zero);
-      oldV.set_Dirichlet(& ins::inlet_V); oldV.set_bc_x(& ins::zero); oldV.set_bc_y(& ins::zero);
-      pressure.set_Dirichlet(& ins::zero); pressure.set_bc_x(& ins::zero); pressure.set_bc_y(& ins::zero);
-    }
+  {
+    U.set_Dirichlet(&ins::inlet_U); U.set_bc_x(&ins::zero); U.set_bc_y(&ins::zero);
+    U.set_Dirichlet_time_derivative(&ins::inlet_U_dt);
+    V.set_Dirichlet(&ins::inlet_V); V.set_bc_x(&ins::zero); V.set_bc_y(&ins::zero);
+    V.set_Dirichlet_time_derivative(&ins::inlet_V_dt);
+    oldU.set_Dirichlet(&ins::inlet_U); oldU.set_bc_x(&ins::zero); oldU.set_bc_y(&ins::zero);
+    oldV.set_Dirichlet(&ins::inlet_V); oldV.set_bc_x(&ins::zero); oldV.set_bc_y(&ins::zero);
+    pressure.set_Dirichlet(&ins::zero); pressure.set_bc_x(&ins::zero); pressure.set_bc_y(&ins::zero);
+  }
   else if (inflow == ins::drivenLid)
-    {
-      U.set_Dirichlet(& ins::lidDriver);     U.set_bc_x(& ins::zero);        U.set_bc_y(& ins::zero);
-      V.set_Dirichlet(& ins::zero);     V.set_bc_x(& ins::zero);        V.set_bc_y(& ins::zero);
-      oldU.set_Dirichlet(& ins::lidDriver); oldU.set_bc_x(& ins::zero); oldU.set_bc_y(& ins::zero);
-      oldV.set_Dirichlet(& ins::zero); oldV.set_bc_x(& ins::zero); oldV.set_bc_y(& ins::zero);
-      pressure.set_Dirichlet(& ins::zero); pressure.set_bc_x(& ins::zero); pressure.set_bc_y(& ins::zero);
-    }
+  {
+    U.set_Dirichlet(&ins::lidDriver);     U.set_bc_x(&ins::zero);        U.set_bc_y(&ins::zero);
+    V.set_Dirichlet(&ins::zero);     V.set_bc_x(&ins::zero);        V.set_bc_y(&ins::zero);
+    oldU.set_Dirichlet(&ins::lidDriver); oldU.set_bc_x(&ins::zero); oldU.set_bc_y(&ins::zero);
+    oldV.set_Dirichlet(&ins::zero); oldV.set_bc_x(&ins::zero); oldV.set_bc_y(&ins::zero);
+    pressure.set_Dirichlet(&ins::zero); pressure.set_bc_x(&ins::zero); pressure.set_bc_y(&ins::zero);
+  }
   if (twilightFlow)
-    {
-      U.set_Dirichlet(& ins::twilight_U); U.set_bc_x(& ins::zero); U.set_bc_y(& ins::zero);
-      U.set_Dirichlet_time_derivative(& ins::twilight_U_dt);
-      V.set_Dirichlet(& ins::twilight_V); V.set_bc_x(& ins::zero); V.set_bc_y(& ins::zero);
-      V.set_Dirichlet_time_derivative(& ins::twilight_V_dt);
-      oldU.set_Dirichlet(& ins::twilight_U); oldU.set_bc_x(& ins::zero); oldU.set_bc_y(& ins::zero);
-      oldV.set_Dirichlet(& ins::twilight_V); oldV.set_bc_x(& ins::zero); oldV.set_bc_y(& ins::zero);
-      pressure.set_Dirichlet(& ins::twilight_P); pressure.set_bc_x(& ins::zero); pressure.set_bc_y(& ins::zero);
-    }
+  {
+    U.set_Dirichlet(&ins::twilight_U); U.set_bc_x(&ins::zero); U.set_bc_y(&ins::zero);
+    U.set_Dirichlet_time_derivative(&ins::twilight_U_dt);
+    V.set_Dirichlet(&ins::twilight_V); V.set_bc_x(&ins::zero); V.set_bc_y(&ins::zero);
+    V.set_Dirichlet_time_derivative(&ins::twilight_V_dt);
+    oldU.set_Dirichlet(&ins::twilight_U); oldU.set_bc_x(&ins::zero); oldU.set_bc_y(&ins::zero);
+    oldV.set_Dirichlet(&ins::twilight_V); oldV.set_bc_x(&ins::zero); oldV.set_bc_y(&ins::zero);
+    pressure.set_Dirichlet(&ins::twilight_P); pressure.set_bc_x(&ins::zero); pressure.set_bc_y(&ins::zero);
+  }
   // Initialize the gridFunctions .
   // How depends on if we restart or not
   if (restart)
-    {
-      U.readFromHDF5File(RESULTFILE, "U");
-      V.readFromHDF5File(RESULTFILE, "V");
-    }
+  {
+    U.readFromHDF5File(RESULTFILE, "U");
+    V.readFromHDF5File(RESULTFILE, "V");
+  }
   else
-    {
-      U.initializeGridData();
-      V.initializeGridData();
-    }
+  {
+    U.initializeGridData();
+    V.initializeGridData();
+  }
   pressure.initializeGridData();
   oldU.initializeGridData();
   oldV.initializeGridData();
   RHS.initializeGridData();
   div = 0;
-
   // Some variables used in the time-loop
   int maxNits = 1000;
   int printIntervall = 20;
@@ -286,19 +286,17 @@ main(int argc, char** argv)
 
   PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--savematrix", &flg);
   if (flg == PETSC_TRUE)
-    // We can save the matrix operators
-    // in matlab-files if we want to
-    {
-      U_momentum.writeMatrixOperatorToFile("U_OP");
-      pressurePoisson.writeMatrixOperatorToFile("laplaceOp");
-    }
-
+  // We can save the matrix operators
+  // in matlab-files if we want to
+  {
+    U_momentum.writeMatrixOperatorToFile("U_OP");
+    pressurePoisson.writeMatrixOperatorToFile("laplaceOp");
+  }
   // Set options used for the solution of 
   // the velocity equations
   U_momentum.setOption(precond_method, Jacobi);
   V_momentum.setOption(precond_method, Jacobi);
-  
-  pressurePoisson.setOption(ksp_method, Direct);
+  pressurePoisson.setOption(ksp_method, Gmres);
 
   double st = 0, dt = 0;
   bool noBC = false;
@@ -306,8 +304,10 @@ main(int argc, char** argv)
   
   fileString << RESULTS << "." << fileCounter << ".h5";
 	  
-  if (myid == 0) std::cout << "\nSaving initial data to file " << fileString.str().c_str() << endl;
-  
+  if (myid == 0)
+  {
+    cout << "\nSaving initial data to file " << fileString.str().c_str() << endl;
+  }
   U.createHDF5File(fileString.str().c_str());
   Kimera.saveCoordinatesToHDF5File(fileString.str().c_str());
   
@@ -332,277 +332,286 @@ main(int argc, char** argv)
   // boundary conditions are mixed in
   // an expression
   //
-  if (myid == 0) std::cout << "\nStarting time-stepping now\n";
-  
+  if (myid == 0)
+  {
+    cout << "\nStarting time-stepping now\n";
+  }
   for (int it = 0; it < maxNits; it++)
+  {
+    // Before the inlet has achieved full
+    // speed we use another field to compute
+    // the time step
+    if (U.getTime() < ins::accelerationTime && !twilightFlow)
     {
-      // Before the inlet has achieved full
-      // speed we use another field to compute
-      // the time step
-      if (U.getTime() < ins::accelerationTime)
-	{
-	  tempU = 0.5;
-	  tempV = 0.;
-	  dt = U.get_CFL_Dt(cfl, tempU, tempV, Kimera);
-	}
-      else
-	{
-	  dt = U.get_CFL_Dt(cfl, U, V, Kimera);
-	}
-
-      if (myid == 0)
-	{
-	  std::cout << "\nIteration nmbr " 
-		    << it << ", time is " 
-		    << U.getTime() << endl;
-	  std::cout << " : dt= " << dt << endl;
-	}
-      
-      tempU = U;
-      tempV = V;
-
-      oldpressure = pressure;
-      
-      // Set div(U,V) to 0 at (most) boundaries
-      U.setDivergenceToZeroAtBoundaries(V, xComponentOfVector);
-      V.setDivergenceToZeroAtBoundaries(U, yComponentOfVector);
-
-      // Compute div(U,V) at all points where
-      // the pressure equation is solved
-      for (k = 0; k < Kimera.nrGrids(); k++)
-	{
-	  Index ix = pressure.getDiscrBounds(0, k);
-	  Index iy = pressure.getDiscrBounds(1, k);
-	  
-	  div(k)(ix, iy) = U.x(k, ix, iy)+V.y(k, ix, iy);
-	}
-
-      if (it % printIntervall == 0 && myid == 0)
-	{
-	  std::cout << "---PREDICTOR STEP---" << endl;
-	}
-
-      double l_hNormOfDivergence = div.l_h();
-      if (myid == 0)
-	{
-	  std::cout << " : l_h norm of divergence is " << l_hNormOfDivergence << endl;
-	}
-      
-      // Construct the right-hand-side
-      // for the pressure equation ...
-      for (k = 0; k < Kimera.nrGrids(); k++)
-	{
-	  Index ix = pressure.getDiscrBounds(0, k);
-	  Index iy = pressure.getDiscrBounds(1, k);
-	  
-	  RHS(k)(ix, iy) = 
-	    + ins::Cd(k, &Kimera, dt, ins::viscosityG, ix, iy)*div(k)(ix, iy)
- 	    - 2.*U.y(k, ix, iy)*V.x(k, ix, iy)
- 	    - U.x(k, ix, iy)*U.x(k, ix, iy) - V.y(k, ix, iy)*V.y(k, ix, iy);
-	}
-      // ... and assign correct boundary
-      // conditions
-      ins::setPressureBCs(RHS, pressure, U, V, &Kimera);
-      
-      if (it % printIntervall == 0 && myid == 0)
-	{
-	  st = MPI_Wtime();
-	  std::cout << " Solving for pressure now " << endl;
-	}
-      // Solve the pressure equation
-      pressurePoisson.solve(RHS, &Kimera, 0, allNeumann, noBC);
-      if (it % printIntervall == 0 && myid == 0)
-	std::cout << "  : solution time for pressure-equation was " 
-		  << MPI_Wtime() - st << endl;
-
-      pressure.addTime(dt);
-      if (it == 0)
-	{
-	  oldpressure = pressure;
-	  oldU = U;
-	  oldV = V;
-	}
-      
-      //
-      // Do the predictor step
-      // for the velocity equations.
-      // 
-      // A mixed Adams_Bashforth(2)|Crank-Nicolson
-      // scheme is used
-      for (k = 0; k < Kimera.nrGrids(); k++)
-	{
-	  Index ui = U.getDiscrBounds(0, k);      Index vi = V.getDiscrBounds(0, k);
-	  Index uj = U.getDiscrBounds(1, k);      Index vj = V.getDiscrBounds(1, k);
-	  
-	  U(k)(ui, uj) = U(k)(ui, uj) +
-	    dt*( 
-		- 0.5*( + 3.*(U(k)(ui, uj)*U.x(k) + V(k)(ui, uj)*U.y(k))
-			- 1.*(oldU(k)(ui, uj)*oldU.x(k) + oldV(k)(ui, uj)*oldU.y(k)) )
-		+ 0.5*( ins::viscosityG*U.laplacian(k) )
-		+ U.forcing(& ins::zero, k, 0.5*dt)
-		- 0.5*( 3.*pressure.x(k, ui, uj) - 1.*oldpressure.x(k, ui, uj) )
-		);
-	  V(k)(vi, vj) = V(k)(vi, vj) + 
-	    dt*(
-		- 0.5*( + 3.*(tempU(k)(vi, vj)*V.x(k) + tempV(k)(vi, vj)*V.y(k))
-			- 1.*(oldU(k)(vi, vj)*oldV.x(k) + oldV(k)(vi, vj)*oldV.y(k)) )
-		+ 0.5*( ins::viscosityG*V.laplacian(k) )
-		+ V.forcing(& ins::zero, k, 0.5*dt)
-		- 0.5*( 3.*pressure.y(k, vi, vj) - 1.*oldpressure.y(k, vi, vj) )
-		);
-	  
-	}
-      
-      // Advance the velocity one time level
-      // and finish the Crank-Nicolson part
-      // of the predictor step
-      U.addTime(dt);
-      V.addTime(dt);
-      
-      if (it % printIntervall == 0 && myid == 0)
-	{
-	  st = MPI_Wtime();
-	  std::cout << " Solving for U now " << endl;
-	}
-      U_momentum.solve(U, &Kimera, 0.5*ins::viscosityG*dt);
-
-      if (it % printIntervall == 0 && myid == 0)
-	std::cout << "  : solution time for U-equation was " << MPI_Wtime() - st << endl;
-      
-      if (it % printIntervall == 0 && myid == 0)
-	{
-	  st = MPI_Wtime();
-	  std::cout << " Solving for V now " << endl;
-	}
-      V_momentum.solve(V, &Kimera, 0.5*ins::viscosityG*dt);
-
-      if (it % printIntervall == 0 && myid == 0)
-	std::cout << "  : solution time for V-equation was " << MPI_Wtime() - st << endl;
-      //
-      // The predictor step is finished here
-      //
-
-      if (it % printIntervall == 0 && myid == 0)
-	{
-	  std::cout << "---CORRECTOR STEP---" << endl;
-	}
-      oldpressure = pressure;
-      
-      oldU = tempU;
-      oldV = tempV;
-
-      tempU = U;
-      tempV = V;
-
-      U.setDivergenceToZeroAtBoundaries(V, xComponentOfVector);
-      V.setDivergenceToZeroAtBoundaries(U, yComponentOfVector);
-
-      // In the corrector step we first
-      // use the predicted velocity field
-      // to compute a corrected pressure field
-      for (k = 0; k < Kimera.nrGrids(); k++)
-	{
-	  Index ix = pressure.getDiscrBounds(0, k);
-	  Index iy = pressure.getDiscrBounds(1, k);
-	  
-	  div(k)(ix, iy) = U.x(k, ix, iy)+V.y(k, ix, iy);
-	}
-      div.finishBCs();
-      for (k = 0; k < Kimera.nrGrids(); k++)
-	{
-	  Index ix = pressure.getDiscrBounds(0, k);
-	  Index iy = pressure.getDiscrBounds(1, k);
-	  
-	  RHS(k)(ix, iy) = 
-	    + ins::Cd(k, &Kimera, dt, ins::viscosityG, ix, iy)*div(k)(ix, iy)
- 	    - 2.*U.y(k, ix, iy)*V.x(k, ix, iy)
- 	    - U.x(k, ix, iy)*U.x(k, ix, iy) - V.y(k, ix, iy)*V.y(k, ix, iy);
-	}
-      ins::setPressureBCs(RHS, pressure, U, V, &Kimera);
-      if (it % printIntervall == 0 && myid == 0)
-	{
-	  st = MPI_Wtime();
-	  std::cout << " Solving for pressure now " << endl;
-	}
-      pressurePoisson.solve(RHS, &Kimera, 0, allNeumann, noBC);
-      if (it % printIntervall == 0 && myid == 0)
-	std::cout << "  : solution time for pressure-equation was " 
-		  << MPI_Wtime() - st << endl;
-
-      // 
-      // Then a corrected velocity field
-      // is computed using the 
-      // Adams-Moulton(2) (=Crank-Nicolson)
-      //
-      for (k = 0; k < Kimera.nrGrids(); k++)
-	{
-	  Index ui = U.getDiscrBounds(0, k);      Index vi = V.getDiscrBounds(0, k);
-	  Index uj = U.getDiscrBounds(1, k);      Index vj = V.getDiscrBounds(1, k);
-	  
-	  U(k)(ui, uj) = oldU(k)(ui, uj) +
-	    dt*( 
-		- 0.5*( + 1.*(U(k)(ui, uj)*U.x(k) + V(k)(ui, uj)*U.y(k))
-			+ 1.*(oldU(k)(ui, uj)*oldU.x(k) + oldV(k)(ui, uj)*oldU.y(k)) )
-		+ 0.5*( ins::viscosityG*oldU.laplacian(k) )
-		+ U.forcing(& ins::zero, k, 0.5*dt)
-		- 0.5*( 1.*pressure.x(k, ui, uj) + 1.*oldpressure.x(k, ui, uj) )
-		);
-	  V(k)(vi, vj) = oldV(k)(vi, vj) + 
-	    dt*( 
-		- 0.5*( + 1.*(tempU(k)(vi, vj)*V.x(k) + tempV(k)(vi, vj)*V.y(k))
-			+ 1.*(oldU(k)(vi, vj)*oldV.x(k) + oldV(k)(vi, vj)*oldV.y(k)) )
-		+ 0.5*( ins::viscosityG*oldV.laplacian(k) )
-		+ V.forcing(& ins::zero, k, 0.5*dt)
-		- 0.5*( 1.*pressure.y(k, vi, vj) + 1.*oldpressure.y(k, vi, vj) )
-		);
-	  
-	}
-      
-      if (it % printIntervall == 0 && myid == 0)
-	{
-	  st = MPI_Wtime();
-	  std::cout << " Solving for U now " << endl;
-	}
-      U_momentum.solve(U, &Kimera, 0.5*ins::viscosityG*dt);
-
-      if (it % printIntervall == 0 && myid == 0)
-	std::cout << "  : solution time for U-equation was " << MPI_Wtime() - st << endl;
-      
-      if (it % printIntervall == 0 && myid == 0)
-	{
-	  st = MPI_Wtime();
-	  std::cout << " Solving for V now " << endl;
-	}
-      V_momentum.solve(V, &Kimera, 0.5*ins::viscosityG*dt);
-
-      if (it % printIntervall == 0 && myid == 0)
-	std::cout << "  : solution time for V-equation was " << MPI_Wtime() - st << endl;
-
-      
-      // check if simulation can be stopped
-      if (U.getTime() > stoptime) 
-	break;
-      
-      if (it % printIntervall == 0 && myid ==0)
-	std::cout << "|----------------------------------------|" 
-		  << endl << endl;
-      
-      if (it % saveIntervall == 0)
-	{
-	  fileCounter++;
-	  fileString.str("");
-	  fileString << RESULTS << "." << fileCounter << ".h5";
-	  
-	  if (myid == 0) std::cout << "\nSaving result to file " << fileString.str().c_str() << endl;
-	  
-	  U.createHDF5File(fileString.str().c_str());
-	  Kimera.saveCoordinatesToHDF5File(fileString.str().c_str());
-
-	  U.saveToHDF5File(fileString.str().c_str(), "u-velocity");
-	  V.saveToHDF5File(fileString.str().c_str(), "v-velocity");
-	  pressure.saveToHDF5File(fileString.str().c_str(), "pressure");
-	}
+      tempU = 0.5;
+      tempV = 0.;
+      dt = U.get_CFL_Dt(cfl, tempU, tempV, Kimera);
     }
+    else
+    {
+      dt = U.get_CFL_Dt(cfl, U, V, Kimera);
+    }
+    if (myid == 0)
+    {
+      cout << "\n New time step, time is; " << U.getTime() << ", dt: " << dt << endl;
+    }
+    
+    tempU = U;
+    tempV = V;
+    
+    oldpressure = pressure;
+    
+    // Set div(U,V) to 0 at (most) boundaries
+    U.setDivergenceToZeroAtBoundaries(V, xComponentOfVector);
+    V.setDivergenceToZeroAtBoundaries(U, yComponentOfVector);
+    
+    // Compute div(U,V) at all points where
+    // the pressure equation is solved
+    for (k = 0; k < Kimera.nrGrids(); k++)
+    {
+      Index ix = pressure.getDiscrBounds(0, k);
+      Index iy = pressure.getDiscrBounds(1, k);
+      
+      div(k)(ix, iy) = U.x(k, ix, iy)+V.y(k, ix, iy);
+    }
+    
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      cout << "|------------------------------------------------------------|"; 
+      cout << "---PREDICTOR STEP---" << endl;
+    }
+    
+    double l_hNormOfDivergence = div.l_h();
+    if (myid == 0)
+    {
+      cout << " l_h norm of divergence is " << l_hNormOfDivergence << endl;
+    }
+      
+    // Construct the right-hand-side
+    // for the pressure equation ...
+    for (k = 0; k < Kimera.nrGrids(); k++)
+    {
+      Index ix = pressure.getDiscrBounds(0, k);
+      Index iy = pressure.getDiscrBounds(1, k);
+      
+      RHS(k)(ix, iy) = 
+	+ ins::Cd(k, &Kimera, dt, ins::viscosityG, ix, iy)*div(k)(ix, iy)
+	- 2.*U.y(k, ix, iy)*V.x(k, ix, iy)
+	- U.x(k, ix, iy)*U.x(k, ix, iy) - V.y(k, ix, iy)*V.y(k, ix, iy);
+    }
+    // ... and assign correct boundary
+    // conditions
+    ins::setPressureBCs(RHS, pressure, U, V, &Kimera);
+    
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      st = MPI_Wtime();
+      cout << " Solving for pressure now " << endl;
+    }
+    // Solve the pressure equation
+    pressurePoisson.solve(RHS, &Kimera, 0, allNeumann, noBC);
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      cout << "  : solution time for pressure-equation was " 
+	   << MPI_Wtime() - st << endl;
+    }
+    pressure.addTime(dt);
+    if (it == 0)
+    {
+      oldpressure = pressure;
+      oldU = U;
+      oldV = V;
+    }
+    
+    //
+    // Do the predictor step
+    // for the velocity equations.
+    // 
+    // A mixed Adams_Bashforth(2)|Crank-Nicolson
+    // scheme is used
+    for (k = 0; k < Kimera.nrGrids(); k++)
+    {
+      Index ui = U.getDiscrBounds(0, k);      Index vi = V.getDiscrBounds(0, k);
+      Index uj = U.getDiscrBounds(1, k);      Index vj = V.getDiscrBounds(1, k);
+      
+      U(k)(ui, uj) = U(k)(ui, uj) +
+	dt*( 
+	    - 0.5*( + 3.*(U(k)(ui, uj)*U.x(k) + V(k)(ui, uj)*U.y(k))
+		    - 1.*(oldU(k)(ui, uj)*oldU.x(k) + oldV(k)(ui, uj)*oldU.y(k)) )
+	    + 0.5*( ins::viscosityG*U.laplacian(k) )
+	    + U.forcing(&ins::zero, k, 0.5*dt)
+	    - 0.5*( 3.*pressure.x(k, ui, uj) - 1.*oldpressure.x(k, ui, uj) )
+	     );
+      V(k)(vi, vj) = V(k)(vi, vj) + 
+	dt*(
+	    - 0.5*( + 3.*(tempU(k)(vi, vj)*V.x(k) + tempV(k)(vi, vj)*V.y(k))
+		    - 1.*(oldU(k)(vi, vj)*oldV.x(k) + oldV(k)(vi, vj)*oldV.y(k)) )
+	    + 0.5*( ins::viscosityG*V.laplacian(k) )
+	    + V.forcing(&ins::zero, k, 0.5*dt)
+	    - 0.5*( 3.*pressure.y(k, vi, vj) - 1.*oldpressure.y(k, vi, vj) )
+	    );
+      
+    }
+    // Advance the velocity one time level
+    // and finish the Crank-Nicolson part
+    // of the predictor step
+    U.addTime(dt);
+    V.addTime(dt);
+    
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      st = MPI_Wtime();
+      cout << " Solving for U now " << endl;
+    }
+    U_momentum.solve(U, &Kimera, 0.5*ins::viscosityG*dt);
+
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      cout << "  : solution time for U-equation was " << MPI_Wtime() - st << endl;
+    }
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      st = MPI_Wtime();
+      cout << " Solving for V now " << endl;
+    }
+    V_momentum.solve(V, &Kimera, 0.5*ins::viscosityG*dt);
+    
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      cout << "  : solution time for V-equation was " << MPI_Wtime() - st << endl;
+    }
+    //
+    // The predictor step is finished here
+    //
+    
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      cout << "---CORRECTOR STEP---" << endl;
+    }
+    oldpressure = pressure;
+    
+    oldU = tempU;
+    oldV = tempV;
+    
+    tempU = U;
+    tempV = V;
+    
+    U.setDivergenceToZeroAtBoundaries(V, xComponentOfVector);
+    V.setDivergenceToZeroAtBoundaries(U, yComponentOfVector);
+
+    // In the corrector step we first
+    // use the predicted velocity field
+    // to compute a corrected pressure field
+    for (k = 0; k < Kimera.nrGrids(); k++)
+    {
+      Index ix = pressure.getDiscrBounds(0, k);
+      Index iy = pressure.getDiscrBounds(1, k);
+      
+      div(k)(ix, iy) = U.x(k, ix, iy)+V.y(k, ix, iy);
+    }
+    div.finishBCs();
+    for (k = 0; k < Kimera.nrGrids(); k++)
+    {
+      Index ix = pressure.getDiscrBounds(0, k);
+      Index iy = pressure.getDiscrBounds(1, k);
+      
+      RHS(k)(ix, iy) = 
+	+ ins::Cd(k, &Kimera, dt, ins::viscosityG, ix, iy)*div(k)(ix, iy)
+	- 2.*U.y(k, ix, iy)*V.x(k, ix, iy)
+	- U.x(k, ix, iy)*U.x(k, ix, iy) - V.y(k, ix, iy)*V.y(k, ix, iy);
+    }
+    ins::setPressureBCs(RHS, pressure, U, V, &Kimera);
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      st = MPI_Wtime();
+      cout << " Solving for pressure now " << endl;
+    }
+    pressurePoisson.solve(RHS, &Kimera, 0, allNeumann, noBC);
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      cout << "  : solution time for pressure-equation was " 
+	   << MPI_Wtime() - st << endl;
+    }
+    // 
+    // Then a corrected velocity field
+    // is computed using the 
+    // Adams-Moulton(2) (=Crank-Nicolson)
+    //
+    for (k = 0; k < Kimera.nrGrids(); k++)
+    {
+      Index ui = U.getDiscrBounds(0, k);      Index vi = V.getDiscrBounds(0, k);
+      Index uj = U.getDiscrBounds(1, k);      Index vj = V.getDiscrBounds(1, k);
+      
+      U(k)(ui, uj) = oldU(k)(ui, uj) +
+	dt*( 
+	    - 0.5*( + 1.*(U(k)(ui, uj)*U.x(k) + V(k)(ui, uj)*U.y(k))
+		    + 1.*(oldU(k)(ui, uj)*oldU.x(k) + oldV(k)(ui, uj)*oldU.y(k)) )
+	    + 0.5*( ins::viscosityG*oldU.laplacian(k) )
+	    + U.forcing(&ins::zero, k, 0.5*dt)
+	    - 0.5*( 1.*pressure.x(k, ui, uj) + 1.*oldpressure.x(k, ui, uj) )
+	     );
+      V(k)(vi, vj) = oldV(k)(vi, vj) + 
+	dt*( 
+	    - 0.5*( + 1.*(tempU(k)(vi, vj)*V.x(k) + tempV(k)(vi, vj)*V.y(k))
+		    + 1.*(oldU(k)(vi, vj)*oldV.x(k) + oldV(k)(vi, vj)*oldV.y(k)) )
+	    + 0.5*( ins::viscosityG*oldV.laplacian(k) )
+	    + V.forcing(&ins::zero, k, 0.5*dt)
+	    - 0.5*( 1.*pressure.y(k, vi, vj) + 1.*oldpressure.y(k, vi, vj) )
+	     );
+      
+    }
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      st = MPI_Wtime();
+      cout << " Solving for U now " << endl;
+    }
+    U_momentum.solve(U, &Kimera, 0.5*ins::viscosityG*dt);
+    
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      cout << "  : solution time for U-equation was " << MPI_Wtime() - st << endl;
+    }
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      st = MPI_Wtime();
+      cout << " Solving for V now " << endl;
+    }
+    V_momentum.solve(V, &Kimera, 0.5*ins::viscosityG*dt);
+
+    if (it % printIntervall == 0 && myid == 0)
+    {
+      cout << "  : solution time for V-equation was " << MPI_Wtime() - st << endl;
+    }
+    // check if simulation can be stopped
+    if (U.getTime() > stoptime)
+    {
+      break;
+    }
+      
+    if (it % printIntervall == 0 && myid ==0)
+    {
+      cout << "--------DONE--------";
+      cout << "|------------------------------------------------------------|" 
+	   << endl << endl;
+    }
+    if (it % saveIntervall == 0)
+    {
+      fileCounter++;
+      fileString.str("");
+      fileString << RESULTS << "." << fileCounter << ".h5";
+      
+      if (myid == 0)
+      {
+	cout << "\nSaving result to file " << fileString.str().c_str() << endl;
+      }
+      U.createHDF5File(fileString.str().c_str());
+      Kimera.saveCoordinatesToHDF5File(fileString.str().c_str());
+      
+      U.saveToHDF5File(fileString.str().c_str(), "u-velocity");
+      V.saveToHDF5File(fileString.str().c_str(), "v-velocity");
+      pressure.saveToHDF5File(fileString.str().c_str(), "pressure");
+    }
+  }
 
   // 
   // Compute the final pressure field
@@ -610,63 +619,54 @@ main(int argc, char** argv)
   U.setDivergenceToZeroAtBoundaries(V, xComponentOfVector);
   V.setDivergenceToZeroAtBoundaries(U, yComponentOfVector);
   for (k=0; k<Kimera.nrGrids(); k++)
-    {
-      Index ix = pressure.getDiscrBounds(0, k);
-      Index iy = pressure.getDiscrBounds(1, k);
-      
-      RHS(k)(ix, iy) = 
-  	- 2.*U.y(k, ix, iy)*V.x(k, ix, iy)
-  	- U.x(k, ix, iy)*U.x(k, ix, iy) - V.y(k, ix, iy)*V.y(k, ix, iy);
-    }
+  {
+    Index ix = pressure.getDiscrBounds(0, k);
+    Index iy = pressure.getDiscrBounds(1, k);
+    
+    RHS(k)(ix, iy) = 
+      - 2.*U.y(k, ix, iy)*V.x(k, ix, iy)
+      - U.x(k, ix, iy)*U.x(k, ix, iy) - V.y(k, ix, iy)*V.y(k, ix, iy);
+  }
   ins::setPressureBCs(RHS, pressure, U, V, &Kimera);
   pressurePoisson.solve(RHS, &Kimera, 0, allNeumann, noBC);
   //
   // Timestepping is finished here
   //
-
+  
   double compTime = MPI_Wtime() - startTime;
   double maxTime;
   MPI_Reduce(&compTime, &maxTime, 1, MPI_DOUBLE, MPI_MAX, 0, myComm);
   
   if (myid == 0)
-    {
-      std::cout << "\nTime-stepping finished\n";
-      std::cout << "  Simulated time is: " << U.getTime() << endl;
-      std::cout << "  Wall clock execution time was " << maxTime << "s\n";
-    }
+  {
+    cout << "\nTime-stepping finished\n";
+    cout << "  Simulated time is: " << U.getTime() << endl;
+    cout << "  Wall clock execution time was " << maxTime << "s\n";
+  }
   if (twilightFlow)
+  {
+    if (myid == 0)
     {
-      if (myid == 0)
-        cout << "Checking U-solution :\n";
-      
-      U.checkErrors(& ins::twilight_U);
-      
-      if (myid == 0)
-        cout << "Checking V-solution :\n";
-      
-      V.checkErrors(& ins::twilight_V);
-      
-      if (myid == 0)
-        cout << "Checking P-solution :\n";
-      
-      pressure.checkErrors(& ins::twilight_P);
-    }
-  //
-  // Check the smallest length scale (at all grid points)...
-  //
-  for (k=0; k<Kimera.nrGrids(); k++)
-    {
-      Index ix = pressure.getDiscrBounds(0, k);
-      Index iy = pressure.getDiscrBounds(1, k);
-      
-      div(k)(ix,iy) = ins::smallestLengthScale(k, &Kimera, U, V, ins::viscosityG, ix, iy);
+      cout << "Checking U-solution :\n";
     }  
-  div.interpolate();
-  div.finishBCs();
-
+    U.checkErrors(&ins::twilight_U);
+      
+    if (myid == 0)
+    {
+      cout << "Checking V-solution :\n";
+    }
+      
+    V.checkErrors(&ins::twilight_V);
+      
+    if (myid == 0)
+    {
+      cout << "Checking P-solution :\n";
+    }  
+    pressure.checkErrors(&ins::twilight_P);
+  }
   // Exit PETSc
   PetscFinalize();
-
+  
   // Exit P++ and MPI
   Optimization_Manager::Exit_Virtual_Machine();
   

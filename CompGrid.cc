@@ -2248,15 +2248,21 @@ void CompositeGrid::checkIfGridIsRegular(int grid)
   //----------------------------------------
 
   if (max(abs(((*localY)(ix,iy+1) - 2.*(*localY)(ix,iy) + (*localY)(ix,iy-1))/(s_stepM[grid]*s_stepM[grid]))) > small)
+  {
     yss = 1;
-  
+  }
   if ( (xs + xrr + yr + yss) == 0 )
+  {
     gridTypeM[grid] = 1;
+  }
   else if ( (xs + yr) == 0 )
+  {
     gridTypeM[grid] = 2;
+  }
   else
+  {
     gridTypeM[grid] = 3;
-
+  }
   //  std::cout << endl << "GridType for grid " << grid << " is " << gridTypeM[grid] << endl;
   //  std::cout << endl << xs << " " << xrr << " " << yr <<  " " << yss << endl;
 }
@@ -2264,11 +2270,10 @@ void CompositeGrid::checkIfGridIsRegular(int grid)
 double CompositeGrid::hSquare() const
 {
   double result = 100000.;
-  
   for (int cG=0; cG<nmbrOfGridsM; cG++)
-    {
-      result = min(result, pow(r_stepM[cG],2.) + pow(s_stepM[cG],2.));
-    }
+  {
+    result = min(result, pow(r_stepM[cG],2.) + pow(s_stepM[cG],2.));
+  }
   return result;
 }
 
@@ -2282,16 +2287,16 @@ void CompositeGrid::simplifyFlagValues()
 {
   Index all;
   for (int cG=0; cG<nmbrOfGridsM; cG++)
+  {
+    if (getBoundaryType(cG, lowR) != PERIODIC)
     {
-      if (getBoundaryType(cG, lowR) != PERIODIC)
-        {
-          flagValuesM[cG](0, all) = 0;
-          flagValuesM[cG](rdimM[cG] - 1, all) = 0;
-        }
-      if (getBoundaryType(cG, lowS) != PERIODIC)
-        {
-          flagValuesM[cG](all, 0) = 0;
-          flagValuesM[cG](all, sdimM[cG] - 1) = 0;
-        }
+      flagValuesM[cG](0, all) = 0;
+      flagValuesM[cG](rdimM[cG] - 1, all) = 0;
     }
+    if (getBoundaryType(cG, lowS) != PERIODIC)
+    {
+      flagValuesM[cG](all, 0) = 0;
+      flagValuesM[cG](all, sdimM[cG] - 1) = 0;
+    }
+  }
 }

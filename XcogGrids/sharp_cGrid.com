@@ -70,6 +70,6 @@ overlap-parameters
 	exit
 compute-overlap
 save-overlapping-grid
-#	hdf-format sharp_cGrid_2.hdf
-	ascii-format sharp_cGrid_2.acg
+	hdf-format sharp_cGrid_2.hdf
+#	ascii-format sharp_cGrid_2.acg
 	yes
