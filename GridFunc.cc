@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include <mpi.h>
+#include "H5Epublic.h"
 #include "hdf5.h"
 
 #include "GridFunc.hh"
@@ -21,60 +22,60 @@ doubleArray gridFunction::boundaryDiff(int i, int gType, const double t,
 				       const doubleArray& ys = doubleArray())
 {  
   if (i == 0) // low r 
+  {
+    if (gType == 1)
     {
-      if (gType == 1)
-	{
-	  doubleArray resArray1 = - bc_x(xIn, yIn, t, 0, 0);
-	  return resArray1;
-	}
-      else
-	{
-	  doubleArray resArray2 = ( ys*bc_x(xIn,yIn,t,0,0) - xs*bc_y(xIn,yIn,t,0,0) ) / pow(xs*xs+ys*ys,0.5);
-	  return resArray2;
-	}
+      doubleArray resArray1 = - bc_x(xIn, yIn, t, 0, 0);
+      return resArray1;
     }
+    else
+    {
+      doubleArray resArray2 = ( ys*bc_x(xIn,yIn,t,0,0) - xs*bc_y(xIn,yIn,t,0,0) ) / pow(xs*xs+ys*ys,0.5);
+      return resArray2;
+    }
+  }
   else if (i == 1) // high r 
+  {
+    if (gType == 1)
     {
-      if (gType == 1)
-	{
-	  doubleArray resArray3 = bc_x(xIn,yIn,t,0,0);
-	  return resArray3;
-	}
-      else
-	{
-	  doubleArray resArray4 = ( ys*bc_x(xIn,yIn,t,0,0) - xs*bc_y(xIn,yIn,t,0,0) ) / pow(xs*xs+ys*ys,0.5);
-	  return resArray4;
-	}
+      doubleArray resArray3 = bc_x(xIn,yIn,t,0,0);
+      return resArray3;
     }
+    else
+    {
+      doubleArray resArray4 = ( ys*bc_x(xIn,yIn,t,0,0) - xs*bc_y(xIn,yIn,t,0,0) ) / pow(xs*xs+ys*ys,0.5);
+      return resArray4;
+    }
+  }
   else if (i == 2) // low s 
+  {
+    if (gType == 1)
     {
-      if (gType == 1)
-	{
-	  doubleArray resArray5 = - bc_y(xIn,yIn,t,0,0);
-	  return resArray5;
-	}
-      else
-	{
-	  doubleArray resArray6 = ( - yr*bc_x(xIn,yIn,t,0,0) + xr*bc_y(xIn,yIn,t,0,0) ) / pow(xr*xr+yr*yr,0.5);
-	  return resArray6;
-	}
+      doubleArray resArray5 = - bc_y(xIn,yIn,t,0,0);
+      return resArray5;
     }
+    else
+    {
+      doubleArray resArray6 = ( - yr*bc_x(xIn,yIn,t,0,0) + xr*bc_y(xIn,yIn,t,0,0) ) / pow(xr*xr+yr*yr,0.5);
+      return resArray6;
+    }
+  }
   else // high s 
+  {
+    if (gType == 1)
     {
-      if (gType == 1)
-	{
-	  doubleArray resArray7 = bc_y(xIn,yIn,t,0,0);
-	  return resArray7;
-	}
-      else
-	{
-	  doubleArray resArray8 = ( - yr*bc_x(xIn,yIn,t,0,0) + xr*bc_y(xIn,yIn,t,0,0) ) / pow(xr*xr+yr*yr,0.5);
-	  return resArray8;
-	}
+      doubleArray resArray7 = bc_y(xIn,yIn,t,0,0);
+      return resArray7;
     }
+    else
+    {
+      doubleArray resArray8 = ( - yr*bc_x(xIn,yIn,t,0,0) + xr*bc_y(xIn,yIn,t,0,0) ) / pow(xr*xr+yr*yr,0.5);
+      return resArray8;
+    }
+  }
 }
 
-gridFunction::gridFunction(CompositeGrid & Kimera, double present)
+gridFunction::gridFunction(CompositeGrid& Kimera, double present)
 {
   myGridM = &Kimera;
   timeM = present;
@@ -91,23 +92,22 @@ gridFunction::gridFunction(CompositeGrid & Kimera, double present)
   boundaryValue = &GridFunction::zero;
   boundaryValue_d_dt = &GridFunction::zero;
   for (int k = 0; k < myGridM->nrGrids(); k++) 
-    {
-      int rdim, sdim;
-      rdim = myGridM->rDim(k);
-      sdim = myGridM->sDim(k);
-      
-      fieldValuesM[k].partition(myGridM->ddM[k]);
-      flagValuesM[k].partition(myGridM->ddM[k]);
-      
-      fieldValuesM[k].redim(rdim, sdim);
-      flagValuesM[k].redim(rdim, sdim);
-      flagValuesM[k] = myGridM->flagValuesM[k];
-      //        myGridM->flagValuesM[k].display();
-      
-    }
+  {
+    int rdim, sdim;
+    rdim = myGridM->rDim(k);
+    sdim = myGridM->sDim(k);
+    
+    fieldValuesM[k].partition(myGridM->ddM[k]);
+    flagValuesM[k].partition(myGridM->ddM[k]);
+    
+    fieldValuesM[k].redim(rdim, sdim);
+    flagValuesM[k].redim(rdim, sdim);
+    flagValuesM[k] = myGridM->flagValuesM[k];
+    //        myGridM->flagValuesM[k].display();
+  }
 }
 
-gridFunction::gridFunction(const gridFunction & fun)
+gridFunction::gridFunction(const gridFunction& fun)
 {
   myGridM = fun.myGridM;
   timeM = fun.timeM;
@@ -120,22 +120,19 @@ gridFunction::gridFunction(const gridFunction & fun)
   bcsM = new BC[myGridM->nrGrids()];
 
   for (int k = 0; k<myGridM->nrGrids(); k++) 
-    {
-      //    fieldValues[k].partition(fun.fieldValues[k]);
-      //    flagValuesM[k].partition(fun.flagValuesM[k]);
-      
-      Index ix = fun.fieldValuesM[k].getFullRange(0);
-      Index iy = fun.fieldValuesM[k].getFullRange(1);
-      fieldValuesM[k].redim(ix,iy);
-      
-      //    ix = fun.flagValuesM[k].getFullRange(0);
-      //    iy = fun.flagValuesM[k].getFullRange(1);
-      flagValuesM[k].redim(ix,iy);
-      
-      fieldValuesM[k](ix,iy) = fun.fieldValuesM[k](ix,iy);
-      flagValuesM[k](ix,iy) = fun.flagValuesM[k](ix,iy);
-      
-    }
+  {
+    //    fieldValues[k].partition(fun.fieldValues[k]);
+    //    flagValuesM[k].partition(fun.flagValuesM[k]);
+    Index ix = fun.fieldValuesM[k].getFullRange(0);
+    Index iy = fun.fieldValuesM[k].getFullRange(1);
+    fieldValuesM[k].redim(ix,iy);
+    //    ix = fun.flagValuesM[k].getFullRange(0);
+    //    iy = fun.flagValuesM[k].getFullRange(1);
+    flagValuesM[k].redim(ix,iy);
+    
+    fieldValuesM[k](ix,iy) = fun.fieldValuesM[k](ix,iy);
+    flagValuesM[k](ix,iy) = fun.flagValuesM[k](ix,iy);  
+  }
 }
 
 gridFunction::gridFunction(int i)
@@ -149,7 +146,7 @@ gridFunction::~gridFunction()
   delete []bcsM;
 }
 
-void gridFunction::printValues(char *info)
+void gridFunction::printValues(char* info)
 {
   int i,j,pxadd,pyadd;
   char filename[64];
@@ -158,109 +155,103 @@ void gridFunction::printValues(char *info)
 
   FILE *fp;
   if ((fp = fopen(filename,"w")) == NULL)
-    {
-      std::cerr << "Could not open" << filename << endl;
-    }
+  {
+    std::cerr << "Could not open" << filename << endl;
+  }
   for (int k=0; k<(myGridM->nmbrOfGridsM); k++)
-    {
-      pxadd = 0;
-      pyadd = 0;
-      
-      if (bcsM[k].hiR == 3)
-	pxadd = 1;
-      if (bcsM[k].hiS == 3)
-	pyadd = 1;
-      doubleSerialArray *localXCoords = myGridM->xM[k].getSerialArrayPointer();
-      doubleSerialArray *localYCoords = myGridM->yM[k].getSerialArrayPointer();
-      doubleSerialArray *localField = fieldValuesM[k].getSerialArrayPointer();
-      intSerialArray *localFlags = myGridM->flagValuesM[k].getSerialArrayPointer();
-      
-      for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
-	for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
-	  if ((*localFlags)(i,j))
-	    fprintf(fp,"%f %f %f\n",(*localXCoords)(i,j),(*localYCoords)(i,j),(*localField)(i,j));
-	}
+  {
+    pxadd = 0;
+    pyadd = 0;
+    
+    if (bcsM[k].hiR == 3)
+      pxadd = 1;
+    if (bcsM[k].hiS == 3)
+      pyadd = 1;
+    doubleSerialArray *localXCoords = myGridM->xM[k].getSerialArrayPointer();
+    doubleSerialArray *localYCoords = myGridM->yM[k].getSerialArrayPointer();
+    doubleSerialArray *localField = fieldValuesM[k].getSerialArrayPointer();
+    intSerialArray *localFlags = myGridM->flagValuesM[k].getSerialArrayPointer();
+    
+    for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
+      for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
+	if ((*localFlags)(i,j))
+	  fprintf(fp,"%f %f %f\n",(*localXCoords)(i,j),(*localYCoords)(i,j),(*localField)(i,j));
       }
     }
+  }
   
   fclose(fp);
-  
   sprintf(filename,"matlabData/PPP%s%d.m",info,myid);
-  
-  
   if ((fp = fopen(filename,"w")) == NULL) 
-    {
-      std::cerr << "Could not open" << filename << endl;
-    }
+  {
+    std::cerr << "Could not open" << filename << endl;
+  }
   for (int cG=0; cG<(myGridM->nrGrids()); cG++)
-    {
-      pxadd = 0;
-      pyadd = 0;
-      
-      if (bcsM[cG].hiR == PERIODIC)
-	pxadd = 1;
-      if (bcsM[cG].hiS == PERIODIC)
-	pyadd = 1;
-      doubleSerialArray *localXCoords = myGridM->xM[cG].getSerialArrayPointer();
-      doubleSerialArray *localYCoords = myGridM->yM[cG].getSerialArrayPointer();
-      doubleSerialArray *localField = fieldValuesM[cG].getSerialArrayPointer();
-      intSerialArray *localFlags = myGridM->flagValuesM[cG].getSerialArrayPointer();
-      
-      fprintf(fp,"X%d%d=[",cG,myid);
-      for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
-	//    for (i=(*localXCoords).getBase(0);i<=(*localXCoords).getBound(0)+pxadd;i++) {
-	fprintf(fp,"[");
-	for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
-	  //      for (j=(*localXCoords).getBase(1);j<=(*localXCoords).getBound(1)+pyadd;j++) {
-	  fprintf(fp,"%f ",(*localXCoords)(i,j));
-	}
-	fprintf(fp,"]\n");
+  {
+    pxadd = 0;
+    pyadd = 0;
+    
+    if (bcsM[cG].hiR == PERIODIC)
+      pxadd = 1;
+    if (bcsM[cG].hiS == PERIODIC)
+      pyadd = 1;
+    doubleSerialArray *localXCoords = myGridM->xM[cG].getSerialArrayPointer();
+    doubleSerialArray *localYCoords = myGridM->yM[cG].getSerialArrayPointer();
+    doubleSerialArray *localField = fieldValuesM[cG].getSerialArrayPointer();
+    intSerialArray *localFlags = myGridM->flagValuesM[cG].getSerialArrayPointer();
+    
+    fprintf(fp,"X%d%d=[",cG,myid);
+    for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
+      //    for (i=(*localXCoords).getBase(0);i<=(*localXCoords).getBound(0)+pxadd;i++) {
+      fprintf(fp,"[");
+      for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
+	//      for (j=(*localXCoords).getBase(1);j<=(*localXCoords).getBound(1)+pyadd;j++) {
+	fprintf(fp,"%f ",(*localXCoords)(i,j));
       }
-      fprintf(fp,"];\n");
-      
-      fprintf(fp,"Y%d%d=[",cG,myid);
-      for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
-	//    for (i=(*localXCoords).getBase(0);i<=(*localXCoords).getBound(0)+pxadd;i++) {
-	fprintf(fp,"[");
-	for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
-	  //      for (j=(*localXCoords).getBase(1);j<=(*localXCoords).getBound(1)+pyadd;j++) {
-	  fprintf(fp,"%f ",(*localYCoords)(i,j));
-	}
-	fprintf(fp,"]\n");
-      }
-      fprintf(fp,"];\n");
-      
-      fprintf(fp,"%s%d%d=[",info,cG,myid);
-      for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
-	//    for (i=(*localXCoords).getBase(0);i<=(*localXCoords).getBound(0)+pxadd;i++) {
-	fprintf(fp,"[");
-	for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
-	  //      for (j=(*localXCoords).getBase(1);j<=(*localXCoords).getBound(1)+pyadd;j++) {
-	  fprintf(fp,"%f ",(*localField)(i,j));
-	}
-	fprintf(fp,"]\n");
-      }
-      fprintf(fp,"];\n");
-      
-      fprintf(fp,"Mask%d%d=[",cG,myid);
-      for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
-	//    for (i=(*localXCoords).getBase(0);i<=(*localXCoords).getBound(0)+pxadd;i++) {
-	fprintf(fp,"[");
-	for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
-	  //      for (j=(*localXCoords).getBase(1);j<=(*localXCoords).getBound(1)+pyadd;j++) {
-	  if ((*localFlags)(i,j) == 0)
-	    fprintf(fp,"NaN ");
-	  else
-	    fprintf(fp,"%d ",1);
-	}
-	fprintf(fp,"]\n");
-      }
-      fprintf(fp,"];\n");
-      
-      fprintf(fp,"%s%d%d=%s%d%d.*Mask%d%d ;\n",info,cG,myid,info,cG,myid,cG,myid);
+      fprintf(fp,"]\n");
     }
-  
-  
+    fprintf(fp,"];\n");
+    
+    fprintf(fp,"Y%d%d=[",cG,myid);
+    for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
+      //    for (i=(*localXCoords).getBase(0);i<=(*localXCoords).getBound(0)+pxadd;i++) {
+      fprintf(fp,"[");
+      for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
+	//      for (j=(*localXCoords).getBase(1);j<=(*localXCoords).getBound(1)+pyadd;j++) {
+	fprintf(fp,"%f ",(*localYCoords)(i,j));
+      }
+      fprintf(fp,"]\n");
+    }
+    fprintf(fp,"];\n");
+    
+    fprintf(fp,"%s%d%d=[",info,cG,myid);
+    for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
+      //    for (i=(*localXCoords).getBase(0);i<=(*localXCoords).getBound(0)+pxadd;i++) {
+      fprintf(fp,"[");
+      for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
+	//      for (j=(*localXCoords).getBase(1);j<=(*localXCoords).getBound(1)+pyadd;j++) {
+	fprintf(fp,"%f ",(*localField)(i,j));
+      }
+      fprintf(fp,"]\n");
+    }
+    fprintf(fp,"];\n");
+    
+    fprintf(fp,"Mask%d%d=[",cG,myid);
+    for (i=(*localXCoords).getBase(0)+1;i<=(*localXCoords).getBound(0)-1+pxadd;i++) {
+      //    for (i=(*localXCoords).getBase(0);i<=(*localXCoords).getBound(0)+pxadd;i++) {
+      fprintf(fp,"[");
+      for (j=(*localXCoords).getBase(1)+1;j<=(*localXCoords).getBound(1)-1+pyadd;j++) {
+	//      for (j=(*localXCoords).getBase(1);j<=(*localXCoords).getBound(1)+pyadd;j++) {
+	if ((*localFlags)(i,j) == 0)
+	  fprintf(fp,"NaN ");
+	else
+	  fprintf(fp,"%d ",1);
+      }
+      fprintf(fp,"]\n");
+    }
+    fprintf(fp,"];\n");  
+    fprintf(fp,"%s%d%d=%s%d%d.*Mask%d%d ;\n",info,cG,myid,info,cG,myid,cG,myid);
+  }
   fclose(fp);
 }
 
@@ -273,53 +264,52 @@ void gridFunction::saveToFile(const char *name)
   int grid;
 
   for (grid=0; grid<myGridM->nrGrids(); grid++)
+  {
+    sprintf(filename,"%s%s%d%d","./matlabData/",name,myid,grid);
+    varfile.open(filename,ios::out);
+    doubleSerialArray *local = fieldValuesM[grid].getSerialArrayPointer();
+    intSerialArray *localFlags = flagValuesM[grid].getSerialArrayPointer();
+    
+    for (int j=myGridM->lb_1(grid); j<=myGridM->ub_1(grid); j++)
     {
-      sprintf(filename,"%s%s%d%d","./matlabData/",name,myid,grid);
-      varfile.open(filename,ios::out);
-      doubleSerialArray *local = fieldValuesM[grid].getSerialArrayPointer();
-      intSerialArray *localFlags = flagValuesM[grid].getSerialArrayPointer();
-
-      for (int j=myGridM->lb_1(grid); j<=myGridM->ub_1(grid); j++)
+      for (int i=myGridM->lb_0(grid); i<=myGridM->ub_0(grid); i++)
+      {
+	if ((*localFlags)(i,j) == 0)
 	{
-	  for (int i=myGridM->lb_0(grid); i<=myGridM->ub_0(grid); i++)
-	    {
-	      if ((*localFlags)(i,j) == 0)
-		{
-		  double notanumber = HUGE_VAL;
-		  varfile.write((const char*) &notanumber,sizeof(double));
-		}
-	      else
-		varfile.write((const char*) &(*local)(i,j),sizeof(double));
-	    }
+	  double notanumber = HUGE_VAL;
+	  varfile.write((const char*) &notanumber,sizeof(double));
 	}
-
-      varfile.close();
+	else
+	  varfile.write((const char*) &(*local)(i,j),sizeof(double));
+      }
     }
+    
+    varfile.close();
+  }
   sprintf(filename,"%s%s%d%s","./matlabData/read",name,myid,".m");
   varfile.open(filename,ios::out);
   for (grid=0; grid<myGridM->nrGrids(); grid++)
-    {
-      sprintf(filename,"%s%s%d%d","./",name,myid,grid);
-      varfile << "fid = fopen('" << filename << "');" << endl;
-      
-      varfile << name << myid << grid << "= fread(fid,[" << myGridM->ub_0(grid)-myGridM->lb_0(grid)+1 << " " << myGridM->ub_1(grid)-myGridM->lb_1(grid)+1 << "],'double');" << endl;
-      varfile << name << myid << grid << "=" << name << myid << grid << "*2/2;" << endl;
-      varfile << name << myid << grid << "=" << name << myid << grid << ".*isfinite(" << name << myid << grid << ");" << endl;
-      varfile << "st = fclose(fid);" << endl;
-      
-    }
+  {
+    sprintf(filename,"%s%s%d%d","./",name,myid,grid);
+    varfile << "fid = fopen('" << filename << "');" << endl;
+    
+    varfile << name << myid << grid << "= fread(fid,[" << myGridM->ub_0(grid)-myGridM->lb_0(grid)+1 << " " << myGridM->ub_1(grid)-myGridM->lb_1(grid)+1 << "],'double');" << endl;
+    varfile << name << myid << grid << "=" << name << myid << grid << "*2/2;" << endl;
+    varfile << name << myid << grid << "=" << name << myid << grid << ".*isfinite(" << name << myid << grid << ");" << endl;
+    varfile << "st = fclose(fid);" << endl;  
+  }
   varfile.close();
 
   if (myid == 0)
+  {
+    sprintf(filename,"%s%s%s","./matlabData/read",name,".m");
+    varfile.open(filename,ios::out);
+    for (int proc=0; proc<Communication_Manager::numberOfProcessors(); proc++)
     {
-      sprintf(filename,"%s%s%s","./matlabData/read",name,".m");
-      varfile.open(filename,ios::out);
-      for (int proc=0; proc<Communication_Manager::numberOfProcessors(); proc++)
-	{
-	  sprintf(filename,"%s%s%d","read",name,proc);
-	  varfile << filename << endl;
-	}
+      sprintf(filename,"%s%s%d","read",name,proc);
+      varfile << filename << endl;
     }
+  }
 }
 
 void gridFunction::readFromFile(const char *name)
@@ -331,31 +321,30 @@ void gridFunction::readFromFile(const char *name)
   int grid;
 
   for (grid=0; grid<myGridM->nrGrids(); grid++)
+  {
+    sprintf(filename,"%s%s%d%d","./matlabData/",name,myid,grid);
+    varfile.open(filename,ios::in);
+    doubleSerialArray *local = fieldValuesM[grid].getSerialArrayPointer();
+    intSerialArray *localFlags = flagValuesM[grid].getSerialArrayPointer();
+    
+    for (int j=(*local).getBase(1); j<=(*local).getBound(1); j++)
     {
-      sprintf(filename,"%s%s%d%d","./matlabData/",name,myid,grid);
-      varfile.open(filename,ios::in);
-      doubleSerialArray *local = fieldValuesM[grid].getSerialArrayPointer();
-      intSerialArray *localFlags = flagValuesM[grid].getSerialArrayPointer();
-
-      for (int j=(*local).getBase(1); j<=(*local).getBound(1); j++)
+      for (int i=(*local).getBase(0); i<=(*local).getBound(0); i++)
+      {
+	if ((*localFlags)(i,j) == 0)
 	{
-	  for (int i=(*local).getBase(0); i<=(*local).getBound(0); i++)
-	    {
-	      if ((*localFlags)(i,j) == 0)
-		{
-		  varfile.read((char*) &(*local)(i,j),sizeof(double));
-		  (*local)(i,j) = 0.0001;
-		}
-	      else
-		varfile.read((char*) &(*local)(i,j),sizeof(double));
-	    }
+	  varfile.read((char*) &(*local)(i,j),sizeof(double));
+	  (*local)(i,j) = 0.0001;
 	}
-
-      varfile.close();
+	else
+	  varfile.read((char*) &(*local)(i,j),sizeof(double));
+      }
     }
+    varfile.close();
+  }
 }
 
-void gridFunction::createHDF5File(const char *name)
+void gridFunction::createHDF5File(const char* name)
 {
   hid_t       file_id, file_props, group_id, group_id2, dataset_id, dataspace;
   hid_t lcpl = H5P_DEFAULT;
@@ -423,85 +412,84 @@ void gridFunction::createHDF5File(const char *name)
   hid_t cgrid_group;
   char cgridName[200];
   for (int grid=0; grid<nOfGrids; grid++)
-    {
-      sprintf(cgridName, "component grid %d",grid);
-      cgrid_group = H5Gcreate(group_id2, cgridName, lcpl, H5P_DEFAULT, H5P_DEFAULT);
+  {
+    sprintf(cgridName, "component grid %d",grid);
+    cgrid_group = H5Gcreate(group_id2, cgridName, lcpl, H5P_DEFAULT, H5P_DEFAULT);
+    
+    //----------------------------------------
+    // Prepare for collective data transfer
+    //----------------------------------------
+    hid_t xfer_plist;         
+    xfer_plist = H5Pcreate(H5P_DATASET_XFER);
+    assert(xfer_plist != FAIL);
+    status = H5Pset_dxpl_mpio(xfer_plist, H5FD_MPIO_COLLECTIVE);
+    assert(status != FAIL);
+    
+    hid_t file_dataspace, mem_dataspace, dataset1;
+    hsize_t count[2], in_count[2], tot_count[2];
+    hsize_t start[2];
+    
+    start[1] = flagValuesM[grid].getLocalBase(0);
+    start[0] = flagValuesM[grid].getLocalBase(1);
+    count[1] = flagValuesM[grid].getLocalBound(0) - start[1] + 1;
+    count[0] = flagValuesM[grid].getLocalBound(1) - start[0] + 1;
+    
+    int bottom0, bottom1, top0, top1;
+    
+    bottom0 = ( flagValuesM[grid].getLocalBase(0) == flagValuesM[grid].getBase(0) ) ? 0 : 1;
+    bottom1 = ( flagValuesM[grid].getLocalBase(1) == flagValuesM[grid].getBase(1) ) ? 0 : 1;
+    top0    = ( flagValuesM[grid].getLocalBound(0) == flagValuesM[grid].getBound(0) ) ? 0 : 1;
+    top1    = ( flagValuesM[grid].getLocalBound(1) == flagValuesM[grid].getBound(1) ) ? 0 : 1;
+    
+    in_count[0] = flagValuesM[grid].getLocalLength(1) - bottom1 - top1;
+    in_count[1] = flagValuesM[grid].getLocalLength(0) - bottom0 - top0;
+    
+    tot_count[0] = flagValuesM[grid].getLength(1);
+    tot_count[1] = flagValuesM[grid].getLength(0);
+    
+    //----------------------------------------
+    // Create data [set,space] for variable
+    //----------------------------------------
+    file_dataspace = H5Screate_simple(2, tot_count, NULL);
+    assert(file_dataspace != FAIL);
 
-      //----------------------------------------
-      // Prepare for collective data transfer
-      //----------------------------------------
-      hid_t xfer_plist;         
-      xfer_plist = H5Pcreate(H5P_DATASET_XFER);
-      assert(xfer_plist != FAIL);
-      status = H5Pset_dxpl_mpio(xfer_plist, H5FD_MPIO_COLLECTIVE);
-      assert(status != FAIL);
+    start[0] += bottom1; start[1] += bottom0;
+    status = H5Sselect_hyperslab(file_dataspace, H5S_SELECT_SET, start, NULL,
+				 in_count, NULL);
+    assert(status != FAIL);
+    
+    if (bottom0 == 0) count[1]++; if (bottom1 == 0) count[0]++;
+    if (top0 == 0)    count[1]++; if (top1 == 0)    count[0]++;
+    
+    mem_dataspace = H5Screate_simple (2, count, NULL);
+    assert(mem_dataspace != FAIL);
 
-      hid_t file_dataspace, mem_dataspace, dataset1;
-      hsize_t count[2], in_count[2], tot_count[2];
-      hsize_t start[2];
-      
-      start[1] = flagValuesM[grid].getLocalBase(0);
-      start[0] = flagValuesM[grid].getLocalBase(1);
-      count[1] = flagValuesM[grid].getLocalBound(0) - start[1] + 1;
-      count[0] = flagValuesM[grid].getLocalBound(1) - start[0] + 1;
-      
-      int bottom0, bottom1, top0, top1;
-
-      bottom0 = ( flagValuesM[grid].getLocalBase(0) == flagValuesM[grid].getBase(0) ) ? 0 : 1;
-      bottom1 = ( flagValuesM[grid].getLocalBase(1) == flagValuesM[grid].getBase(1) ) ? 0 : 1;
-      top0    = ( flagValuesM[grid].getLocalBound(0) == flagValuesM[grid].getBound(0) ) ? 0 : 1;
-      top1    = ( flagValuesM[grid].getLocalBound(1) == flagValuesM[grid].getBound(1) ) ? 0 : 1;
-      
-      in_count[0] = flagValuesM[grid].getLocalLength(1) - bottom1 - top1;
-      in_count[1] = flagValuesM[grid].getLocalLength(0) - bottom0 - top0;
-
-      tot_count[0] = flagValuesM[grid].getLength(1);
-      tot_count[1] = flagValuesM[grid].getLength(0);
- 
-      //----------------------------------------
-      // Create data [set,space] for variable
-      //----------------------------------------
-      file_dataspace = H5Screate_simple(2, tot_count, NULL);
-      assert(file_dataspace != FAIL);
-
-      start[0] += bottom1; start[1] += bottom0;
-      status = H5Sselect_hyperslab(file_dataspace, H5S_SELECT_SET, start, NULL,
-				   in_count, NULL);
-
-      assert(status != FAIL);
-      
-      if (bottom0 == 0) count[1]++; if (bottom1 == 0) count[0]++;
-      if (top0 == 0)    count[1]++; if (top1 == 0)    count[0]++;
-
-      mem_dataspace = H5Screate_simple (2, count, NULL);
-      assert(mem_dataspace != FAIL);
-
-      start[0] = 1; start[1] = 1;
-
-      status = H5Sselect_hyperslab(mem_dataspace, H5S_SELECT_SET, start, NULL, 
-      				   in_count, NULL);
-      assert(status != FAIL);
-      //----------------------------------------
-      // Write variable to file
-      //----------------------------------------
-      dataset1 = H5Dcreate(cgrid_group, "mask", H5T_NATIVE_INT, file_dataspace, lcpl, H5P_DEFAULT, H5P_DEFAULT);
-      assert(dataset1 != FAIL);
-
-      status = H5Dwrite(dataset1, H5T_NATIVE_INT, mem_dataspace, file_dataspace,
-			xfer_plist, myGridM->flagValuesM[grid].getDataPointer());
-      assert(status != FAIL);
-
-      //----------------------------------------
-      // Release resources
-      //----------------------------------------
-      H5Dclose(dataset1);
-      H5Sclose(file_dataspace);
-      H5Sclose(mem_dataspace);
-      H5Pclose(xfer_plist);
-
-      status = H5Gclose(cgrid_group);
-      assert(status != FAIL);
-    }
+    start[0] = 1; start[1] = 1;
+    
+    status = H5Sselect_hyperslab(mem_dataspace, H5S_SELECT_SET, start, NULL, 
+				 in_count, NULL);
+    assert(status != FAIL);
+    //----------------------------------------
+    // Write variable to file
+    //----------------------------------------
+    dataset1 = H5Dcreate(cgrid_group, "mask", H5T_NATIVE_INT, file_dataspace, lcpl, H5P_DEFAULT, H5P_DEFAULT);
+    assert(dataset1 != FAIL);
+    
+    status = H5Dwrite(dataset1, H5T_NATIVE_INT, mem_dataspace, file_dataspace,
+		      xfer_plist, myGridM->flagValuesM[grid].getDataPointer());
+    assert(status != FAIL);
+    
+    //----------------------------------------
+    // Release resources
+    //----------------------------------------
+    H5Dclose(dataset1);
+    H5Sclose(file_dataspace);
+    H5Sclose(mem_dataspace);
+    H5Pclose(xfer_plist);
+    
+    status = H5Gclose(cgrid_group);
+    assert(status != FAIL);
+  }
   //----------------------------------------
   // Close groups
   //----------------------------------------
@@ -510,7 +498,7 @@ void gridFunction::createHDF5File(const char *name)
   assert(status != FAIL);
   status = H5Gclose(group_id);
   assert(status != FAIL);
-
+  
   //----------------------------------------
   // Close hdf5-file
   //----------------------------------------
@@ -518,7 +506,7 @@ void gridFunction::createHDF5File(const char *name)
   assert(status != FAIL);
 }
 
-void gridFunction::saveToHDF5File(const char *fileName, const char *varName)
+void gridFunction::saveToHDF5File(const char* fileName, const char* varName)
 {
   hid_t       file_id, file_props, group_id;
   herr_t      status;
@@ -544,125 +532,123 @@ void gridFunction::saveToHDF5File(const char *fileName, const char *varName)
   // grid
   //----------------------------------------
   char word[200];
-  for (int k=0; k<myGridM->nrGrids(); k++)
+  for (int k = 0; k < myGridM->nrGrids(); k++)
+  {
+    //----------------------------------------
+    // Open the group for component grid [k]
+    // and use as offset for coordinates
+    //----------------------------------------
+    sprintf(word, "/root/overlapping grid/component grid %d",k);
+    
+    group_id = H5Gopen(file_id, word, H5P_DEFAULT);
+    
+    //----------------------------------------
+    // Prepare for collective data transfer
+    //----------------------------------------
+    hid_t xfer_plist;         
+    xfer_plist = H5Pcreate (H5P_DATASET_XFER);
+    assert(xfer_plist != FAIL);
+    status = H5Pset_dxpl_mpio(xfer_plist, H5FD_MPIO_COLLECTIVE);
+    assert(status != FAIL);
+    
+    hid_t file_dataspace, mem_dataspace, sid1 = FAIL, dataset1;
+    hsize_t count[2], in_count[2], tot_count[2];
+    hsize_t start[2];
+    
+    int bottom0, bottom1, top0, top1;
+    
+    bottom0 = ( flagValuesM[k].getLocalBase(0) == flagValuesM[k].getBase(0) )?0:1;
+    bottom1 = ( flagValuesM[k].getLocalBase(1) == flagValuesM[k].getBase(1) )?0:1;
+    top0    = ( flagValuesM[k].getLocalBound(0) == flagValuesM[k].getBound(0) )?0:1;
+    top1    = ( flagValuesM[k].getLocalBound(1) == flagValuesM[k].getBound(1) )?0:1;
+    
+    start[1] = fieldValuesM[k].getLocalBase(0);
+    start[0] = fieldValuesM[k].getLocalBase(1);
+    count[1] = fieldValuesM[k].getLocalBound(0) - start[1] + 1;
+    count[0] = fieldValuesM[k].getLocalBound(1) - start[0] + 1;
+    
+    in_count[0] = fieldValuesM[k].getLocalLength(1) - bottom1 - top1;
+    in_count[1] = fieldValuesM[k].getLocalLength(0) - bottom0 - top0;
+    
+    tot_count[0] = fieldValuesM[k].getLength(1);
+    tot_count[1] = fieldValuesM[k].getLength(0);
+    
+    //----------------------------------------
+    // Check if dataset already exists
+    //----------------------------------------
+    //----------------------------------------
+    // Turn off error printing
+    //----------------------------------------
+    H5E_auto2_t old_func;
+    void* old_client_data;
+    H5Eget_auto2(H5E_DEFAULT, &old_func, &old_client_data);
+    hid_t error_stack;
+    hid_t lcpl = H5P_DEFAULT;
+    H5Eset_auto2(H5E_DEFAULT, NULL, NULL);
+    dataset1 = H5Dopen(group_id, varName, H5P_DEFAULT);      
+    //----------------------------------------
+    // Restore previous error handler 
+    //----------------------------------------
+    H5Eset_auto2(H5E_DEFAULT, old_func, old_client_data);
+    
+    bool closesid1 = false;
+    if (dataset1 < 0)
     {
       //----------------------------------------
-      // Open the group for component grid [k]
-      // and use as offset for coordinates
+      // Create data [set,space] for variable
       //----------------------------------------
-      sprintf(word, "/root/overlapping grid/component grid %d",k);
+      sid1 = H5Screate_simple(2, tot_count, NULL);
+      assert(sid1 != FAIL);
       
-      group_id = H5Gopen(file_id, word, H5P_DEFAULT);
-
-      //----------------------------------------
-      // Prepare for collective data transfer
-      //----------------------------------------
-      hid_t xfer_plist;         
-      xfer_plist = H5Pcreate (H5P_DATASET_XFER);
-      assert(xfer_plist != FAIL);
-      status = H5Pset_dxpl_mpio(xfer_plist, H5FD_MPIO_COLLECTIVE);
-      assert(status != FAIL);
-
-      hid_t file_dataspace, mem_dataspace, sid1 = FAIL, dataset1;
-      hsize_t count[2], in_count[2], tot_count[2];
-      hsize_t start[2];
+      dataset1 = H5Dcreate(group_id, varName, H5T_NATIVE_DOUBLE, sid1, lcpl, H5P_DEFAULT, H5P_DEFAULT);
+      assert(dataset1 != FAIL);
       
-      int bottom0, bottom1, top0, top1;
-
-      bottom0 = ( flagValuesM[k].getLocalBase(0) == flagValuesM[k].getBase(0) )?0:1;
-      bottom1 = ( flagValuesM[k].getLocalBase(1) == flagValuesM[k].getBase(1) )?0:1;
-      top0    = ( flagValuesM[k].getLocalBound(0) == flagValuesM[k].getBound(0) )?0:1;
-      top1    = ( flagValuesM[k].getLocalBound(1) == flagValuesM[k].getBound(1) )?0:1;
-
-      start[1] = fieldValuesM[k].getLocalBase(0);
-      start[0] = fieldValuesM[k].getLocalBase(1);
-      count[1] = fieldValuesM[k].getLocalBound(0) - start[1] + 1;
-      count[0] = fieldValuesM[k].getLocalBound(1) - start[0] + 1;
-      
-      in_count[0] = fieldValuesM[k].getLocalLength(1) - bottom1 - top1;
-      in_count[1] = fieldValuesM[k].getLocalLength(0) - bottom0 - top0;
-
-      tot_count[0] = fieldValuesM[k].getLength(1);
-      tot_count[1] = fieldValuesM[k].getLength(0);
-
-      //----------------------------------------
-      // Check if dataset already exists
-      //----------------------------------------
-
-      //----------------------------------------
-      // Turn off error printing
-      //----------------------------------------
-      herr_t (*old_func)(void*);
-      void *old_client_data;
-      H5Eget_auto1(&old_func, &old_client_data);
-      hid_t error_stack;
-      hid_t lcpl = H5P_DEFAULT;
-      H5Eset_auto(error_stack, NULL, NULL);
-
-      dataset1 = H5Dopen(group_id, varName, H5P_DEFAULT);      
-      //----------------------------------------
-      // Restore previous error handler 
-      //----------------------------------------
-      H5Eset_auto1(old_func, old_client_data);
-      
-      bool closesid1 = false;
-      if (dataset1 < 0)
-	{
-	  //----------------------------------------
-	  // Create data [set,space] for variable
-	  //----------------------------------------
-	  sid1 = H5Screate_simple(2, tot_count, NULL);
-	  assert(sid1 != FAIL);
-	  
-	  dataset1 = H5Dcreate(group_id, varName, H5T_NATIVE_DOUBLE, sid1, lcpl, H5P_DEFAULT, H5P_DEFAULT);
-	  assert(dataset1 != FAIL);
-
-	  closesid1 = true;
-	}
-      
-      file_dataspace = H5Dget_space(dataset1);   
-      assert(file_dataspace != FAIL);
-
-      start[0] += bottom1; start[1] += bottom0;
-      status = H5Sselect_hyperslab(file_dataspace, H5S_SELECT_SET, start, NULL,
-				   in_count, NULL);
-      assert(status != FAIL);
-      
-      if (bottom0 == 0) count[1]++; if (bottom1 == 0) count[0]++;
-      if (top0 == 0)    count[1]++; if (top1 == 0)    count[0]++;
-
-      mem_dataspace = H5Screate_simple (2, count, NULL);
-      assert(mem_dataspace != FAIL);
-
-      start[0] = 1; start[1] = 1;
-      status = H5Sselect_hyperslab(mem_dataspace, H5S_SELECT_SET, start, NULL, 
-				   in_count, NULL);
-      assert(status != FAIL);
-      //----------------------------------------
-      // Write variable to file
-      //----------------------------------------
-      status = H5Dwrite(dataset1, H5T_NATIVE_DOUBLE, mem_dataspace, file_dataspace,
-      			xfer_plist, fieldValuesM[k].getDataPointer());
-      assert(status != FAIL);
-
-      //----------------------------------------
-      // Release resources
-      //----------------------------------------
-      if (closesid1)
-	{
-	  H5Sclose(sid1);
-	}
-      H5Dclose(dataset1);
-      H5Sclose(file_dataspace);
-      H5Sclose(mem_dataspace);
-      H5Pclose(xfer_plist);
-
-      //----------------------------------------
-      // Close component grid group
-      //----------------------------------------
-      status = H5Gclose(group_id);
-      assert(status != FAIL);
+      closesid1 = true;
     }
+    
+    file_dataspace = H5Dget_space(dataset1);   
+    assert(file_dataspace != FAIL);
+    
+    start[0] += bottom1; start[1] += bottom0;
+    status = H5Sselect_hyperslab(file_dataspace, H5S_SELECT_SET, start, NULL,
+				 in_count, NULL);
+    assert(status != FAIL);
+    
+    if (bottom0 == 0) count[1]++; if (bottom1 == 0) count[0]++;
+    if (top0 == 0)    count[1]++; if (top1 == 0)    count[0]++;
+    
+    mem_dataspace = H5Screate_simple (2, count, NULL);
+    assert(mem_dataspace != FAIL);
+    
+    start[0] = 1; start[1] = 1;
+    status = H5Sselect_hyperslab(mem_dataspace, H5S_SELECT_SET, start, NULL, 
+				 in_count, NULL);
+    assert(status != FAIL);
+    //----------------------------------------
+    // Write variable to file
+    //----------------------------------------
+    status = H5Dwrite(dataset1, H5T_NATIVE_DOUBLE, mem_dataspace, file_dataspace,
+		      xfer_plist, fieldValuesM[k].getDataPointer());
+    assert(status != FAIL);
+    
+    //----------------------------------------
+    // Release resources
+    //----------------------------------------
+    if (closesid1)
+    {
+      H5Sclose(sid1);
+    }
+    H5Dclose(dataset1);
+    H5Sclose(file_dataspace);
+    H5Sclose(mem_dataspace);
+    H5Pclose(xfer_plist);
+    
+    //----------------------------------------
+    // Close component grid group
+    //----------------------------------------
+    status = H5Gclose(group_id);
+    assert(status != FAIL);
+  }
   status = H5Fclose(file_id);
   assert(status != FAIL);
 }
@@ -687,97 +673,97 @@ void gridFunction::readFromHDF5File(const char *fileName, const char *varName)
   
   status = H5Pclose(file_props);
   assert(status != FAIL);  
-
+  
   //----------------------------------------
   // Read the variable for every component
   // grid
   //----------------------------------------
   char word[200];
   for (int k=0; k<myGridM->nrGrids(); k++)
-    {
-      //----------------------------------------
-      // Open the group for component grid [k]
-      // and use as offset for coordinates
-      //----------------------------------------
-      sprintf(word, "/root/overlapping grid/component grid %d",k);
-      
-      group_id = H5Gopen(file_id, word, H5P_DEFAULT);
-
-      //----------------------------------------
-      // Prepare for collective data transfer
-      //----------------------------------------
-      hid_t xfer_plist;         
-      xfer_plist = H5Pcreate (H5P_DATASET_XFER);
-      assert(xfer_plist != FAIL);
-      status = H5Pset_dxpl_mpio(xfer_plist, H5FD_MPIO_COLLECTIVE);
-      assert(status != FAIL);
-
-      hid_t file_dataspace, mem_dataspace, dataset1;
-      hsize_t count[2], in_count[2], tot_count[2];
-      hsize_t start[2];
-
-      int bottom0, bottom1, top0, top1;
-
-      bottom0 = ( flagValuesM[k].getLocalBase(0) == flagValuesM[k].getBase(0) )?0:1;
-      bottom1 = ( flagValuesM[k].getLocalBase(1) == flagValuesM[k].getBase(1) )?0:1;
-      top0    = ( flagValuesM[k].getLocalBound(0) == flagValuesM[k].getBound(0) )?0:1;
-      top1    = ( flagValuesM[k].getLocalBound(1) == flagValuesM[k].getBound(1) )?0:1;
-
-      start[1] = fieldValuesM[k].getLocalBase(0);
-      start[0] = fieldValuesM[k].getLocalBase(1);
-      count[1] = fieldValuesM[k].getLocalBound(0) - start[1] + 1;
-      count[0] = fieldValuesM[k].getLocalBound(1) - start[0] + 1;
-      
-      in_count[0] = fieldValuesM[k].getLocalLength(1) - bottom1 - top1;
-      in_count[1] = fieldValuesM[k].getLocalLength(0) - bottom0 - top0;
-
-      tot_count[0] = fieldValuesM[k].getLength(1);
-      tot_count[1] = fieldValuesM[k].getLength(0);
-      //----------------------------------------
-      // Open data set for variable
-      //----------------------------------------
-      dataset1 = H5Dopen(group_id, varName, H5P_DEFAULT);
-      assert(dataset1 != FAIL);
-
-      file_dataspace = H5Dget_space (dataset1);   
-      assert(file_dataspace != FAIL);
-
-      start[0] += bottom1; start[1] += bottom0;
-      status = H5Sselect_hyperslab(file_dataspace, H5S_SELECT_SET, start, NULL,
-				   in_count, NULL);
-      assert(status != FAIL);
-
-      if (bottom0 == 0) count[1]++; if (bottom1 == 0) count[0]++;
-      if (top0 == 0)    count[1]++; if (top1 == 0)    count[0]++;
-      
-      mem_dataspace = H5Screate_simple (2, count, NULL);
-      assert(mem_dataspace != FAIL);
-
-      start[0] = 1; start[1] = 1;
-      status = H5Sselect_hyperslab(mem_dataspace, H5S_SELECT_SET, start, NULL, 
-				   in_count, NULL);
-      assert(status != FAIL);
-      //----------------------------------------
-      // Write variable to file
-      //----------------------------------------
-      status = H5Dread(dataset1, H5T_NATIVE_DOUBLE, mem_dataspace, file_dataspace,
-		       xfer_plist, fieldValuesM[k].getDataPointer());
-      assert(status != FAIL);
-
-      //----------------------------------------
-      // Release resources
-      //----------------------------------------
-      H5Dclose(dataset1);
-      H5Sclose(file_dataspace);
-      H5Sclose(mem_dataspace);
-      H5Pclose(xfer_plist);
-
-      //----------------------------------------
-      // Close component grid group
-      //----------------------------------------
-      status = H5Gclose(group_id);
-      assert(status != FAIL);
-    }
+  {
+    //----------------------------------------
+    // Open the group for component grid [k]
+    // and use as offset for coordinates
+    //----------------------------------------
+    sprintf(word, "/root/overlapping grid/component grid %d",k);
+    
+    group_id = H5Gopen(file_id, word, H5P_DEFAULT);
+    
+    //----------------------------------------
+    // Prepare for collective data transfer
+    //----------------------------------------
+    hid_t xfer_plist;         
+    xfer_plist = H5Pcreate (H5P_DATASET_XFER);
+    assert(xfer_plist != FAIL);
+    status = H5Pset_dxpl_mpio(xfer_plist, H5FD_MPIO_COLLECTIVE);
+    assert(status != FAIL);
+    
+    hid_t file_dataspace, mem_dataspace, dataset1;
+    hsize_t count[2], in_count[2], tot_count[2];
+    hsize_t start[2];
+    
+    int bottom0, bottom1, top0, top1;
+    
+    bottom0 = ( flagValuesM[k].getLocalBase(0) == flagValuesM[k].getBase(0) )?0:1;
+    bottom1 = ( flagValuesM[k].getLocalBase(1) == flagValuesM[k].getBase(1) )?0:1;
+    top0    = ( flagValuesM[k].getLocalBound(0) == flagValuesM[k].getBound(0) )?0:1;
+    top1    = ( flagValuesM[k].getLocalBound(1) == flagValuesM[k].getBound(1) )?0:1;
+    
+    start[1] = fieldValuesM[k].getLocalBase(0);
+    start[0] = fieldValuesM[k].getLocalBase(1);
+    count[1] = fieldValuesM[k].getLocalBound(0) - start[1] + 1;
+    count[0] = fieldValuesM[k].getLocalBound(1) - start[0] + 1;
+    
+    in_count[0] = fieldValuesM[k].getLocalLength(1) - bottom1 - top1;
+    in_count[1] = fieldValuesM[k].getLocalLength(0) - bottom0 - top0;
+    
+    tot_count[0] = fieldValuesM[k].getLength(1);
+    tot_count[1] = fieldValuesM[k].getLength(0);
+    //----------------------------------------
+    // Open data set for variable
+    //----------------------------------------
+    dataset1 = H5Dopen(group_id, varName, H5P_DEFAULT);
+    assert(dataset1 != FAIL);
+    
+    file_dataspace = H5Dget_space (dataset1);   
+    assert(file_dataspace != FAIL);
+    
+    start[0] += bottom1; start[1] += bottom0;
+    status = H5Sselect_hyperslab(file_dataspace, H5S_SELECT_SET, start, NULL,
+				 in_count, NULL);
+    assert(status != FAIL);
+    
+    if (bottom0 == 0) count[1]++; if (bottom1 == 0) count[0]++;
+    if (top0 == 0)    count[1]++; if (top1 == 0)    count[0]++;
+    
+    mem_dataspace = H5Screate_simple (2, count, NULL);
+    assert(mem_dataspace != FAIL);
+    
+    start[0] = 1; start[1] = 1;
+    status = H5Sselect_hyperslab(mem_dataspace, H5S_SELECT_SET, start, NULL, 
+				 in_count, NULL);
+    assert(status != FAIL);
+    //----------------------------------------
+    // Write variable to file
+    //----------------------------------------
+    status = H5Dread(dataset1, H5T_NATIVE_DOUBLE, mem_dataspace, file_dataspace,
+		     xfer_plist, fieldValuesM[k].getDataPointer());
+    assert(status != FAIL);
+    
+    //----------------------------------------
+    // Release resources
+    //----------------------------------------
+    H5Dclose(dataset1);
+    H5Sclose(file_dataspace);
+    H5Sclose(mem_dataspace);
+    H5Pclose(xfer_plist);
+    
+    //----------------------------------------
+    // Close component grid group
+    //----------------------------------------
+    status = H5Gclose(group_id);
+    assert(status != FAIL);
+  }
   status = H5Fclose(file_id);
   assert(status != FAIL);
 }
@@ -785,14 +771,18 @@ void gridFunction::readFromHDF5File(const char *fileName, const char *varName)
 void gridFunction::initializeGridData()
 {
   if (boundaryValue != 0)
+  {
     for (int k=0; k<(myGridM->nrGrids()); k++)
-      fieldValuesM[k] = boundaryValue(myGridM->xM[k], myGridM->yM[k], timeM, -1, -1);
-  else
     {
-      for (int k=0; k<(myGridM->nrGrids()); k++)
-        fieldValuesM[k] = sin(0*myGridM->xM[k]);
-    std::cerr << "Cannot initializeGridData, no boundaryValue function defined!!" << std::endl;
+      fieldValuesM[k] = boundaryValue(myGridM->xM[k], myGridM->yM[k], timeM, -1, -1);
     }
+  }
+  else
+  {
+    for (int k=0; k<(myGridM->nrGrids()); k++)
+      fieldValuesM[k] = sin(0*myGridM->xM[k]);
+    std::cerr << "Cannot initializeGridData, no boundaryValue function defined!!" << std::endl;
+  }
 }
 
 doubleArray gridFunction::x(int k, Index ix, Index iy) const

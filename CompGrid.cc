@@ -1575,7 +1575,7 @@ void CompositeGrid::saveCoordinatesToFile() const
     }
 }
 
-void CompositeGrid::saveCoordinatesToHDF5File(const char *name) const
+void CompositeGrid::saveCoordinatesToHDF5File(const char* name) const
 {
   hid_t       file_id, file_props, group_id;
   herr_t      status;
@@ -1592,131 +1592,131 @@ void CompositeGrid::saveCoordinatesToHDF5File(const char *name) const
   
   status = H5Pclose(file_props);
   assert(status != FAIL);  
-
+  
   //----------------------------------------
   // Write coordinates for every component
   // grid
   //----------------------------------------
   char word[200];
-  for (int k=0; k<nmbrOfGridsM; k++)
-    {
-      //----------------------------------------
-      // Open the group for component grid [k]
-      // and use as offset for coordinates
-      //----------------------------------------
-      sprintf(word, "/root/overlapping grid/component grid %d",k);
-      
-      group_id = H5Gopen(file_id, word, H5P_DEFAULT);
-
-      //----------------------------------------
-      // Prepare for collective data transfer
-      //----------------------------------------
-      hid_t xfer_plist;         
-      xfer_plist = H5Pcreate (H5P_DATASET_XFER);
-      assert(xfer_plist != FAIL);
-      status = H5Pset_dxpl_mpio(xfer_plist, H5FD_MPIO_COLLECTIVE);
-      assert(status != FAIL);
-
-      hid_t file_dataspace, file_dataspace2, mem_dataspace, mem_dataspace2, sid1, sid2, dataset1, dataset2;
-      hid_t lcpl = H5P_DEFAULT;
-      hsize_t count[2], in_count[2], tot_count[2];
-      hsize_t start[2];
-      
-      //----------------------------------------
-      // x is used as a template 
-      // for distribution of data over processes
-      //----------------------------------------
-
-      int bottom0, bottom1, top0, top1;
-
-      bottom0 = ( flagValuesM[k].getLocalBase(0) == flagValuesM[k].getBase(0) )?0:1;
-      bottom1 = ( flagValuesM[k].getLocalBase(1) == flagValuesM[k].getBase(1) )?0:1;
-      top0    = ( flagValuesM[k].getLocalBound(0) == flagValuesM[k].getBound(0) )?0:1;
-      top1    = ( flagValuesM[k].getLocalBound(1) == flagValuesM[k].getBound(1) )?0:1;
-
-      start[1] = xM[k].getLocalBase(0);
-      start[0] = xM[k].getLocalBase(1);
-      count[1] = xM[k].getLocalBound(0) - start[1] + 1;
-      count[0] = xM[k].getLocalBound(1) - start[0] + 1;
-      
-      in_count[0] = xM[k].getLocalLength(1) - bottom1 - top1;
-      in_count[1] = xM[k].getLocalLength(0) - bottom0 - top0;
-
-      tot_count[0] = xM[k].getLength(1);
-      tot_count[1] = xM[k].getLength(0);
-      //----------------------------------------
-      // Create data [set,space] for x and y
-      //----------------------------------------
-      sid1 = H5Screate_simple (2, tot_count, NULL);
-      assert(sid1 != FAIL);
-      sid2 = H5Screate_simple (2, tot_count, NULL);
-      assert(sid2 != FAIL);
-
-      dataset1 = H5Dcreate(group_id, "x", H5T_NATIVE_DOUBLE, sid1, lcpl, H5P_DEFAULT, H5P_DEFAULT);
-      assert(dataset1 != FAIL);
-      dataset2 = H5Dcreate(group_id, "y", H5T_NATIVE_DOUBLE, sid1, lcpl, H5P_DEFAULT, H5P_DEFAULT);
-      assert(dataset2 != FAIL);
-      
-      file_dataspace = H5Dget_space (dataset1);   
-      assert(file_dataspace != FAIL);
-      file_dataspace2 = H5Dget_space (dataset2);   
-      assert(file_dataspace2 != FAIL);
-
-      start[0] += bottom1; start[1] += bottom0;
-
-      status = H5Sselect_hyperslab(file_dataspace, H5S_SELECT_SET, start, NULL,
-				   in_count, NULL);
-      assert(status != FAIL);
-      status = H5Sselect_hyperslab(file_dataspace2, H5S_SELECT_SET, start, NULL,
-				   in_count, NULL);
-      assert(status != FAIL);
-      
-      if (bottom0 == 0) count[1]++; if (bottom1 == 0) count[0]++;
-      if (top0 == 0)    count[1]++; if (top1 == 0)    count[0]++;
-
-      mem_dataspace = H5Screate_simple (2, count, NULL);
-      assert(mem_dataspace != FAIL);
-      mem_dataspace2 = H5Screate_simple (2, count, NULL);
-      assert(mem_dataspace2 != FAIL);
-
-      start[0] = 1; start[1] = 1;
-
-      status = H5Sselect_hyperslab(mem_dataspace, H5S_SELECT_SET, start, NULL, 
-      				   in_count, NULL);
-      assert(status != FAIL);
-      status = H5Sselect_hyperslab(mem_dataspace2, H5S_SELECT_SET, start, NULL, 
-      				   in_count, NULL);
-      assert(status != FAIL);
-      //----------------------------------------
-      // Write x and y to file
-      //----------------------------------------
-      status = H5Dwrite(dataset1, H5T_NATIVE_DOUBLE, mem_dataspace, file_dataspace,
-			xfer_plist, xM[k].getDataPointer());
-      assert(status != FAIL);
-
-      status = H5Dwrite(dataset2, H5T_NATIVE_DOUBLE, mem_dataspace2, file_dataspace2,
-			xfer_plist, yM[k].getDataPointer());
-      assert(status != FAIL);
-
-      //----------------------------------------
-      // Release resources
-      //----------------------------------------
-      H5Sclose(sid1);
-      H5Dclose(dataset1);
-      H5Sclose(file_dataspace);
-      H5Sclose(mem_dataspace);
-      H5Pclose(xfer_plist);
-      H5Sclose(sid2);
-      H5Dclose(dataset2);
-      H5Sclose(file_dataspace2);
-      H5Sclose(mem_dataspace2);
-
-      //----------------------------------------
-      // Close component grid group
-      //----------------------------------------
-      status = H5Gclose(group_id);
-      assert(status != FAIL);
-    }
+  for (int k = 0; k < nmbrOfGridsM; k++)
+  {
+    //----------------------------------------
+    // Open the group for component grid [k]
+    // and use as offset for coordinates
+    //----------------------------------------
+    sprintf(word, "/root/overlapping grid/component grid %d",k);
+    
+    group_id = H5Gopen(file_id, word, H5P_DEFAULT);
+    
+    //----------------------------------------
+    // Prepare for collective data transfer
+    //----------------------------------------
+    hid_t xfer_plist;         
+    xfer_plist = H5Pcreate (H5P_DATASET_XFER);
+    assert(xfer_plist != FAIL);
+    status = H5Pset_dxpl_mpio(xfer_plist, H5FD_MPIO_COLLECTIVE);
+    assert(status != FAIL);
+    
+    hid_t file_dataspace, file_dataspace2, mem_dataspace, mem_dataspace2, sid1, sid2, dataset1, dataset2;
+    hid_t lcpl = H5P_DEFAULT;
+    hsize_t count[2], in_count[2], tot_count[2];
+    hsize_t start[2];
+    
+    //----------------------------------------
+    // x is used as a template 
+    // for distribution of data over processes
+    //----------------------------------------
+    
+    int bottom0, bottom1, top0, top1;
+    
+    bottom0 = ( flagValuesM[k].getLocalBase(0) == flagValuesM[k].getBase(0) )?0:1;
+    bottom1 = ( flagValuesM[k].getLocalBase(1) == flagValuesM[k].getBase(1) )?0:1;
+    top0    = ( flagValuesM[k].getLocalBound(0) == flagValuesM[k].getBound(0) )?0:1;
+    top1    = ( flagValuesM[k].getLocalBound(1) == flagValuesM[k].getBound(1) )?0:1;
+    
+    start[1] = xM[k].getLocalBase(0);
+    start[0] = xM[k].getLocalBase(1);
+    count[1] = xM[k].getLocalBound(0) - start[1] + 1;
+    count[0] = xM[k].getLocalBound(1) - start[0] + 1;
+    
+    in_count[0] = xM[k].getLocalLength(1) - bottom1 - top1;
+    in_count[1] = xM[k].getLocalLength(0) - bottom0 - top0;
+    
+    tot_count[0] = xM[k].getLength(1);
+    tot_count[1] = xM[k].getLength(0);
+    //----------------------------------------
+    // Create data [set,space] for x and y
+    //----------------------------------------
+    sid1 = H5Screate_simple (2, tot_count, NULL);
+    assert(sid1 != FAIL);
+    sid2 = H5Screate_simple (2, tot_count, NULL);
+    assert(sid2 != FAIL);
+    
+    dataset1 = H5Dcreate(group_id, "x", H5T_NATIVE_DOUBLE, sid1, lcpl, H5P_DEFAULT, H5P_DEFAULT);
+    assert(dataset1 != FAIL);
+    dataset2 = H5Dcreate(group_id, "y", H5T_NATIVE_DOUBLE, sid1, lcpl, H5P_DEFAULT, H5P_DEFAULT);
+    assert(dataset2 != FAIL);
+    
+    file_dataspace = H5Dget_space (dataset1);   
+    assert(file_dataspace != FAIL);
+    file_dataspace2 = H5Dget_space (dataset2);   
+    assert(file_dataspace2 != FAIL);
+    
+    start[0] += bottom1; start[1] += bottom0;
+    
+    status = H5Sselect_hyperslab(file_dataspace, H5S_SELECT_SET, start, NULL,
+				 in_count, NULL);
+    assert(status != FAIL);
+    status = H5Sselect_hyperslab(file_dataspace2, H5S_SELECT_SET, start, NULL,
+				 in_count, NULL);
+    assert(status != FAIL);
+    
+    if (bottom0 == 0) count[1]++; if (bottom1 == 0) count[0]++;
+    if (top0 == 0)    count[1]++; if (top1 == 0)    count[0]++;
+    
+    mem_dataspace = H5Screate_simple (2, count, NULL);
+    assert(mem_dataspace != FAIL);
+    mem_dataspace2 = H5Screate_simple (2, count, NULL);
+    assert(mem_dataspace2 != FAIL);
+    
+    start[0] = 1; start[1] = 1;
+    
+    status = H5Sselect_hyperslab(mem_dataspace, H5S_SELECT_SET, start, NULL, 
+				 in_count, NULL);
+    assert(status != FAIL);
+    status = H5Sselect_hyperslab(mem_dataspace2, H5S_SELECT_SET, start, NULL, 
+				 in_count, NULL);
+    assert(status != FAIL);
+    //----------------------------------------
+    // Write x and y to file
+    //----------------------------------------
+    status = H5Dwrite(dataset1, H5T_NATIVE_DOUBLE, mem_dataspace, file_dataspace,
+		      xfer_plist, xM[k].getDataPointer());
+    assert(status != FAIL);
+    
+    status = H5Dwrite(dataset2, H5T_NATIVE_DOUBLE, mem_dataspace2, file_dataspace2,
+		      xfer_plist, yM[k].getDataPointer());
+    assert(status != FAIL);
+    
+    //----------------------------------------
+    // Release resources
+    //----------------------------------------
+    H5Sclose(sid1);
+    H5Dclose(dataset1);
+    H5Sclose(file_dataspace);
+    H5Sclose(mem_dataspace);
+    H5Pclose(xfer_plist);
+    H5Sclose(sid2);
+    H5Dclose(dataset2);
+    H5Sclose(file_dataspace2);
+    H5Sclose(mem_dataspace2);
+    
+    //----------------------------------------
+    // Close component grid group
+    //----------------------------------------
+    status = H5Gclose(group_id);
+    assert(status != FAIL);
+  }
   status = H5Fclose(file_id);
   assert(status != FAIL);
 }

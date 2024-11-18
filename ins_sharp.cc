@@ -592,13 +592,13 @@ main(int argc, char** argv)
     {
       cout << "--------DONE--------";
       cout << "|------------------------------------------------------------|" 
-	   << endl << endl;
+	   << endl;
     }
     if (it % saveIntervall == 0)
     {
       fileCounter++;
       fileString.str("");
-      fileString << RESULTS << "." << fileCounter << ".h5";
+      fileString << RESULTS << "_" << fileCounter << ".h5";
       
       if (myid == 0)
       {
