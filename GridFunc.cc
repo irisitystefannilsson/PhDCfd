@@ -2550,7 +2550,7 @@ void gridFunction::setFlagValues()
       // 	  flagValuesM[grid](hi_i,hi_j-1) = grid + 1 + 4000;
       // 	}
       
-      //     flagValuesM[grid].display();exit(1);
+      //flagValuesM[grid].display();
     }
 
   // What is this. Probably some old debug code (SN)

@@ -210,7 +210,7 @@ main(int argc, char** argv)
   PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--allNeumann", &flg);
   if (flg == PETSC_TRUE && !(pressureType == DirichletAllOver) )
   {
-    allNeumann = true;  
+    allNeumann = true;
   }
   // Set type of equation system for the
   // Overlapping grid equations
@@ -302,7 +302,7 @@ main(int argc, char** argv)
   bool noBC = false;
   int k;
   
-  fileString << RESULTS << "." << fileCounter << ".h5";
+  fileString << RESULTS << "_" << fileCounter << ".h5";
 	  
   if (myid == 0)
   {

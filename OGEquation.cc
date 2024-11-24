@@ -99,8 +99,8 @@ DMSRMatrix::setupMatrix(CompositeGrid *Kimera, MatrixOperator operatorType, int 
     PetscInt* o_nnz = new PetscInt[N_update];
     for (int i = 0; i < N_update; ++i)
     {
-      nnz[i] = 10;
-      o_nnz[i] = 9;
+      nnz[i] = 11;
+      o_nnz[i] = 10;
     }
     if (allNeumann && me == nrProcs-1)
     {
