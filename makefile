@@ -34,10 +34,10 @@ LIBS_LINUX_G=-L$(PPPLIB_DIR_G) -L$(AZTEC_LIB) \
 
 INCLUDES= $(PPP_INCLUDE_G) $(AZTEC_INCLUDE) $(HDF5_INCLUDE) -I/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/include -I/usr/lib/x86_64-linux-gnu/openmpi/include/
 
-CPPFLAGS_LINUX=${INCLUDES} -DHAVE_CONFIG_H -I. -DHAVE_CONFIG_H -I. -DAZ_MPI -fpermissive -std=c++17
-CFLAGS_LINUX=-DHAVE_CONFIG_H -I. -DAZ_MPI
+CPPFLAGS_LINUX=${INCLUDES} -DHAVE_CONFIG_H -I. -DAZ_MPI
+CFLAGS_LINUX=-fpermissive -std=c++17 
 
-CPPFLAGS=$(CPPFLAGS_$(ARCH)) -D$(ARCH)
+CPPFLAGS=$(CPPFLAGS_$(ARCH))
 CFLAGS=$(CFLAGS_$(ARCH)) 
 
 LIBRARIES= $(LIBS_$(ARCH)) -L/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/lib -lpetsc_real
@@ -51,7 +51,13 @@ srcs= GridFunc.cc CompGrid.cc OGEquation.cc
 # OBJECTS GIVEN BELOW
 objs= $(srcs:.cc=.o)
 
+%.o: %.cc
+	$(CC) -c -o $@ $< $(CFLAGS) $(CPPFLAGS) -O2
+
 objs_g= $(srcs:.cc=_g.o)
+
+%_g.o: %.cc
+	$(CC) -c -o $@ $< $(CFLAGS) $(CPPFLAGS) -g
 
 my_auxiliary_routines.o: my_auxiliary_routines.cc my_auxiliary_routines.hh
 
@@ -68,19 +74,20 @@ OGEquation.o: OGEquation.cc OGEquation.hh
 CompGrid.o: CompGrid.cc CompGrid.hh
 
 my_auxiliary_routines_g.o: my_auxiliary_routines.cc my_auxiliary_routines.hh
-	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} my_auxiliary_routines.cc
+
 ins_sharp_g.o: ins_sharp.cc ins_sharp.hh
-	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} ins_sharp.cc
+
+poissonEq_g.o: poissonEq.cc
+
 heatEq_g.o: heatEq.cc ins_sharp.hh
-	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} heatEq.cc
+
 ins_g.o: ins.cc my_auxiliary_routines.hh
-	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} ins.cc
+
 GridFunc_g.o: GridFunc.cc GridFunc.hh
-	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} GridFunc.cc
+
 OGEquation_g.o: OGEquation.cc OGEquation.hh
-	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} OGEquation.cc
+
 CompGrid_g.o: CompGrid.cc CompGrid.hh
-	${CC} -g -c -o $@ $(CPPFLAGS) $(CFLAGS) ${PETSC_CCPPFLAGS} CompGrid.cc
 
 ins: ins.o my_auxiliary_routines.o $(objs)
 	${CLINKER} -o $@ $(LDFLAGS) ins.o my_auxiliary_routines.o $(objs) $(LIBRARIES)
@@ -93,6 +100,9 @@ ins_g: ins_g.o my_auxiliary_routines_g.o $(objs_g)
 
 ins_sharp_g: ins_sharp_g.o $(objs_g)
 	${CLINKER} -o $@ $(LDFLAGS) ins_sharp_g.o $(objs_g) $(LIBRARIES_G)
+
+poissonEq_g: poissonEq_g.o $(objs_g)
+	${CLINKER} -o $@ $(LDFLAGS) poissonEq_g.o $(objs_g) $(LIBRARIES_G)
 
 heatEq: heatEq.o $(objs)
 	${CLINKER} -o $@ $(LDFLAGS) heatEq.o $(objs) $(LIBRARIES_G)

@@ -194,7 +194,7 @@ main(int argc, char** argv)
   // Set flag values for all grid points the
   // gridFunctions are
   // defined on
-  pressure.setFlagValues(); 
+  pressure.setFlagValues();
   U.setFlagValues(); 
   V.setFlagValues();
   // Attach gridFunctions to the
