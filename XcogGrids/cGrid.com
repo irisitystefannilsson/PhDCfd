@@ -1,8 +1,5 @@
 #xcog-file-type-1
 reset-xcog
-overlap-parameters
-	interpolation-width 3
-	exit
 make-curve cylinder
 	circular-arc
 		radius .4
@@ -12,15 +9,15 @@ make-mapping square-grid
 	cartesian-mapping
 		xmin -1.0
 		ymin -1.0
-		set-r-lines 101
-		set-s-lines 101
+		set-r-lines 21
+		set-s-lines 21
 	exit
 make-mapping cylinder-grid
 	normal-curve-mapping cylinder
 		reverse-curve-parametrization
 		constant-width .5
-		set-r-lines 201
-		set-s-lines 51
+		set-r-lines 41
+		set-s-lines 11
 	exit
 curve-label cylinder-grid
 	low-s 1
@@ -41,12 +38,19 @@ boundary-condition square-grid
 	high-s 1
 exit
 boundary-condition cylinder-grid
-	low-s 1
-exit
+	      low-s 1
+	      low-r 3
+	      high-r 3
+	      exit
+	      overlap-parameters
+	ghostpoints 1
+        interpolation-width 3
+	normal-width 3
+	exit
 compute-overlap
-save-overlapping-grid
+#save-overlapping-grid
 #	hdf-format cGrid.hdf
-	ascii-format cGrid.acg
+	ascii-format cGrid_21x21.acg
 	yes
 
 
