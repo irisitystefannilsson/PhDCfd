@@ -104,8 +104,11 @@ ins_sharp_g: ins_sharp_g.o $(objs_g)
 poissonEq_g: poissonEq_g.o $(objs_g)
 	${CLINKER} -o $@ $(LDFLAGS) poissonEq_g.o $(objs_g) $(LIBRARIES_G)
 
+poissonEq: poissonEq.o $(objs)
+	${CLINKER} -o $@ $(LDFLAGS) poissonEq.o $(objs) $(LIBRARIES)
+
 heatEq: heatEq.o $(objs)
-	${CLINKER} -o $@ $(LDFLAGS) heatEq.o $(objs) $(LIBRARIES_G)
+	${CLINKER} -o $@ $(LDFLAGS) heatEq.o $(objs) $(LIBRARIES)
 
 heatEq_g: heatEq_g.o $(objs_g)
 	${CLINKER} -o $@ $(LDFLAGS) heatEq_g.o $(objs_g) $(LIBRARIES_G)
