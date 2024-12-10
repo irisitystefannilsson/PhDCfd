@@ -65,8 +65,6 @@ ins_sharp.o: ins_sharp.cc ins_sharp.hh
 
 heatEq.o: heatEq.cc ins_sharp.hh
 
-ins.o: ins.cc my_auxiliary_routines.hh
-
 GridFunc.o: GridFunc.cc GridFunc.hh
 
 OGEquation.o: OGEquation.cc OGEquation.hh
@@ -81,19 +79,14 @@ poissonEq_g.o: poissonEq.cc
 
 heatEq_g.o: heatEq.cc ins_sharp.hh
 
-ins_g.o: ins.cc my_auxiliary_routines.hh
-
 GridFunc_g.o: GridFunc.cc GridFunc.hh
 
 OGEquation_g.o: OGEquation.cc OGEquation.hh
 
 CompGrid_g.o: CompGrid.cc CompGrid.hh
 
-ins: ins.o my_auxiliary_routines.o $(objs)
-	${CLINKER} -o $@ $(LDFLAGS) ins.o my_auxiliary_routines.o $(objs) $(LIBRARIES)
-
 ins_sharp: ins_sharp.o $(objs)
-	${CLINKER} -o $@ $(LDFLAGS) ins_sharp.o $(objs) $(LIBRARIES_G)
+	${CLINKER} -o $@ $(LDFLAGS) ins_sharp.o $(objs) $(LIBRARIES)
 
 ins_g: ins_g.o my_auxiliary_routines_g.o $(objs_g)
 	${CLINKER} -o $@ $(LDFLAGS) ins_g.o my_auxiliary_routines_g.o $(objs_g) $(LIBRARIES_G)
