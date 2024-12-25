@@ -1,12 +1,8 @@
 // -*-c++-*-
 #ifndef OGEQUATION_H
-
 #define OGEQUATION_H
 
-#include "A++.h"
-#include "GridFunc.hh"
-#include "CompGrid.hh"
-
+#include "petscksp.h"
 extern "C"
 {
 #include "az_aztec.h"
@@ -14,8 +10,11 @@ extern "C"
 #undef min
 #undef max
 
-//#include "petscsles.h"
-#include "petscksp.h"
+#include "A++.h"
+
+#include "GridFunc.hh"
+#include "CompGrid.hh"
+
 
 enum MatrixOperator 
 {
@@ -143,7 +142,7 @@ public :
   
   int *bindx() { return jaM; };
   
-  int getGlobalNrOfUnknowns() {return globalNrOfUnknownsM;}; 
+  int getGlobalNrOfUnknowns() { return globalNrOfUnknownsM; }; 
   
 };
 
@@ -220,8 +219,4 @@ public :
 
   void setParameter(OPTION parameter, double value);
 };
-
-
-  
-
 #endif

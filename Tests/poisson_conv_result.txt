@@ -1,0 +1,166 @@
+CARTESIAN MESH
+NUMPROCS = 1
+11x11
+acg
+  l_inf norm of Error is 0.00434585
+  l_h norm of Error is   0.00202063
+h5
+  l_inf norm of Error is 0.00434585
+  l_h norm of Error is   0.00202063
+h5
+21x21
+acg
+  l_inf norm of Error is 0.00108247
+  l_h norm of Error is   0.000500286
+h5
+  l_inf norm of Error is 0.00108247
+  l_h norm of Error is   0.000500286
+h5
+41x41
+acg
+  l_inf norm of Error is 0.000272665
+  l_h norm of Error is   0.000125113
+h5
+  l_inf norm of Error is 0.000272665
+  l_h norm of Error is   0.000125113
+h5
+81x81
+acg
+  l_inf norm of Error is 7.2149e-05
+  l_h norm of Error is   3.33885e-05
+h5
+  l_inf norm of Error is 7.2149e-05
+  l_h norm of Error is   3.33885e-05
+h5
+161x161
+acg
+  l_inf norm of Error is 2.38093e-05
+  l_h norm of Error is   1.07286e-05
+h5
+  l_inf norm of Error is 2.38093e-05
+  l_h norm of Error is   1.07286e-05
+h5
+321x321
+acg
+  l_inf norm of Error is 8.86905e-06
+  l_h norm of Error is   4.31273e-06
+h5
+  l_inf norm of Error is 8.86905e-06
+  l_h norm of Error is   4.31273e-06
+h5
+NUMPROCS = 4
+11x11
+acg
+  l_inf norm of Error is 0.0043385
+  l_h norm of Error is   0.00201651
+h5
+  l_inf norm of Error is 0.00433915
+  l_h norm of Error is   0.00201992
+21x21
+acg
+  l_inf norm of Error is 0.00108444
+  l_h norm of Error is   0.000497572
+h5
+  l_inf norm of Error is 0.0010863
+  l_h norm of Error is   0.000500476
+41x41
+acg
+  l_inf norm of Error is 0.000297759
+  l_h norm of Error is   0.000137063
+h5
+  l_inf norm of Error is 0.000269665
+  l_h norm of Error is   0.000122796
+81x81
+acg
+  l_inf norm of Error is 7.89909e-05
+  l_h norm of Error is   3.7683e-05
+h5
+  l_inf norm of Error is 6.96235e-05
+  l_h norm of Error is   3.25301e-05
+161x161
+acg
+  l_inf norm of Error is 2.4999e-05
+  l_h norm of Error is   1.1552e-05
+h5
+  l_inf norm of Error is 2.22866e-05
+  l_h norm of Error is   9.9956e-06
+321x321
+acg
+  l_inf norm of Error is 7.41437e-06
+  l_h norm of Error is   3.63275e-06
+h5
+  l_inf norm of Error is 7.87175e-06
+  l_h norm of Error is   3.68112e-06
+COMPOSITE MESH
+NUMPROCS = 1
+21x21
+acg
+  l_inf norm of Error is 0.000614458
+  l_h norm of Error is   0.000145567
+h5
+  l_inf norm of Error is 0.000615963
+  l_h norm of Error is   0.00014564
+41x41
+acg
+  l_inf norm of Error is 0.000117899
+  l_h norm of Error is   3.17304e-05
+h5
+  l_inf norm of Error is 0.000118731
+  l_h norm of Error is   3.21487e-05
+81x81
+acg
+  l_inf norm of Error is 2.06725e-05
+  l_h norm of Error is   7.04796e-06
+h5
+  l_inf norm of Error is 2.06635e-05
+  l_h norm of Error is   7.10599e-06
+161x161
+acg
+  l_inf norm of Error is 3.12644e-06
+  l_h norm of Error is   1.69945e-06
+h5
+  l_inf norm of Error is 3.42569e-06
+  l_h norm of Error is   1.76111e-06
+321x321
+acg
+  l_inf norm of Error is 7.2807e-07
+  l_h norm of Error is   3.71422e-07
+h5
+  l_inf norm of Error is 7.56735e-07
+  l_h norm of Error is   4.16814e-07
+NUMPROCS = 4
+21x21
+acg
+  l_inf norm of Error is 0.00061469
+  l_h norm of Error is   0.000145255
+h5
+  l_inf norm of Error is 0.000614754
+  l_h norm of Error is   0.000145394
+41x41
+acg
+  l_inf norm of Error is 0.00011756
+  l_h norm of Error is   3.17819e-05
+h5
+  l_inf norm of Error is 0.000117457
+  l_h norm of Error is   3.17891e-05
+81x81
+acg
+  l_inf norm of Error is 2.04116e-05
+  l_h norm of Error is   6.91799e-06
+h5
+  l_inf norm of Error is 2.04934e-05
+  l_h norm of Error is   7.06888e-06
+161x161
+acg
+  l_inf norm of Error is 3.00245e-06
+  l_h norm of Error is   1.7034e-06
+h5
+  l_inf norm of Error is 2.7692e-06
+  l_h norm of Error is   1.52013e-06
+321x321
+acg
+  l_inf norm of Error is 6.7292e-07
+  l_h norm of Error is   3.73527e-07
+h5
+  l_inf norm of Error is 6.24999e-07
+  l_h norm of Error is   3.76995e-07

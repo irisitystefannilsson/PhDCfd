@@ -3368,7 +3368,6 @@ DMSRMatrix::insertInterpolationInfo(int localrow, int *update, int grid, const i
 	  vM[9] = CoeffReceiveBufferM(2,offset+index) * CoeffReceiveBufferM(5,offset+index);
 	}
   }
-  
   else if (iType == linear)
     {
       int index = Kimera->getInterpIndex(i,j,grid);

@@ -157,13 +157,14 @@ main(int argc, char** argv)
 
   poissonEq.setOption(ksp_method, Gmres);
 
-  // Solve the pressure equation
+  // Solve the Poisson equation
   poissonEq.solve(rhs, &chimera, 0, allNeumann);
-
+  // Check errors
   sol.checkErrors(&twilight_Sol);
 
   chimera.saveCoordinatesToFile();
   sol.saveToFile("poissSol");
+  //poissonEq.writeMatrixOperatorToFile("laplaceOp");
   // Exit PETSc
   PetscFinalize();
   // Exit P++ and MPI

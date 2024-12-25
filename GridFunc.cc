@@ -1816,7 +1816,7 @@ doubleSerialArray gridFunction::computeInterpolationPoints(int k)
  	    + alpha0*beta0*U(i_L+1,j_L+1) + alphaP1*beta0*U(i_L+2,j_L+1) 
  	    + alphaM1*betaP1*U(i_L,j_L+2) + alpha0*betaP1*U(i_L+1,j_L+2) 
  	    + alphaP1*betaP1*U(i_L+2,j_L+2);
-	
+	  result1.display();
 	  return result1;
 	}
     }
@@ -2020,18 +2020,15 @@ void gridFunction::interpolate(int gridToUpdate, gridFunction *target)
   MPI_Comm_size(myComm, &nrProcs);
   MPI_Comm_rank(myComm, &myRank);
 
-
   double *theSendArray, *theReceiveArray;
   theSendArray = myGridM->theSendBufferM.Array_Descriptor.Array_Data;
   theReceiveArray = myGridM->theReceiveBufferM.Array_Descriptor.Array_Data;
   
   MPI_Request *Request1 = new MPI_Request[nrProcs];
   MPI_Request *Request2 = new MPI_Request[nrProcs];
-
   /*
     First post all receives needed
   */
-
   int recHandle;
   int currIndex=0;
   int *block_lengths = new int[(myGridM->nmbrOfGridsM)*(myGridM->nmbrOfGridsM)];

@@ -2,7 +2,7 @@
 Code written as part of my PhD work in Cfd on overset grids 
 
 ## MPI - OpenMPI
-Version 4.1.4  from Debian 12.5
+Version 4.1.4 from Debian 12.5
 
 ## A++/P++
 Using version 0.8.3
@@ -20,13 +20,18 @@ Build:
 	(for debug build)
 
 ## Aztec
+Using 2.0. Old download. Should move to Trilinos?
 
 ## Petsc
+Using 3.18 from Debian 12.5
 
 ## Hdf5
 Version 1.10.8 from Debian 12.5
 
 ## Xcog
+Used to generate Overset grids.
+
+Version 2.3 used. Local tar.gz-file.
 
 ### Hdf4
 Xcog can save to hdf4 format binary files.
