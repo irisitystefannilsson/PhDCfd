@@ -10,9 +10,7 @@
 
 using std::vector;
 
-CompositeGrid::CompositeGrid(std::string xcogFileName, 
-                             Partitioning_Type gridDistribution[])
-{
+CompositeGrid::CompositeGrid(std::string xcogFileName, Partitioning_Type gridDistribution[]) {
   fromFileM = true;
   int *nr_int_point = 0x0, nrProcs, lineSkip, dim1, dim2;
   intSerialArray *i_point = 0x0, *j_point = 0x0, *i_loc = 0x0, *j_loc = 0x0, *gridLoc = 0x0;
@@ -136,8 +134,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	      for (int i=0; i<dim1; i++)
 		xcogFile >> i_point[k](i);
 	    }
-	  }
-	  else if (!strcmp(word,"j_point")) {
+	  } else if (!strcmp(word,"j_point")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    if (dim1>0) {
@@ -147,8 +144,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	      for (int i=0; i<dim1; i++)
 		xcogFile >> j_point[k](i);
 	    }
-	  }
-	  else if (!strcmp(word,"i_loc")) {
+	  } else if (!strcmp(word,"i_loc")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    if (dim1>0) {
@@ -158,8 +154,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	      for (int i=0; i<dim1; i++)
 		xcogFile >> i_loc[k](i);
 	    }
-	  }
-	  else if (!strcmp(word,"j_loc")) {
+	  } else if (!strcmp(word,"j_loc")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    if (dim1>0) {
@@ -169,8 +164,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	      for (int i=0; i<dim1; i++)
 		xcogFile >> j_loc[k](i);
 	    }
-	  }
-	  else if (!strcmp(word,"grid_loc->priority")) {
+	  } else if (!strcmp(word,"grid_loc->priority")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    if (dim1>0) {
@@ -181,8 +175,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 		xcogFile >> gridLoc[k](i);
 	    }
 	  }
-	}
-	else if(!strcmp(word,"@int_array_2d")) {
+	} else if(!strcmp(word,"@int_array_2d")) {
 	  xcogFile >> word;
 	  if (!strcmp(word,"range")) {
 	    xcogFile >> word;
@@ -191,8 +184,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	    xcogFile >> dim2;
 	    for (lineSkip=0; lineSkip<12; lineSkip++)
 	      xcogFile >> word;
-	  }
-	  else if(!strcmp(word,"bc")) {
+	  } else if(!strcmp(word,"bc")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    xcogFile >> word;
@@ -203,8 +195,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	    xcogFile >> bcsM[k].bP[1];
 	    xcogFile >> bcsM[k].bP[2];
 	    xcogFile >> bcsM[k].bP[3];
-	  }
-	  else if(!strcmp(word,"flag")) {
+	  } else if(!strcmp(word,"flag")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    xcogFile >> word;
@@ -233,8 +224,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 		xcogFile >> word;
 	    }
 	  }
-	}
-	else if (!strcmp(word, "@real_array_1d")) {
+	} else if (!strcmp(word, "@real_array_1d")) {
 	  xcogFile >> word;
 	  if (!strcmp(word, "r_loc")) {
 	    xcogFile >> word;
@@ -246,8 +236,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	      for (int i = 0; i < dim1; i++)
 		xcogFile >> r_loc[k](i);
 	    }
-	  }
-	  else if(!strcmp(word, "s_loc")) {
+	  } else if(!strcmp(word, "s_loc")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    if (dim1 > 0) {
@@ -258,8 +247,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 		xcogFile >> s_loc[k](i);
 	    }
 	  }
-	}
-	else if (!strcmp(word, "@real_array_2d")) {
+	} else if (!strcmp(word, "@real_array_2d")) {
 	  xcogFile >> word;
 	  if(!strcmp(word, "x")) {
 	    xcogFile >> word;
@@ -290,8 +278,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	      for (int i2 = i_hi_corner + 1; i2 < dim1; i2++) 
 		xcogFile >> word;
 	    }
-	  }
-	  else if(!strcmp(word, "y")) {
+	  } else if(!strcmp(word, "y")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    xcogFile >> word;
@@ -332,15 +319,13 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	      //----------------------------------------
 	      
 	      checkIfGridIsRegular(k);
-	    }
-	    else {
+	    } else {
 	      //----------------------------------------
 	      // Otherwise it is Curvilinear
 	      //----------------------------------------
 	      gridTypeM[k] = 3;
 	    }
-	  }
-	  else if (!strcmp(word, "xr")) {
+	  } else if (!strcmp(word, "xr")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    xcogFile >> word;
@@ -372,9 +357,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 		  xcogFile >> word;
 	      }
 	    }
-	  }
-	  
-	  else if(!strcmp(word, "xs")) {
+	  } else if(!strcmp(word, "xs")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    xcogFile >> word;
@@ -405,9 +388,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 		  xcogFile >> word;
 	      }
 	    }
-	  }
-	  
-	  else if(!strcmp(word, "yr")) {
+	  } else if(!strcmp(word, "yr")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    xcogFile >> word;
@@ -439,9 +420,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 		  xcogFile >> word;
 	      }
 	    }
-	  }
-	  
-	  else if (!strcmp(word, "ys")) {
+	  } else if (!strcmp(word, "ys")) {
 	    xcogFile >> word;
 	    xcogFile >> dim1;
 	    xcogFile >> word;
@@ -482,8 +461,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
     } // for ... nmbrOfGridsM
       
     xcogFile.close();
-  }
-  else if (typ == HDF5) {
+  } else if (typ == HDF5) {
     hid_t       file_id, file_props, dataset_id, int_tid, char_tid;
     herr_t      status;
     
@@ -571,7 +549,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
     hid_t group_id, dset_id;
     size_t size;
     
-    for (int k=nmbrOfGridsM; k>=1; k--) {
+    for (int k = nmbrOfGridsM; k >= 1; k--) {
       //----------------------------------------
       // Open the group for component grid [k-1]
       // and use as offset for all datasets 
@@ -773,8 +751,8 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
       status = H5Sclose(file_dataspace);
       status = H5Dclose(dset_id);
       
-      xM[k-1].partition(ddM[k-1]);
-      xM[k-1].redim(rdimM[k-1], sdimM[k-1]);
+      xM[k - 1].partition(ddM[k - 1]);
+      xM[k - 1].redim(rdimM[k - 1], sdimM[k - 1]);
       
       //----------------------------------------
       // Open and read x dataset
@@ -834,7 +812,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
       status = H5Dclose(dset_id);
       
       
-      if (gridTypeM[k-1] == 1) {
+      if (gridTypeM[k - 1] == 1) {
 	//----------------------------------------
 	// This means grid is at least Cartesian
 	// , and maybe even regular
@@ -843,18 +821,16 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
 	// Control whether the grid really is regular
 	// or not
 	//----------------------------------------
-	
-	checkIfGridIsRegular(k-1);
-      }
-      else {
+	checkIfGridIsRegular(k - 1);
+      } else {
 	//----------------------------------------
 	// Otherwise it is Curvilinear
 	//----------------------------------------
 	gridTypeM[k] = 3;
       }
-      if (gridTypeM[k-1] != 1) {
-	xrM[k-1].partition(ddM[k-1]);
-	xrM[k-1].redim(rdimM[k-1], sdimM[k-1]);
+      if (gridTypeM[k - 1] != 1) {
+	xrM[k - 1].partition(ddM[k-1]);
+	xrM[k - 1].redim(rdimM[k-1], sdimM[k-1]);
 	
 	//----------------------------------------
 	// Open and read xr dataset
@@ -1107,8 +1083,7 @@ CompositeGrid::CompositeGrid(std::string xcogFileName,
   }
 }
 
-CompositeGrid::CompositeGrid(int dim1, int dim2, Partitioning_Type gridDistribution[])
-{
+CompositeGrid::CompositeGrid(int dim1, int dim2, Partitioning_Type gridDistribution[]) {
   fromFileM = false;
   int *nr_int_point;
   
@@ -1225,8 +1200,7 @@ CompositeGrid::CompositeGrid(int dim1, int dim2, Partitioning_Type gridDistribut
   }
 }
 
-CompositeGrid::~CompositeGrid()
-{
+CompositeGrid::~CompositeGrid() {
   delete []xM;
   delete []yM;
   delete []flagValuesM;
@@ -1256,110 +1230,80 @@ CompositeGrid::~CompositeGrid()
   delete[] ddM;
 }
 
-void CompositeGrid::setBoundaryType()
-{
+void CompositeGrid::setBoundaryType() {
   for (int k=0; k<nrGrids(); k++) {
     if (bcsM[k].bP[0] == 0) {  // interpolation
       bcsM[k].lowR = INTERPOLATION;
-    }
-    else if (bcsM[k].bP[0] == 1) {  // no-slip or inflow
+    } else if (bcsM[k].bP[0] == 1) {  // no-slip or inflow
       bcsM[k].lowR = NOSLIP;
-    }
-    else if (bcsM[k].bP[0] == 3) {  // periodic
+    } else if (bcsM[k].bP[0] == 3) {  // periodic
       bcsM[k].lowR = PERIODIC;
-    }
-    else if (bcsM[k].bP[0] == 5) {  // slip wall
+    } else if (bcsM[k].bP[0] == 5) {  // slip wall
       bcsM[k].lowR = SLIP;
-    }
-    else if (bcsM[k].bP[0] == 20) {  // inflow
+    } else if (bcsM[k].bP[0] == 20) {  // inflow
       bcsM[k].lowR = INFLOW;
-    }
-    else if (bcsM[k].bP[0] == 21) {  // outflow
+    } else if (bcsM[k].bP[0] == 21) {  // outflow
       bcsM[k].lowR = OUTFLOW;
-    }
-    else if (bcsM[k].bP[0] == 22) {  // outflow with neumann pressure
+    } else if (bcsM[k].bP[0] == 22) {  // outflow with neumann pressure
       bcsM[k].lowR = OUTFLOW_NEUM_P;
-    }
-    else if (bcsM[k].bP[0] == 50) {  // twilight-zone
+    } else if (bcsM[k].bP[0] == 50) {  // twilight-zone
       bcsM[k].lowR = DIRICHLET;
     }
     if (bcsM[k].bP[1] == 0) {  // interpolation
       bcsM[k].hiR = INTERPOLATION;
-    }
-    else if (bcsM[k].bP[1] == 1) {  // no-slip or inflow
+    } else if (bcsM[k].bP[1] == 1) {  // no-slip or inflow
       bcsM[k].hiR = NOSLIP;
-    }
-    else if (bcsM[k].bP[1] == 3) {  // periodic
+    } else if (bcsM[k].bP[1] == 3) {  // periodic
       bcsM[k].hiR = PERIODIC;
-    }
-    else if (bcsM[k].bP[1] == 5) {  // slip wall
+    } else if (bcsM[k].bP[1] == 5) {  // slip wall
       bcsM[k].hiR = SLIP;
-    }
-    else if (bcsM[k].bP[1] == 20) {  // inflow
+    } else if (bcsM[k].bP[1] == 20) {  // inflow
       bcsM[k].hiR = INFLOW;
-    }
-    else if (bcsM[k].bP[1] == 21) {  // outflow
+    } else if (bcsM[k].bP[1] == 21) {  // outflow
       bcsM[k].hiR = OUTFLOW;
-    }
-    else if (bcsM[k].bP[1] == 22) {  // outflow with neumann pressure
+    } else if (bcsM[k].bP[1] == 22) {  // outflow with neumann pressure
       bcsM[k].hiR = OUTFLOW_NEUM_P;
-    }
-    else if (bcsM[k].bP[1] == 50) {  // twilight-zone
+    } else if (bcsM[k].bP[1] == 50) {  // twilight-zone
       bcsM[k].hiR = DIRICHLET;
     }
     if (bcsM[k].bP[2] == 0) {  // interpolation
       bcsM[k].lowS = INTERPOLATION;
-    }
-    else if (bcsM[k].bP[2] == 1) {  // no-slip or inflow
+    } else if (bcsM[k].bP[2] == 1) {  // no-slip or inflow
       bcsM[k].lowS = NOSLIP;
-    }
-    else if (bcsM[k].bP[2] == 3) {  // periodic
+    } else if (bcsM[k].bP[2] == 3) {  // periodic
       bcsM[k].lowS = PERIODIC;
-    }
-    else if (bcsM[k].bP[2] == 5) {  // slip wall
+    } else if (bcsM[k].bP[2] == 5) {  // slip wall
       bcsM[k].lowS = SLIP;
-    }
-    else if (bcsM[k].bP[2] == 20) {  // outflow
+    } else if (bcsM[k].bP[2] == 20) {  // outflow
       bcsM[k].lowS = INFLOW;
-    }
-    else if (bcsM[k].bP[2] == 21) {  // outflow
+    } else if (bcsM[k].bP[2] == 21) {  // outflow
       bcsM[k].lowS = OUTFLOW;
-    }
-    else if (bcsM[k].bP[2] == 22) {  // outflow with neumann pressure
+    } else if (bcsM[k].bP[2] == 22) {  // outflow with neumann pressure
       bcsM[k].lowS = OUTFLOW_NEUM_P;
-    }
-    else if (bcsM[k].bP[2] == 50) {  // twilight-zone
+    } else if (bcsM[k].bP[2] == 50) {  // twilight-zone
       bcsM[k].lowS = DIRICHLET;
     }
     if (bcsM[k].bP[3] == 0) {  // interpolation
       bcsM[k].hiS = INTERPOLATION;
-    }
-    else if (bcsM[k].bP[3] == 1) {  // no-slip or inflow
+    } else if (bcsM[k].bP[3] == 1) {  // no-slip or inflow
       bcsM[k].hiS = NOSLIP;
-    }
-    else if (bcsM[k].bP[3] == 3) {  // periodic
+    } else if (bcsM[k].bP[3] == 3) {  // periodic
       bcsM[k].hiS = PERIODIC;
-    }
-    else if (bcsM[k].bP[3] == 5) {  // slip wall
+    } else if (bcsM[k].bP[3] == 5) {  // slip wall
       bcsM[k].hiS = SLIP;
-    }
-    else if (bcsM[k].bP[3] == 20) {  // outflow
+    } else if (bcsM[k].bP[3] == 20) {  // outflow
       bcsM[k].hiS = INFLOW;
-    }
-    else if (bcsM[k].bP[3] == 21) {  // outflow
+    } else if (bcsM[k].bP[3] == 21) {  // outflow
       bcsM[k].hiS = OUTFLOW;
-    }
-    else if (bcsM[k].bP[3] == 22) {  // outflow with neumann pressure
+    } else if (bcsM[k].bP[3] == 22) {  // outflow with neumann pressure
       bcsM[k].hiS = OUTFLOW_NEUM_P;
-    }
-    else if (bcsM[k].bP[3] == 50) {  // twilight-zone
+    } else if (bcsM[k].bP[3] == 50) {  // twilight-zone
       bcsM[k].hiS = DIRICHLET;
     }
   }
 }
 
-boundaryType CompositeGrid::getBoundaryType(int k, Side side) const
-{
+boundaryType CompositeGrid::getBoundaryType(int k, Side side) const {
   if (side == lowR)
     return bcsM[k].lowR;
   else if (side == hiR)
@@ -1375,15 +1319,13 @@ boundaryType CompositeGrid::getBoundaryType(int k, Side side) const
   }
 }
 
-void CompositeGrid::setGhostCellWidth()
-{
+void CompositeGrid::setGhostCellWidth() {
   for (int k=0; k<nmbrOfGridsM; k++) {
     ddM[k].SpecifyInternalGhostBoundaryWidths(1,1);
   }
 }
 
-void CompositeGrid::saveCoordinatesToFile() const
-{
+void CompositeGrid::saveCoordinatesToFile() const {
   ofstream xC, yC, maskFile;
 
   int myid = Communication_Manager::My_Process_Number;
@@ -1458,8 +1400,7 @@ void CompositeGrid::saveCoordinatesToFile() const
   }
 }
 
-void CompositeGrid::saveCoordinatesToHDF5File(const char* name) const
-{
+void CompositeGrid::saveCoordinatesToHDF5File(const char* name) const {
   hid_t       file_id, file_props, group_id;
   herr_t      status;
   
@@ -1603,13 +1544,11 @@ void CompositeGrid::saveCoordinatesToHDF5File(const char* name) const
   assert(status != FAIL);
 }
 
-int CompositeGrid::nrGrids() const
-{
+int CompositeGrid::nrGrids() const {
   return nmbrOfGridsM;
 }
 
-Range CompositeGrid::getBounds(int direction, int k) const
-{
+Range CompositeGrid::getBounds(int direction, int k) const {
   int low, hi;
   
   low = 0;
@@ -1624,8 +1563,7 @@ Range CompositeGrid::getBounds(int direction, int k) const
   return retRange;
 }
   
-void CompositeGrid::updateGhostBoundaries()
-{
+void CompositeGrid::updateGhostBoundaries() {
   for (int k=0; k<nmbrOfGridsM; k++) {
     xM[k].updateGhostBoundaries();
     yM[k].updateGhostBoundaries();
@@ -1648,8 +1586,14 @@ void CompositeGrid::updateGhostBoundaries()
   }
 }
 
-void CompositeGrid::getLocalInterp(int *nr_int_point, intSerialArray *i_point, intSerialArray *j_point, intSerialArray *i_loc, intSerialArray *j_loc, intSerialArray *gridLoc, doubleSerialArray *r_loc, doubleSerialArray *s_loc)
-{
+void CompositeGrid::getLocalInterp(int *nr_int_point,
+				   intSerialArray *i_point,
+				   intSerialArray *j_point,
+				   intSerialArray *i_loc,
+				   intSerialArray *j_loc,
+				   intSerialArray *gridLoc,
+				   doubleSerialArray *r_loc,
+				   doubleSerialArray *s_loc) {
   int nrProcs, currGrid;
   
   MPI_Comm_size(MPI_COMM_WORLD, &nrProcs);
@@ -1759,8 +1703,7 @@ void CompositeGrid::getLocalInterp(int *nr_int_point, intSerialArray *i_point, i
   theReceiveBufferM.redim(theReceiveBufferSize);
 }
 
-void CompositeGrid::printIntInf(int k) const
-{
+void CompositeGrid::printIntInf(int k) const {
   int nrProcs;
   
   Partitioning_Type local_DD = xM[k].getPartition();
@@ -1791,8 +1734,13 @@ void CompositeGrid::printIntInf(int k) const
   }
 }
 
-void CompositeGrid::gridSort(intSerialArray *i_point, intSerialArray *j_point, intSerialArray *i_loc, intSerialArray *j_loc, intSerialArray *gridLoc, doubleSerialArray *r_loc, doubleSerialArray *s_loc)
-{
+void CompositeGrid::gridSort(intSerialArray *i_point,
+			     intSerialArray *j_point,
+			     intSerialArray *i_loc,
+			     intSerialArray *j_loc,
+			     intSerialArray *gridLoc,
+			     doubleSerialArray *r_loc,
+			     doubleSerialArray *s_loc) {
   int i, nrOfSwaps;
   
   for (int cG = 0; cG < nmbrOfGridsM; cG++) {
@@ -1816,8 +1764,7 @@ void CompositeGrid::gridSort(intSerialArray *i_point, intSerialArray *j_point, i
   }
 }
 
-int CompositeGrid::getInterpIndex(int i, int j, int grid) const
-{
+int CompositeGrid::getInterpIndex(int i, int j, int grid) const {
   int index;
 
   for (index = 0; index < myIntPointsM[grid].getLength(0); index++)
@@ -1828,8 +1775,7 @@ int CompositeGrid::getInterpIndex(int i, int j, int grid) const
   return -1;
 }
 
-doubleArray CompositeGrid::normalVector_R_Component(int grid, int side, Index ixb, Index low_r, Index hi_r, Index iyb, Index low_s, Index hi_s) const
-{
+doubleArray CompositeGrid::normalVector_R_Component(int grid, int side, Index ixb, Index low_r, Index hi_r, Index iyb, Index low_s, Index hi_s) const {
   if (ixb.getBase() == -1000) 
     ixb = Index(1, rdimM[grid]-2);
   if (low_r.getBase() == -1000) 
@@ -1888,8 +1834,7 @@ doubleArray CompositeGrid::normalVector_R_Component(int grid, int side, Index ix
   }
 }
 
-doubleArray CompositeGrid::normalVector_S_Component(int grid, int side, Index ixb, Index low_r, Index hi_r, Index iyb, Index low_s, Index hi_s) const
-{
+doubleArray CompositeGrid::normalVector_S_Component(int grid, int side, Index ixb, Index low_r, Index hi_r, Index iyb, Index low_s, Index hi_s) const {
   if (ixb.getBase() == -1000) 
     ixb = Index(1, rdimM[grid]-2);
   if (low_r.getBase() == -1000) 
@@ -1948,8 +1893,7 @@ doubleArray CompositeGrid::normalVector_S_Component(int grid, int side, Index ix
   }
 }
 
-doubleArray CompositeGrid::gridSize(int grid, int direction1, int direction2, Index ix, Index iy) const
-{
+doubleArray CompositeGrid::gridSize(int grid, int direction1, int direction2, Index ix, Index iy) const {
   if (ix.getBase() == -1000) 
     ix = Index(1, rdimM[grid]-2);
   if (iy.getBase() == -1000) 
@@ -1971,8 +1915,7 @@ doubleArray CompositeGrid::gridSize(int grid, int direction1, int direction2, In
   return result;
 }
 
-void CompositeGrid::checkIfGridIsRegular(int grid)
-{
+void CompositeGrid::checkIfGridIsRegular(int grid) {
   //----------------------------------------
   // Get bounds for local part of array
   //----------------------------------------
@@ -1987,9 +1930,9 @@ void CompositeGrid::checkIfGridIsRegular(int grid)
   localX = xM[grid].getSerialArrayPointer();
   localY = yM[grid].getSerialArrayPointer();
 
-  Range ix(i_low_corner+1, i_hi_corner-1), iy(j_low_corner+1, j_hi_corner-1);
+  Range ix(i_low_corner + 1, i_hi_corner - 1), iy(j_low_corner + 1, j_hi_corner - 1);
 
-  int xrr=0, xs=0, yr=0, yss=0;
+  int xrr = 0, xs = 0, yr = 0, yss = 0;
   double small = 0.001;
 
   //----------------------------------------
@@ -2029,8 +1972,7 @@ void CompositeGrid::checkIfGridIsRegular(int grid)
   }
 }
 
-double CompositeGrid::hSquare() const
-{
+double CompositeGrid::hSquare() const {
   double result = 100000.;
   for (int cG = 0; cG < nmbrOfGridsM; cG++) {
     result = min(result, pow(r_stepM[cG],2.) + pow(s_stepM[cG],2.));
@@ -2044,8 +1986,7 @@ int CompositeGrid::gType(int grid) const { return gridTypeM[grid]; };
 double CompositeGrid::rStep(int grid) const { return r_stepM[grid]; };
 double CompositeGrid::sStep(int grid) const { return s_stepM[grid]; };
 
-void CompositeGrid::simplifyFlagValues()
-{
+void CompositeGrid::simplifyFlagValues() {
   Index all;
   for (int cG = 0; cG < nmbrOfGridsM; cG++) {
     if (getBoundaryType(cG, lowR) != PERIODIC) {
