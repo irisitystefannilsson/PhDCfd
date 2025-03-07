@@ -1,4 +1,5 @@
 #include <mpi.h>
+#include "A++.h"
 #include "petscsystypes.h"
 
 // OGEquation.hh contains declarations  
@@ -16,6 +17,9 @@
 using std::cout;
 using std::endl;
 
+#define SINGULAR_X 0
+#define SINGULAR_Y 1.0
+
 doubleArray
 twilight_Sol(const doubleArray& x, 
 	     const doubleArray& y, 
@@ -27,6 +31,19 @@ twilight_Sol(const doubleArray& x,
   resArray = sin(x)*sin(x)*cos(y)*cos(y) + cos(x)*sin(y);
   return resArray;
 }
+
+// doubleArray fundamental_Sol(const doubleArray& x,
+// 			    const doubleArray& y,
+//                             const double t,
+// 			    int grid,
+// 			    int side)
+
+// {
+//   doubleArray resArray(x);
+//   doubleArray r = sqrt(x*x + y*y);
+//   resArray = log(r)/(2*M_PI);
+//   return resArray;
+// }
 
 doubleArray
 twilight_X(const doubleArray& x, 
@@ -67,6 +84,22 @@ twilight_forcing(const doubleArray& x,
   return resArray;
 }
 
+// doubleArray
+// dirac_forcing(const doubleArray& x, 
+// 	      const doubleArray& y, 
+// 	      const double t, 
+// 	      int grid, 
+// 	      int side)
+// {
+//   double singularRadius = ((x(x.getBound(0), 0) -  x(0, 0)) +
+// 			   (x(x.getBound(0), x.getBound(1)) -  x(0, x.getBound(1))) +
+// 			   (y(0, y.getBound(1)) -  y(0, 0)) +
+// 			   (y(y.getBound(0), y.getBound(1)) -  y(y.getBound(1), 0))) / ((x.getBound(0) + y.getBound(1)));
+//   doubleArray resArray(x);
+//   where ((pow(x - SINGULAR_X, 2) + pow(y - SINGULAR_Y, 2)) < pow(singularRadius, 2))
+//     resArray = 1. / (pow(x - SINGULAR_X, 2) + pow(y - SINGULAR_Y, 2));
+//   return resArray;
+// }
 
 ////////////////////////////////////////
 //                                    //
