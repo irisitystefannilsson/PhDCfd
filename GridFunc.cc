@@ -1610,7 +1610,7 @@ doubleSerialArray gridFunction::computeInterpolationPoints(int k)
 	+ alpha0*beta0*U(i_L + 1, j_L + 1) + alphaP1*beta0*U(i_L + 2, j_L + 1) 
 	+ alphaM1*betaP1*U(i_L, j_L + 2) + alpha0*betaP1*U(i_L + 1, j_L + 2) 
 	+ alphaP1*betaP1*U(i_L + 2, j_L + 2);
-      result1.display();
+      // result1.display();
       return result1;
     }
   } else if (iTypeM == linear) {
@@ -2553,17 +2553,19 @@ const gridFunction operator/(const gridFunction& left, const double right)
 
 double gridFunction::l_inf()
 {
-  double maxVal=0;
+  double maxVal = 0;
   double gridMax;
 
   for (int k = 0; k < myGridM->nrGrids(); k++) {
     //      where (myGridM->flagValuesM[k] == k+1)
     //	{
-    gridMax = max(abs(fieldValuesM[k])*myGridM->maskM[k])/(k+1);
+    fieldValuesM[k].updateGhostBoundaries();
+    gridMax = max(abs(fieldValuesM[k])*myGridM->maskM[k])/(k + 1);
     //      std::cout << "gridmax at grid " << k << " is " << gridMax << endl;
     //	}
     maxVal = max(maxVal, gridMax);
-  }return maxVal;
+  }
+  return maxVal;
 }
 
 double gridFunction::l_2()
@@ -2574,7 +2576,8 @@ double gridFunction::l_2()
   for (int k = 0; k < myGridM->nrGrids(); k++) {
     //      where (myGridM->flagValuesM[k] == k+1)
     //	{
-    gridSum = sum(pow(fieldValuesM[k],2.)*myGridM->maskM[k])/(k+1);
+    fieldValuesM[k].updateGhostBoundaries();
+    gridSum = sum(pow(fieldValuesM[k], 2.)*myGridM->maskM[k])/(k + 1);
     //	}
     totSum += gridSum;
   }
@@ -2590,7 +2593,8 @@ double gridFunction::l_h()
   for (int k = 0; k < myGridM->nrGrids(); k++) {
     //      where (myGridM->flagValuesM[k] == k+1)
     //	{
-    gridSum = sum(pow(fieldValuesM[k],2.)*myGridM->maskM[k])/(k+1);
+    fieldValuesM[k].updateGhostBoundaries();
+    gridSum = sum(pow(fieldValuesM[k], 2.)*myGridM->maskM[k])/(k + 1);
     //	}
     totSum += gridSum*myGridM->rStep(k)*myGridM->sStep(k);
   }

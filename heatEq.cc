@@ -84,11 +84,10 @@ main(int argc, char** argv)
   // ...or from an HDF5-file
   char filename[100];
   PetscOptionsGetString(PETSC_NULL, PETSC_NULL, "--filename", filename, 100, &flg);
-  if (flg != PETSC_TRUE)
-    {
-      std::cerr << "Hey!, we need a grid from somewhere (no filename given, exiting...)... \n\n";
-      MPI_Abort(MPI_COMM_WORLD, 1);
-    }
+  if (flg != PETSC_TRUE) {
+    std::cerr << "Hey!, we need a grid from somewhere (no filename given, exiting...)... \n\n";
+    MPI_Abort(MPI_COMM_WORLD, 1);
+  }
   CompositeGrid Kimera(filename);
 
   //
@@ -170,9 +169,9 @@ main(int argc, char** argv)
   
   fileString << RESULTS << "." << fileCounter << ".h5";
 	  
-  if (myid == 0)
+  if (myid == 0) {
     std::cout << "\nSaving initial data to file " << fileString.str().c_str() << endl;
-  
+  }
   //  U.createHDF5File(fileString.str().c_str());
   //  Kimera.saveCoordinatesToHDF5File(fileString.str().c_str());
   
@@ -193,79 +192,72 @@ main(int argc, char** argv)
   // boundary conditions are mixed in
   // an expression
   //
-  if (myid == 0) std::cout << "\nStarting time-stepping now\n";
-  
-  for (int it = 0; it < maxNits; it++)
-    {
-      // Before the inlet has achieved full
-      // speed we use another field to compute
-      // the time step
-      dt = 0.001*cfl;
-
-      if (myid == 0)
-	{
-	  std::cout << "\nIteration nmbr " 
-		    << it << ", time is " 
-		    << U.getTime() << endl;
-	  std::cout << " : dt= " << dt << endl;
-	}
-      
-      for (k = 0; k < Kimera.nrGrids(); k++)
-	{
-	  Index ui = U.getDiscrBounds(0, k);
-	  Index uj = U.getDiscrBounds(1, k);
-	  
-	  U(k)(ui, uj) = U(k)(ui, uj) +
-	    dt*( 
-		ins::viscosityG*( U.xx(k) + U.yy(k))
-                 );
-	  
-	}
-      U_momentum.solve(U, &Kimera, ins::viscosityG*dt);
-      U.interpolate();
-
-      U.addTime(dt);
-
-      U.updateBCs();
-      // Advance the velocity one time level
-      // and finish the Crank-Nicolson part
-      // of the predictor step
+  if (myid == 0) {
+    std::cout << "\nStarting time-stepping now\n";
+  }
+  for (int it = 0; it < maxNits; it++) {
+    // Before the inlet has achieved full
+    // speed we use another field to compute
+    // the time step
+    dt = 0.001*cfl;
     
-      
-      // check if simulation can be stopped
-      if (U.getTime() > stoptime) 
-	break;
-      
-      if (it % printIntervall == 0 && myid ==0)
-	std::cout << "|----------------------------------------|" 
-		  << endl << endl;
-      
-      if (it % saveIntervall == 0)
-	{
-	  fileCounter++;
-	  fileString.str("");
-	  fileString << RESULTS << "." << fileCounter << ".h5";
-	  
-	  if (myid == 0) std::cout << "\nSaving result to file " << fileString.str().c_str() << endl;
-	  
-	  U.saveToFile("temperature");
-	}
+    if (myid == 0) {
+      std::cout << "\nIteration nmbr " 
+		<< it << ", time is " 
+		<< U.getTime() << endl;
+      std::cout << " : dt= " << dt << endl;
     }
-
+    for (k = 0; k < Kimera.nrGrids(); k++) {
+      Index ui = U.getDiscrBounds(0, k);
+      Index uj = U.getDiscrBounds(1, k);
+      
+      U(k)(ui, uj) = U(k)(ui, uj) +
+	dt*(
+	    ins::viscosityG*( U.xx(k) + U.yy(k))
+	    );
+      
+    }
+    U_momentum.solve(U, &Kimera, ins::viscosityG*dt);
+    U.interpolate();
+    
+    U.addTime(dt);
+    
+    U.updateBCs();
+    // Advance the velocity one time level
+    // and finish the Crank-Nicolson part
+    // of the predictor step
+    
+    // check if simulation can be stopped
+    if (U.getTime() > stoptime) {
+      break;
+    }
+    if (it % printIntervall == 0 && myid == 0) {
+      std::cout << "|----------------------------------------|" 
+		<< endl << endl;
+    }
+    if (it % saveIntervall == 0) {
+      fileCounter++;
+      fileString.str("");
+      fileString << RESULTS << "." << fileCounter << ".h5";
+      
+      if (myid == 0) {
+	std::cout << "\nSaving result to file " << fileString.str().c_str() << endl;
+      }
+      U.saveToFile("temperature");
+    }
+  }
   //
   // Timestepping is finished here
   //
-
   double compTime = MPI_Wtime() - startTime;
   double maxTime;
   MPI_Reduce(&compTime, &maxTime, 1, MPI_DOUBLE, MPI_MAX, 0, myComm);
   
-  if (myid == 0)
-    {
-      std::cout << "\nTime-stepping finished\n";
-      std::cout << "  Simulated time is: " << U.getTime() << endl;
-      std::cout << "  Wall clock execution time was " << maxTime << "s\n";
-    }
+  if (myid == 0) {
+    std::cout << "\nTime-stepping finished\n";
+    std::cout << "  Simulated time is: " << U.getTime() << endl;
+    std::cout << "  Wall clock execution time was " << maxTime << "s\n";
+  }
   // Exit PETSc
   PetscFinalize();
 
