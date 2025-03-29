@@ -93,91 +93,91 @@ h5
 NUMPROCS = 4
 11x11
 acg
-  l_inf norm of Error is 1.0244
+  l_inf norm of Error is 0.00497223
   l_h norm of Error is   0.00212802
-  l_inf norm of Error is 1.06934
+  l_inf norm of Error is 0.00507995
   l_h norm of Error is   0.0021856
   l_inf norm of Error is 0.00949381
   l_h norm of Error is   0.00380011
 h5
-  l_inf norm of Error is 0.137849
+  l_inf norm of Error is 0.00495356
   l_h norm of Error is   0.00211663
-  l_inf norm of Error is 0.105416
+  l_inf norm of Error is 0.00509532
   l_h norm of Error is   0.0021883
   l_inf norm of Error is 0.00941591
   l_h norm of Error is   0.00384023
 21x21
 acg
-  l_inf norm of Error is 0.0305595
+  l_inf norm of Error is 0.00162942
   l_h norm of Error is   0.000745077
-  l_inf norm of Error is 0.0687536
+  l_inf norm of Error is 0.00166934
   l_h norm of Error is   0.00074623
   l_inf norm of Error is 0.00746184
   l_h norm of Error is   0.00198734
 h5
-  l_inf norm of Error is 0.00626997
+  l_inf norm of Error is 0.00162679
   l_h norm of Error is   0.000742703
-  l_inf norm of Error is 0.0625133
+  l_inf norm of Error is 0.00167814
   l_h norm of Error is   0.000748296
   l_inf norm of Error is 0.00753798
   l_h norm of Error is   0.00198048
 41x41
 acg
-  l_inf norm of Error is 0.0582931
+  l_inf norm of Error is 0.000582912
   l_h norm of Error is   0.000247461
-  l_inf norm of Error is 0.143323
+  l_inf norm of Error is 0.000612204
   l_h norm of Error is   0.00025166
   l_inf norm of Error is 0.00752994
   l_h norm of Error is   0.00233726
 h5
-  l_inf norm of Error is 0.00710565
+  l_inf norm of Error is 0.000569328
   l_h norm of Error is   0.000242237
-  l_inf norm of Error is 0.142007
+  l_inf norm of Error is 0.000597031
   l_h norm of Error is   0.000245709
   l_inf norm of Error is 0.00727872
   l_h norm of Error is   0.0023068
 81x81
 acg
-  l_inf norm of Error is 0.0856932
+  l_inf norm of Error is 0.000182275
   l_h norm of Error is   7.86904e-05
-  l_inf norm of Error is 0.143233
+  l_inf norm of Error is 0.000191128
   l_h norm of Error is   7.94172e-05
   l_inf norm of Error is 0.00475254
   l_h norm of Error is   0.0023134
 h5
-  l_inf norm of Error is 0.00358079
+  l_inf norm of Error is 0.000182378
   l_h norm of Error is   7.87331e-05
-  l_inf norm of Error is 0.143205
+  l_inf norm of Error is 0.000190912
   l_h norm of Error is   7.94725e-05
   l_inf norm of Error is 0.00476329
   l_h norm of Error is   0.00231415
 161x161
 acg
-  l_inf norm of Error is 0.104553
+  l_inf norm of Error is 4.53842e-05
   l_h norm of Error is   2.11274e-05
-  l_inf norm of Error is 0.173137
+  l_inf norm of Error is 4.75876e-05
   l_h norm of Error is   2.13156e-05
   l_inf norm of Error is 0.00458351
   l_h norm of Error is   0.00346308
 h5
-  l_inf norm of Error is 0.00216421
+  l_inf norm of Error is 4.4295e-05
   l_h norm of Error is   2.0724e-05
-  l_inf norm of Error is 0.173129
+  l_inf norm of Error is 4.61123e-05
   l_h norm of Error is   2.0822e-05
   l_inf norm of Error is 0.00456188
   l_h norm of Error is   0.003463
 321x321
 acg
-  l_inf norm of Error is 0.105014
+  l_inf norm of Error is 1.36939e-05
   l_h norm of Error is   6.30415e-06
-  l_inf norm of Error is 0.173153
+  l_inf norm of Error is 1.29522e-05
   l_h norm of Error is   6.30528e-06
   l_inf norm of Error is 0.00396524
   l_h norm of Error is   0.00351653
 h5
-  l_inf norm of Error is 0.00108221
+  l_inf norm of Error is 1.34476e-05
   l_h norm of Error is   6.31575e-06
-  l_inf norm of Error is 0.173151
+  l_inf norm of Error is 1.30662e-05
   l_h norm of Error is   6.22459e-06
   l_inf norm of Error is 0.00397009
   l_h norm of Error is   0.00351654
@@ -261,76 +261,76 @@ h5
 NUMPROCS = 4
 21x21
 acg
-  l_inf norm of Error is 0.0268256
+  l_inf norm of Error is 0.00126186
   l_h norm of Error is   0.000605948
-  l_inf norm of Error is 0.126325
+  l_inf norm of Error is 0.00100478
   l_h norm of Error is   0.000597264
   l_inf norm of Error is 0.00824264
   l_h norm of Error is   0.00406733
 h5
-  l_inf norm of Error is 0.00625918
+  l_inf norm of Error is 0.00125919
   l_h norm of Error is   0.000606095
-  l_inf norm of Error is 0.0624057
+  l_inf norm of Error is 0.00100282
   l_h norm of Error is   0.000594782
   l_inf norm of Error is 0.00807367
   l_h norm of Error is   0.00399829
 41x41
 acg
-  l_inf norm of Error is 0.100832
+  l_inf norm of Error is 0.000422982
   l_h norm of Error is   0.000163953
-  l_inf norm of Error is 0.693188
+  l_inf norm of Error is 0.00035891
   l_h norm of Error is   0.000157005
   l_inf norm of Error is 0.00640421
   l_h norm of Error is   0.00299727
 h5
-  l_inf norm of Error is 0.00710373
+  l_inf norm of Error is 0.000426737
   l_h norm of Error is   0.000164279
-  l_inf norm of Error is 0.0865785
+  l_inf norm of Error is 0.000356645
   l_h norm of Error is   0.000157289
   l_inf norm of Error is 0.00650846
   l_h norm of Error is   0.0030203
 81x81
 acg
-  l_inf norm of Error is 0.0856858
+  l_inf norm of Error is 0.000135642
   l_h norm of Error is   4.99757e-05
-  l_inf norm of Error is 0.143221
+  l_inf norm of Error is 0.0001272
   l_h norm of Error is   4.94569e-05
   l_inf norm of Error is 0.00427202
   l_h norm of Error is   0.00253804
 h5
-  l_inf norm of Error is 0.00358052
+  l_inf norm of Error is 0.000140121
   l_h norm of Error is   5.09828e-05
-  l_inf norm of Error is 0.143194
+  l_inf norm of Error is 0.000130253
   l_h norm of Error is   4.97558e-05
   l_inf norm of Error is 0.00436249
   l_h norm of Error is   0.00255194
 161x161
 acg
-  l_inf norm of Error is 0.10455
+  l_inf norm of Error is 3.53626e-05
   l_h norm of Error is   1.30623e-05
-  l_inf norm of Error is 0.173133
+  l_inf norm of Error is 3.54929e-05
   l_h norm of Error is   1.31179e-05
   l_inf norm of Error is 0.00453439
   l_h norm of Error is   0.00356979
 h5
-  l_inf norm of Error is 0.00216416
+  l_inf norm of Error is 3.5304e-05
   l_h norm of Error is   1.2974e-05
-  l_inf norm of Error is 0.173124
+  l_inf norm of Error is 3.64174e-05
   l_h norm of Error is   1.3265e-05
   l_inf norm of Error is 0.00454532
   l_h norm of Error is   0.00356991
 321x321
 acg
-  l_inf norm of Error is 0.105013
+  l_inf norm of Error is 9.00516e-06
   l_h norm of Error is   3.80888e-06
-  l_inf norm of Error is 0.173151
+  l_inf norm of Error is 9.48414e-06
   l_h norm of Error is   3.82637e-06
   l_inf norm of Error is 0.00408918
   l_h norm of Error is   0.00353379
 h5
-  l_inf norm of Error is 0.00108219
+  l_inf norm of Error is 8.81823e-06
   l_h norm of Error is   3.76493e-06
-  l_inf norm of Error is 0.173149
+  l_inf norm of Error is 9.52423e-06
   l_h norm of Error is   3.83412e-06
   l_inf norm of Error is 0.00408363
   l_h norm of Error is   0.00353368
