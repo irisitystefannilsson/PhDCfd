@@ -80,7 +80,7 @@ private :
 
   void insertInterpolationInfo(int localrow, int *update, int grid, const int fromGrid, int i, int j, CompositeGrid *Kimera, interpolationType iType, sparseSolver package);
 
-  void insertFD(int row, int localrow, int rdim, int grid, int i, int j, MatrixOperator operatorType, int gridType, doubleSerialArray *Xr, doubleSerialArray *Xs, doubleSerialArray *Yr, doubleSerialArray *Ys, doubleSerialArray *Xrr, doubleSerialArray *Xss, doubleSerialArray *Yrr, doubleSerialArray *Yss, doubleSerialArray *sqrtOfG, doubleSerialArray *viscosity, double r_step, double s_step, sparseSolver package, doubleSerialArray *convFieldU, doubleSerialArray *convFieldV, doubleSerialArray *X=0, doubleSerialArray *Y=0, CompositeGrid *Kimera=0 );
+  void insertFD(int row, int localrow, int rdim, int grid, int i, int j, MatrixOperator operatorType, int gridType, doubleSerialArray *Xr, doubleSerialArray *Xs, doubleSerialArray *Yr, doubleSerialArray *Ys, doubleSerialArray *Xrr, doubleSerialArray *Xss, doubleSerialArray *Yrr, doubleSerialArray *Yss, doubleSerialArray *sqrtOfG, doubleSerialArray *viscosity, double r_step, double s_step, sparseSolver package, doubleSerialArray *convFieldU, doubleSerialArray *convFieldV, doubleSerialArray *X=0, doubleSerialArray *Y=0, CompositeGrid *Kimera = 0 );
 
   void insertNeumann(int row, int localrow, int side, int rdim, int i, int j, int gridType, doubleSerialArray *Xr, doubleSerialArray *Xs, doubleSerialArray *Yr, doubleSerialArray *Ys, doubleSerialArray *sqrtOfG, double r_step, double s_step, sparseSolver package);
 
@@ -108,17 +108,17 @@ private :
   
   doubleSerialArray computeInterpolationWeights(int k, CompositeGrid *Kimera, interpolationType iType);
   
-  doubleSerialArray & alpha(int i,int k, CompositeGrid *Kimera);
+  doubleSerialArray& alpha(int i,int k, CompositeGrid *Kimera);
   
-  doubleSerialArray & beta(int i,int k, CompositeGrid *Kimera);
+  doubleSerialArray& beta(int i,int k, CompositeGrid *Kimera);
   
-  doubleSerialArray & gamma(int i,int k, CompositeGrid *Kimera);
+  doubleSerialArray& gamma(int i,int k, CompositeGrid *Kimera);
   
-  doubleSerialArray & delta(int i,int k, CompositeGrid *Kimera);
+  doubleSerialArray& delta(int i,int k, CompositeGrid *Kimera);
 
-  doubleSerialArray & epsilon(int i,int k, CompositeGrid *Kimera);
+  doubleSerialArray& epsilon(int i,int k, CompositeGrid *Kimera);
   
-  doubleSerialArray & zeta(int i,int k, CompositeGrid *Kimera);
+  doubleSerialArray& zeta(int i,int k, CompositeGrid *Kimera);
 
   int ownerProcess(int i, int j, int grid);
 
@@ -197,19 +197,19 @@ private :
 
 public :
   
-  void setBoundaryValues(gridFunction & RHS, CompositeGrid *Kimera);
+  void setBoundaryValues(gridFunction& RHS, CompositeGrid *Kimera);
   
-  OGEquation(CompositeGrid *Kimera, sparseSolver spSolver=Aztec, int itm=AZ_bicgstab, int prec=AZ_dom_decomp, int over=0);
+  OGEquation(CompositeGrid *Kimera, sparseSolver spSolver = Aztec, int itm = AZ_bicgstab, int prec = AZ_dom_decomp, int over = 0);
 
   ~OGEquation(); 
 
   void destroyOperator();
 
-  void solve(gridFunction & RHS, CompositeGrid *Kimera, double dt=0, bool allNeumann=false, bool setBCs=true);
+  void solve(gridFunction& RHS, CompositeGrid *Kimera, double dt = 0, bool allNeumann = false, bool setBCs = true);
   
-  void setUnknown(gridFunction & LHS) { unKnownM = &LHS; if (packageM == Aztec) {rhsM = new double[N_updateM+1];} };//+1 if we need an extra equation for a pure Neumann problem
+  void setUnknown(gridFunction& LHS) { unKnownM = &LHS; if (packageM == Aztec) {rhsM = new double[N_updateM+1];} };//+1 if we need an extra equation for a pure Neumann problem
   
-  void setOperator(MatrixOperator operatorType, bool allNeumann=false, gridFunction *visc=0, bool reset=false, gridFunction *convFieldU=0, gridFunction *convFieldV=0);
+  void setOperator(MatrixOperator operatorType, bool allNeumann = false, gridFunction *visc = 0, bool reset = false, gridFunction *convFieldU = 0, gridFunction *convFieldV = 0);
 
   void infNorm();
 

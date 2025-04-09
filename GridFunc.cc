@@ -26,31 +26,31 @@ doubleArray gridFunction::boundaryDiff(int i, int gType, const double t,
       doubleArray resArray1 = - bc_x(xIn, yIn, t, 0, 0);
       return resArray1;
     } else {
-      doubleArray resArray2 = ( ys*bc_x(xIn,yIn,t,0,0) - xs*bc_y(xIn,yIn,t,0,0) ) / pow(xs*xs+ys*ys,0.5);
+      doubleArray resArray2 = ( ys*bc_x(xIn, yIn, t, 0, 0) - xs*bc_y(xIn, yIn, t, 0, 0) ) / pow(xs*xs + ys*ys, 0.5);
       return resArray2;
     }
   } else if (i == 1) { // high r 
     if (gType == 1) {
-      doubleArray resArray3 = bc_x(xIn,yIn,t,0,0);
+      doubleArray resArray3 = bc_x(xIn, yIn, t, 0, 0);
       return resArray3;
     } else {
-      doubleArray resArray4 = ( ys*bc_x(xIn,yIn,t,0,0) - xs*bc_y(xIn,yIn,t,0,0) ) / pow(xs*xs+ys*ys,0.5);
+      doubleArray resArray4 = ( ys*bc_x(xIn, yIn, t, 0, 0) - xs*bc_y(xIn, yIn, t, 0, 0) ) / pow(xs*xs + ys*ys, 0.5);
       return resArray4;
     }
   } else if (i == 2) { // low s 
     if (gType == 1) {
-      doubleArray resArray5 = - bc_y(xIn,yIn,t,0,0);
+      doubleArray resArray5 = - bc_y(xIn, yIn, t, 0, 0);
       return resArray5;
     } else {
-      doubleArray resArray6 = ( - yr*bc_x(xIn,yIn,t,0,0) + xr*bc_y(xIn,yIn,t,0,0) ) / pow(xr*xr+yr*yr,0.5);
+      doubleArray resArray6 = ( - yr*bc_x(xIn, yIn, t, 0, 0) + xr*bc_y(xIn, yIn, t, 0, 0) ) / pow(xr*xr + yr*yr, 0.5);
       return resArray6;
     }
   } else { // high s 
     if (gType == 1) {
-      doubleArray resArray7 = bc_y(xIn,yIn,t,0,0);
+      doubleArray resArray7 = bc_y(xIn, yIn, t, 0, 0);
       return resArray7;
     } else {
-      doubleArray resArray8 = ( - yr*bc_x(xIn,yIn,t,0,0) + xr*bc_y(xIn,yIn,t,0,0) ) / pow(xr*xr+yr*yr,0.5);
+      doubleArray resArray8 = ( - yr*bc_x(xIn, yIn, t, 0, 0) + xr*bc_y(xIn, yIn, t, 0, 0) ) / pow(xr*xr + yr*yr, 0.5);
       return resArray8;
     }
   }
@@ -99,18 +99,18 @@ gridFunction::gridFunction(const gridFunction& fun)
 
   bcsM = new BC[myGridM->nrGrids()];
 
-  for (int k = 0; k<myGridM->nrGrids(); k++) {
+  for (int k = 0; k < myGridM->nrGrids(); k++) {
     //    fieldValues[k].partition(fun.fieldValues[k]);
     //    flagValuesM[k].partition(fun.flagValuesM[k]);
     Index ix = fun.fieldValuesM[k].getFullRange(0);
     Index iy = fun.fieldValuesM[k].getFullRange(1);
-    fieldValuesM[k].redim(ix,iy);
+    fieldValuesM[k].redim(ix, iy);
     //    ix = fun.flagValuesM[k].getFullRange(0);
     //    iy = fun.flagValuesM[k].getFullRange(1);
-    flagValuesM[k].redim(ix,iy);
+    flagValuesM[k].redim(ix, iy);
     
-    fieldValuesM[k](ix,iy) = fun.fieldValuesM[k](ix,iy);
-    flagValuesM[k](ix,iy) = fun.flagValuesM[k](ix,iy);  
+    fieldValuesM[k](ix, iy) = fun.fieldValuesM[k](ix, iy);
+    flagValuesM[k](ix, iy) = fun.flagValuesM[k](ix, iy);  
   }
 }
 
@@ -127,7 +127,7 @@ gridFunction::~gridFunction()
 
 void gridFunction::printValues(char* info)
 {
-  int i,j,pxadd,pyadd;
+  int i, j, pxadd, pyadd;
   char filename[64];
   int myid = Communication_Manager::My_Process_Number;
   sprintf(filename, "gnuplotData/P++%s.%d", info, myid);
@@ -140,10 +140,12 @@ void gridFunction::printValues(char* info)
     pxadd = 0;
     pyadd = 0;
     
-    if (bcsM[k].hiR == 3)
+    if (bcsM[k].hiR == 3) {
       pxadd = 1;
-    if (bcsM[k].hiS == 3)
+    }
+    if (bcsM[k].hiS == 3) {
       pyadd = 1;
+    }
     doubleSerialArray *localXCoords = myGridM->xM[k].getSerialArrayPointer();
     doubleSerialArray *localYCoords = myGridM->yM[k].getSerialArrayPointer();
     doubleSerialArray *localField = fieldValuesM[k].getSerialArrayPointer();
@@ -241,7 +243,7 @@ void gridFunction::saveToFile(const char *name)
   int myid = Communication_Manager::My_Process_Number;
   int grid;
 
-  for (grid=0; grid<myGridM->nrGrids(); grid++) {
+  for (grid = 0; grid < myGridM->nrGrids(); grid++) {
     sprintf(filename, "%s%s%d%d", "./matlabData/", name, myid, grid);
     varfile.open(filename, ios::out);
     doubleSerialArray *local = fieldValuesM[grid].getSerialArrayPointer();
@@ -748,20 +750,20 @@ void gridFunction::initializeGridData()
 doubleArray gridFunction::x(int k, Index ix, Index iy) const
 {
   if (ix.getBase() == -1000) {
-    ix = getDiscrBounds(0,k);
+    ix = getDiscrBounds(0, k);
   }
   if (iy.getBase() == -1000) {
-    iy = getDiscrBounds(1,k); // Indices for discretization points in the grid
+    iy = getDiscrBounds(1, k); // Indices for discretization points in the grid
   }
   if (myGridM->gType(k) == 1) {
-    doubleArray resArray1 = ( ( fieldValuesM[k](ix+1,iy) - fieldValuesM[k](ix-1,iy) ) / ( myGridM->xM[k](ix+1,iy) - myGridM->xM[k](ix-1,iy) ) );
+    doubleArray resArray1 = ( ( fieldValuesM[k](ix + 1, iy) - fieldValuesM[k](ix - 1, iy) ) / ( myGridM->xM[k](ix + 1, iy) - myGridM->xM[k](ix - 1, iy) ) );
     return resArray1;
   } else {
     if (conservativeDifferenceOperatorsM) {
-      doubleArray resArray2 = ( ( ( myGridM->ysM[k]*fieldValuesM[k] )(ix+1,iy)  - ( myGridM->ysM[k]*fieldValuesM[k] )(ix-1,iy) ) / (2*myGridM->rStep(k)) - ( ( myGridM->yrM[k]*fieldValuesM[k] )(ix,iy+1) - ( myGridM->yrM[k]*fieldValuesM[k] )(ix,iy-1) ) / (2*myGridM->sStep(k)) ) / myGridM->sqrtOfGM[k](ix,iy);
+      doubleArray resArray2 = ( ( ( myGridM->ysM[k]*fieldValuesM[k] )(ix + 1, iy)  - ( myGridM->ysM[k]*fieldValuesM[k] )(ix - 1, iy) ) / (2*myGridM->rStep(k)) - ( ( myGridM->yrM[k]*fieldValuesM[k] )(ix, iy + 1) - ( myGridM->yrM[k]*fieldValuesM[k] )(ix, iy - 1) ) / (2*myGridM->sStep(k)) ) / myGridM->sqrtOfGM[k](ix, iy);
       return resArray2;
     } else {
-      doubleArray resArray3 = ( ( myGridM->ysM[k](ix,iy)*(fieldValuesM[k](ix+1,iy) - fieldValuesM[k](ix-1,iy)) / (2*myGridM->rStep(k)) - myGridM->yrM[k](ix,iy)*(fieldValuesM[k](ix,iy+1) - fieldValuesM[k](ix,iy-1)) / (2*myGridM->sStep(k))) / myGridM->sqrtOfGM[k](ix,iy) );
+      doubleArray resArray3 = ( ( myGridM->ysM[k](ix, iy)*(fieldValuesM[k](ix + 1, iy) - fieldValuesM[k](ix - 1, iy)) / (2*myGridM->rStep(k)) - myGridM->yrM[k](ix, iy)*(fieldValuesM[k](ix, iy + 1) - fieldValuesM[k](ix, iy - 1)) / (2*myGridM->sStep(k))) / myGridM->sqrtOfGM[k](ix, iy) );
       return resArray3;
     }
   }
@@ -771,9 +773,9 @@ gridFunction gridFunction::x() const
 {
   gridFunction result = *this;
   for (int k = 0; k < myGridM->nrGrids(); k++) {
-    Index ix = getDiscrBounds(0,k);
-    Index iy = getDiscrBounds(1,k);
-    result.fieldValuesM[k].redim(ix,iy);
+    Index ix = getDiscrBounds(0, k);
+    Index iy = getDiscrBounds(1, k);
+    result.fieldValuesM[k].redim(ix, iy);
     result.fieldValuesM[k] = x(k);
   }
   return result;
@@ -788,14 +790,14 @@ doubleArray gridFunction::y(int k, Index ix, Index iy) const
     iy = getDiscrBounds(1,k); // Indices for discretization points in the grid
   }
   if (myGridM->gType(k) == 1) {
-    doubleArray resArray1 = ( fieldValuesM[k](ix,iy+1) - fieldValuesM[k](ix,iy-1) ) / ( myGridM->yM[k](ix,iy+1) - myGridM->yM[k](ix,iy-1) );
+    doubleArray resArray1 = ( fieldValuesM[k](ix, iy + 1) - fieldValuesM[k](ix, iy - 1) ) / ( myGridM->yM[k](ix, iy + 1) - myGridM->yM[k](ix, iy - 1) );
     return resArray1;
   } else {
     if (conservativeDifferenceOperatorsM) {
-      doubleArray resArray2 = ( ( ( -myGridM->xsM[k]*fieldValuesM[k] )(ix+1,iy) - ( -myGridM->xsM[k]*fieldValuesM[k] )(ix-1,iy) ) / (2*myGridM->rStep(k)) + ( ( myGridM->xrM[k]*fieldValuesM[k] )(ix,iy+1) - ( myGridM->xrM[k]*fieldValuesM[k] )(ix,iy-1) ) / (2*myGridM->sStep(k)) ) / myGridM->sqrtOfGM[k](ix,iy);
+      doubleArray resArray2 = ( ( ( -myGridM->xsM[k]*fieldValuesM[k] )(ix + 1, iy) - ( -myGridM->xsM[k]*fieldValuesM[k] )(ix - 1, iy) ) / (2*myGridM->rStep(k)) + ( ( myGridM->xrM[k]*fieldValuesM[k] )(ix, iy + 1) - ( myGridM->xrM[k]*fieldValuesM[k] )(ix, iy - 1) ) / (2*myGridM->sStep(k)) ) / myGridM->sqrtOfGM[k](ix, iy);
       return resArray2;
     } else {
-      doubleArray resArray3 = ( -myGridM->xsM[k](ix,iy)*(fieldValuesM[k](ix+1,iy) - fieldValuesM[k](ix-1,iy)) / (2*myGridM->rStep(k)) + myGridM->xrM[k](ix,iy)*(fieldValuesM[k](ix,iy+1) - fieldValuesM[k](ix,iy-1)) / (2*myGridM->sStep(k))) / myGridM->sqrtOfGM[k](ix,iy);
+      doubleArray resArray3 = ( -myGridM->xsM[k](ix, iy)*(fieldValuesM[k](ix + 1, iy) - fieldValuesM[k](ix - 1, iy)) / (2*myGridM->rStep(k)) + myGridM->xrM[k](ix, iy)*(fieldValuesM[k](ix, iy + 1) - fieldValuesM[k](ix, iy - 1)) / (2*myGridM->sStep(k))) / myGridM->sqrtOfGM[k](ix, iy);
       return resArray3;
     }
   }
@@ -805,9 +807,9 @@ gridFunction gridFunction::y() const
 {
   gridFunction result = *this;
   for (int k = 0; k < myGridM->nrGrids(); k++) {
-    Index ix = getDiscrBounds(0,k);
-    Index iy = getDiscrBounds(1,k);
-    result.fieldValuesM[k].redim(ix,iy);
+    Index ix = getDiscrBounds(0, k);
+    Index iy = getDiscrBounds(1, k);
+    result.fieldValuesM[k].redim(ix, iy);
     result.fieldValuesM[k] = y(k);
   }
   return result;
@@ -2005,13 +2007,13 @@ void gridFunction::PUMcheckErrors(doubleArray (*infunc) (const doubleArray & x, 
 
 doubleArray gridFunction::forcing(doubleArray (*infunc) (const doubleArray& x, const doubleArray& y, const double t, int grid, int side), int grid, double tadd, Index ix, Index iy)
 {
-  if (ix == -1000)
+  if (ix == -1000) {
     ix = getDiscrBounds(0, grid);
-  if (iy == -1000) 
-    iy = getDiscrBounds(1, grid);  
-
+  }
+  if (iy == -1000)  {
+    iy = getDiscrBounds(1, grid);
+  }
   doubleArray force = infunc(myGridM->xM[grid](ix, iy), myGridM->yM[grid](ix, iy), timeM + tadd, -1, -1)*myGridM->maskM[grid](ix, iy);
-  
   return force;
 }
 
@@ -2029,14 +2031,15 @@ gridFunction gridFunction::forcing(doubleArray (*infunc) (const doubleArray& x, 
 
 void gridFunction::setBoundaryConditionType(int k, Side side, boundaryType condition)
 {
-  if (side == lowR)
+  if (side == lowR) {
     bcsM[k].lowR = condition;
-  else if (side == hiR)
+  } else if (side == hiR) {
     bcsM[k].hiR = condition;
-  else if (side == lowS)
+  } else if (side == lowS) {
     bcsM[k].lowS = condition;
-  else if (side == hiS)
+  } else if (side == hiS) {
     bcsM[k].hiS = condition;
+  }
 }
 
 void gridFunction::setBC(functionType fType)
@@ -2050,39 +2053,44 @@ void gridFunction::setBC(functionType fType)
       } else if (myGridM->getBoundaryType(k, (Side) side) == INTERPOLATION) { // interpolation
 	setBoundaryConditionType(k, (Side) side, INTERPOLATION);
       } else if (myGridM->getBoundaryType(k, (Side) side) == NOSLIP) { // no-slip or inflow
-	if (fType == scalar)
+	if (fType == scalar) {
 	  setBoundaryConditionType(k, (Side) side, NEUMANN);
-	else if (fType == xComponentOfVector || fType == yComponentOfVector)
+	} else if (fType == xComponentOfVector || fType == yComponentOfVector) {
 	  setBoundaryConditionType(k, (Side) side, DIRICHLET);
+	}
       } else if (myGridM->getBoundaryType(k, (Side) side) == PERIODIC) { // periodic
 	setBoundaryConditionType(k, (Side) side, PERIODIC);
       } else if (myGridM->getBoundaryType(k, (Side) side) == SLIP) { // slip wall
-	if (fType == scalar)
+	if (fType == scalar) {
 	  setBoundaryConditionType(k, (Side) side, NEUMANN);
-	else if (fType == xComponentOfVector && ( (Side) side == lowS || (Side) side == hiS )) {
+	} else if (fType == xComponentOfVector && ( (Side) side == lowS || (Side) side == hiS )) {
 	  cout << "Setting Neumann condition on side " << side << endl;
 	  setBoundaryConditionType(k, (Side) side, NEUMANN);
-	} else if (fType == xComponentOfVector && ( (Side) side == lowR || (Side) side == hiR ))
+	} else if (fType == xComponentOfVector && ( (Side) side == lowR || (Side) side == hiR )) {
 	  setBoundaryConditionType(k, (Side) side, DIRICHLET);
-	else if (fType == yComponentOfVector && ( (Side) side == lowS || (Side) side == hiS ))
+	} else if (fType == yComponentOfVector && ( (Side) side == lowS || (Side) side == hiS )) {
 	  setBoundaryConditionType(k, (Side) side, DIRICHLET);
-	else if (fType == yComponentOfVector && ( (Side) side == lowR || (Side) side == hiR ))
+	} else if (fType == yComponentOfVector && ( (Side) side == lowR || (Side) side == hiR )) {
 	  setBoundaryConditionType(k, (Side) side, NEUMANN);
+	}
       } else if (myGridM->getBoundaryType(k,(Side) side) == INFLOW) { // inflow
-	if (fType == scalar)
+	if (fType == scalar) {
 	  setBoundaryConditionType(k, (Side) side, DIRICHLET);
-	else if (fType == xComponentOfVector || fType == yComponentOfVector)
+	} else if (fType == xComponentOfVector || fType == yComponentOfVector) {
 	  setBoundaryConditionType(k, (Side) side, DIRICHLET);
+	}
       } else if (myGridM->getBoundaryType(k, (Side) side) == OUTFLOW) { // outflow
-	if (fType == scalar)
+	if (fType == scalar) {
 	  setBoundaryConditionType(k, (Side) side, ROBIN);
-	else if (fType == xComponentOfVector || fType == yComponentOfVector)
+	} else if (fType == xComponentOfVector || fType == yComponentOfVector) {
 	  setBoundaryConditionType(k, (Side) side, EXTRAPOLATION);
+	}
       } else if (myGridM->getBoundaryType(k, (Side) side) == OUTFLOW_NEUM_P) { // outflow with Neumann pressure
-	if (fType == scalar)
+	if (fType == scalar) {
 	  setBoundaryConditionType(k, (Side) side, NEUMANN);
-	else if (fType == xComponentOfVector || fType == yComponentOfVector)
+	} else if (fType == xComponentOfVector || fType == yComponentOfVector) {
 	  setBoundaryConditionType(k, (Side) side, EXTRAPOLATION);
+	}
       } else if (myGridM->getBoundaryType(k, (Side) side) == DIRICHLET) { // twilight-zone
 	setBoundaryConditionType(k,(Side) side, DIRICHLET);
       }
@@ -2166,34 +2174,34 @@ void gridFunction::setFlagValues()
     }
       
     // (almost) lastly, mark the corners
-    if (getBoundaryType(grid, (Side) 0) == PERIODIC)
+    if (getBoundaryType(grid, (Side) 0) == PERIODIC) {
       flagValuesM[grid](low_i, low_j) = grid + 3 + 1000;
-    else if (getBoundaryType(grid, (Side) 2) == PERIODIC)
+    } else if (getBoundaryType(grid, (Side) 2) == PERIODIC) {
       flagValuesM[grid](low_i, low_j) = grid + 3 + 3000;
-    else
+    } else {
       flagValuesM[grid](low_i, low_j) = 10000;
-    
-    if (getBoundaryType(grid, (Side) 0) == PERIODIC)
+    }
+    if (getBoundaryType(grid, (Side) 0) == PERIODIC) {
       flagValuesM[grid](low_i, hi_j) = grid + 3 + 1000;
-    else if (getBoundaryType(grid, (Side) 3) == PERIODIC)
+    } else if (getBoundaryType(grid, (Side) 3) == PERIODIC) {
       flagValuesM[grid](low_i, hi_j) = grid + 3 + 4000;
-    else
+    } else {
       flagValuesM[grid](low_i, hi_j) = 20000;
-      
-    if (getBoundaryType(grid, (Side) 2) == PERIODIC)
+    }
+    if (getBoundaryType(grid, (Side) 2) == PERIODIC) {
       flagValuesM[grid](hi_i, low_j) = grid + 3 + 3000;
-    else if (getBoundaryType(grid, (Side) 1) == PERIODIC)
+    } else if (getBoundaryType(grid, (Side) 1) == PERIODIC) {
       flagValuesM[grid](hi_i, low_j) = grid + 3 + 2000;
-    else
+    } else {
       flagValuesM[grid](hi_i, low_j) = 30000;
-    
-    if (getBoundaryType(grid, (Side) 1) == PERIODIC)
+    }
+    if (getBoundaryType(grid, (Side) 1) == PERIODIC) {
       flagValuesM[grid](hi_i, hi_j) = grid + 3 + 2000;
-    else if (getBoundaryType(grid, (Side) 3) == PERIODIC)
+    } else if (getBoundaryType(grid, (Side) 3) == PERIODIC) {
       flagValuesM[grid](hi_i, hi_j) = grid + 3 + 4000;
-    else
+    } else {
       flagValuesM[grid](hi_i, hi_j) = 40000;
-    
+    }
     //----------------------------------------
     // Fix the no-slip (Dirichlet) extremal
     // points
@@ -2283,57 +2291,57 @@ Range gridFunction::getDiscrBounds(int direction, int k) const
 
 void gridFunction::extrapolateToBoundaries()
 {
-  for (int k = 0; k < myGridM->nrGrids(); k++)
-    {
-      Index ixb(2, (myGridM->rDim(k)) - 4);
-      Index low_r(1), hi_r((myGridM->rDim(k)) - 2);
-      Index iyb(2, (myGridM->sDim(k)) - 4);
-      Index low_s(1), hi_s((myGridM->sDim(k)) - 2);
-      
-      if (getBoundaryType(k, (Side) 0) != PERIODIC) {
-	fieldValuesM[k](low_r, iyb) = 3.*fieldValuesM[k](low_r + 1, iyb) - 3.*fieldValuesM[k](low_r + 2, iyb) + 1.*fieldValuesM[k](low_r + 3, iyb);
-      }
-      
-      if (getBoundaryType(k, (Side) 1) != PERIODIC) {
-	fieldValuesM[k](hi_r, iyb) = 3.*fieldValuesM[k](hi_r - 1, iyb) - 3.*fieldValuesM[k](hi_r - 2, iyb) + 1.*fieldValuesM[k](hi_r - 3, iyb);
-      }
-      
-      if (getBoundaryType(k, (Side) 2) != PERIODIC) {
-	fieldValuesM[k](ixb, low_s) = 3.*fieldValuesM[k](ixb, low_s + 1) - 3.*fieldValuesM[k](ixb, low_s + 2) + 1.*fieldValuesM[k](ixb, low_s + 3);
-      }
-      
-      if (getBoundaryType(k, (Side) 3) != PERIODIC) {
-	fieldValuesM[k](ixb, hi_s) = 3.*fieldValuesM[k](ixb, hi_s - 1) - 3.*fieldValuesM[k](ixb, hi_s - 2) + 1.*fieldValuesM[k](ixb, hi_s - 3);
-      }
-      
-      if (getBoundaryType(k, (Side) 0) == PERIODIC)
-	fieldValuesM[k](1, 1) = 3.*fieldValuesM[k](1, 2) - 3*fieldValuesM[k](1, 3) + 1*fieldValuesM[k](1, 4);
-      else if (getBoundaryType(k, (Side) 2) == PERIODIC)
-	fieldValuesM[k](1, 1) = 3.*fieldValuesM[k](2, 1) - 3*fieldValuesM[k](3, 1) + 1*fieldValuesM[k](4, 1);
-      else
-	fieldValuesM[k](1, 1) = 3.*fieldValuesM[k](2, 2) - 3*fieldValuesM[k](3, 3) + 1*fieldValuesM[k](4, 4);
-      
-      if (getBoundaryType(k, (Side) 1) == PERIODIC)
-	fieldValuesM[k](myGridM->rdimM[k] - 2, 1) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 2, 2) - 3*fieldValuesM[k](myGridM->rdimM[k] - 2, 3) + 1*fieldValuesM[k](myGridM->rdimM[k] - 2, 4);
-      else if (getBoundaryType(k, (Side) 2) == PERIODIC)
-	fieldValuesM[k](myGridM->rdimM[k] - 2, 1) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 3, 1) - 3*fieldValuesM[k](myGridM->rdimM[k] - 4, 1) + 1*fieldValuesM[k](myGridM->rdimM[k] - 5, 1);
-      else
-	fieldValuesM[k](myGridM->rdimM[k] - 2, 1) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 3, 2) - 3*fieldValuesM[k](myGridM->rdimM[k] - 4, 3) + 1*fieldValuesM[k](myGridM->rdimM[k] - 5, 4);
-      
-      if (getBoundaryType(k, (Side) 0) == PERIODIC)
-	fieldValuesM[k](1, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](1, myGridM->sdimM[k] - 3) - 3*fieldValuesM[k](1, myGridM->sdimM[k] - 4) + 1*fieldValuesM[k](1, myGridM->sdimM[k] - 5);
-      else if (getBoundaryType(k, (Side) 3) == PERIODIC)
-	fieldValuesM[k](1, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](2, myGridM->sdimM[k] - 2) - 3*fieldValuesM[k](3, myGridM->sdimM[k] - 2) + 1*fieldValuesM[k](4, myGridM->sdimM[k] - 2);
-      else
-	fieldValuesM[k](1, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](2, myGridM->sdimM[k] - 3) - 3*fieldValuesM[k](3, myGridM->sdimM[k] - 4) + 1*fieldValuesM[k](4, myGridM->sdimM[k] - 5);
-      
-      if (getBoundaryType(k, (Side) 1) == PERIODIC)
-	fieldValuesM[k](myGridM->rdimM[k] - 2,myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 3) - 3*fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 4) + 1*fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 5);
-      else if (getBoundaryType(k, (Side) 3) == PERIODIC)
-	fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 3, myGridM->sdimM[k] - 2) - 3*fieldValuesM[k](myGridM->rdimM[k] - 4, myGridM->sdimM[k] - 2) + 1*fieldValuesM[k](myGridM->rdimM[k] - 5, myGridM->sdimM[k] - 2);
-      else
-	fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 3, myGridM->sdimM[k] - 3) - 3*fieldValuesM[k](myGridM->rdimM[k] - 4, myGridM->sdimM[k] - 4) + 1*fieldValuesM[k](myGridM->rdimM[k] - 5, myGridM->sdimM[k] - 5);
+  for (int k = 0; k < myGridM->nrGrids(); k++) {
+    Index ixb(2, (myGridM->rDim(k)) - 4);
+    Index low_r(1), hi_r((myGridM->rDim(k)) - 2);
+    Index iyb(2, (myGridM->sDim(k)) - 4);
+    Index low_s(1), hi_s((myGridM->sDim(k)) - 2);
+    
+    if (getBoundaryType(k, (Side) 0) != PERIODIC) {
+      fieldValuesM[k](low_r, iyb) = 3.*fieldValuesM[k](low_r + 1, iyb) - 3.*fieldValuesM[k](low_r + 2, iyb) + 1.*fieldValuesM[k](low_r + 3, iyb);
     }
+    
+    if (getBoundaryType(k, (Side) 1) != PERIODIC) {
+      fieldValuesM[k](hi_r, iyb) = 3.*fieldValuesM[k](hi_r - 1, iyb) - 3.*fieldValuesM[k](hi_r - 2, iyb) + 1.*fieldValuesM[k](hi_r - 3, iyb);
+    }
+    
+    if (getBoundaryType(k, (Side) 2) != PERIODIC) {
+      fieldValuesM[k](ixb, low_s) = 3.*fieldValuesM[k](ixb, low_s + 1) - 3.*fieldValuesM[k](ixb, low_s + 2) + 1.*fieldValuesM[k](ixb, low_s + 3);
+    }
+    
+    if (getBoundaryType(k, (Side) 3) != PERIODIC) {
+      fieldValuesM[k](ixb, hi_s) = 3.*fieldValuesM[k](ixb, hi_s - 1) - 3.*fieldValuesM[k](ixb, hi_s - 2) + 1.*fieldValuesM[k](ixb, hi_s - 3);
+    }
+    
+    if (getBoundaryType(k, (Side) 0) == PERIODIC) {
+      fieldValuesM[k](1, 1) = 3.*fieldValuesM[k](1, 2) - 3*fieldValuesM[k](1, 3) + 1*fieldValuesM[k](1, 4);
+    } else if (getBoundaryType(k, (Side) 2) == PERIODIC) {
+      fieldValuesM[k](1, 1) = 3.*fieldValuesM[k](2, 1) - 3*fieldValuesM[k](3, 1) + 1*fieldValuesM[k](4, 1);
+    } else {
+      fieldValuesM[k](1, 1) = 3.*fieldValuesM[k](2, 2) - 3*fieldValuesM[k](3, 3) + 1*fieldValuesM[k](4, 4);
+    }
+    if (getBoundaryType(k, (Side) 1) == PERIODIC) {
+      fieldValuesM[k](myGridM->rdimM[k] - 2, 1) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 2, 2) - 3*fieldValuesM[k](myGridM->rdimM[k] - 2, 3) + 1*fieldValuesM[k](myGridM->rdimM[k] - 2, 4);
+    } else if (getBoundaryType(k, (Side) 2) == PERIODIC) {
+      fieldValuesM[k](myGridM->rdimM[k] - 2, 1) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 3, 1) - 3*fieldValuesM[k](myGridM->rdimM[k] - 4, 1) + 1*fieldValuesM[k](myGridM->rdimM[k] - 5, 1);
+    } else {
+      fieldValuesM[k](myGridM->rdimM[k] - 2, 1) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 3, 2) - 3*fieldValuesM[k](myGridM->rdimM[k] - 4, 3) + 1*fieldValuesM[k](myGridM->rdimM[k] - 5, 4);
+    }
+    if (getBoundaryType(k, (Side) 0) == PERIODIC) {
+      fieldValuesM[k](1, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](1, myGridM->sdimM[k] - 3) - 3*fieldValuesM[k](1, myGridM->sdimM[k] - 4) + 1*fieldValuesM[k](1, myGridM->sdimM[k] - 5);
+    } else if (getBoundaryType(k, (Side) 3) == PERIODIC) {
+      fieldValuesM[k](1, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](2, myGridM->sdimM[k] - 2) - 3*fieldValuesM[k](3, myGridM->sdimM[k] - 2) + 1*fieldValuesM[k](4, myGridM->sdimM[k] - 2);
+    } else {
+      fieldValuesM[k](1, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](2, myGridM->sdimM[k] - 3) - 3*fieldValuesM[k](3, myGridM->sdimM[k] - 4) + 1*fieldValuesM[k](4, myGridM->sdimM[k] - 5);
+    }
+    if (getBoundaryType(k, (Side) 1) == PERIODIC) {
+      fieldValuesM[k](myGridM->rdimM[k] - 2,myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 3) - 3*fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 4) + 1*fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 5);
+    } else if (getBoundaryType(k, (Side) 3) == PERIODIC) {
+      fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 3, myGridM->sdimM[k] - 2) - 3*fieldValuesM[k](myGridM->rdimM[k] - 4, myGridM->sdimM[k] - 2) + 1*fieldValuesM[k](myGridM->rdimM[k] - 5, myGridM->sdimM[k] - 2);
+    } else {
+      fieldValuesM[k](myGridM->rdimM[k] - 2, myGridM->sdimM[k] - 2) = 3.*fieldValuesM[k](myGridM->rdimM[k] - 3, myGridM->sdimM[k] - 3) - 3*fieldValuesM[k](myGridM->rdimM[k] - 4, myGridM->sdimM[k] - 4) + 1*fieldValuesM[k](myGridM->rdimM[k] - 5, myGridM->sdimM[k] - 5);
+    }
+  }
 }
 
 void gridFunction::setDivergenceToZeroAtBoundaries(gridFunction& otherVelocityComponent, functionType fType)
@@ -2380,8 +2388,7 @@ void gridFunction::setDivergenceToZeroAtBoundaries(gridFunction& otherVelocityCo
 	  (myGridM->yM[k](ixb, hi_s - 1) - myGridM->yM[k](ixb, hi_s + 1))*
 	  otherVelocityComponent.x(k, ixb, hi_s);
       }
-    }
-    else if (myGridM->gType(k) == 2) {
+    } else if (myGridM->gType(k) == 2) {
       //----------------------------------------
       // Cartesian grid
       //----------------------------------------
@@ -2405,8 +2412,7 @@ void gridFunction::setDivergenceToZeroAtBoundaries(gridFunction& otherVelocityCo
 	  2.*s_step*ys(ixb, hi_s) / xr(ixb, hi_s)*
 	  ( otherVelocityComponent(k)(ixb + 1, hi_s) - otherVelocityComponent(k)(ixb - 1, hi_s) ) / (2.*r_step);
       }
-    }
-    else if (myGridM->gType(k) == 3) {
+    } else if (myGridM->gType(k) == 3) {
       //----------------------------------------
       // Curvilinear grid
       //----------------------------------------
