@@ -266,8 +266,6 @@ public :
 
   void checkErrors(doubleArray (*infunc) (const doubleArray& x, const doubleArray& y, const double t, int, int));
 
-  void PUMcheckErrors(doubleArray (*infunc) (const doubleArray& x, const doubleArray& y, const double t, int, int),bool check=true);
-
   doubleArray forcing(doubleArray (*infunc) (const doubleArray& x, const doubleArray& y, const double t, int grid, int side), int grid, double tadd = 0., Index ix = -1000, Index iy = -1000);
 
   doubleArray boundary_d_dt(int grid, double tadd = 0., Index ix = -1000, Index iy = -1000) { return forcing(boundaryValue_d_dt, grid, tadd, ix, iy); }

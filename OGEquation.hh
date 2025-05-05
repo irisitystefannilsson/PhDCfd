@@ -18,7 +18,7 @@ extern "C"
 
 enum MatrixOperator 
 {
-  Poisson, Poisson_with_TD_diagonal, Grad_Visc_Div, Grad_Visc_Div_with_TD_diagonal, PUM, PUM_with_TD_diagonal, Conv_varDiff , Conv_varDiff_with_TD_diagonal
+  Poisson, Poisson_with_TD_diagonal, Grad_Visc_Div, Grad_Visc_Div_with_TD_diagonal, Conv_varDiff , Conv_varDiff_with_TD_diagonal
 };
 
 enum sparseSolver
@@ -213,7 +213,7 @@ public :
 
   void infNorm();
 
-  void writeMatrixOperatorToFile(const char *name);
+  void writeMatrixOperatorToFile(const char* const name);
   
   void setOption(OPTION option, int value);
 

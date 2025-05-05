@@ -1973,38 +1973,6 @@ void gridFunction::checkErrors(doubleArray (*infunc) (const doubleArray& x, cons
   }
 }
 
-void gridFunction::PUMcheckErrors(doubleArray (*infunc) (const doubleArray & x, const doubleArray & y, const double t, int side, int grid),bool check)
-{
-  double R = 0.5;
-  double overlap = 0.25;
-  
-  if (check)
-    fieldValuesM[0] -= infunc(myGridM->xM[0], myGridM->yM[0], timeM, -1, -1);
-  doubleArray radius0 = (sqrt(pow(myGridM->xM[0],2.)+pow(myGridM->yM[0],2.))-R)/overlap;
-  where (radius0 <= 0)
-    fieldValuesM[0] = 0;
-  if (check)
-    fieldValuesM[1] -= infunc(myGridM->xM[1],myGridM->yM[1], timeM, -1, -1);
-  doubleArray radius1 = (sqrt(pow(myGridM->xM[1],2.)+pow(myGridM->yM[1],2.))-R)/overlap;
-  where (radius1 >= 1)
-    fieldValuesM[1] = 0;
-  double linf = l_inf();
-  double lh = l_h();
-  if (Communication_Manager::My_Process_Number == 0 && check) 
-    {
-      std::cout << "  l_inf norm of Error is " << linf << endl;
-      std::cout << "  l_h norm of Error is   " << lh << endl;
-    }
-  radius0 = (sqrt(pow(myGridM->xM[0],2.)+pow(myGridM->yM[0],2.))-R)/overlap;
-  where (radius0 <= 0)
-    fieldValuesM[0] = 10000000;
-
-  radius1 = (sqrt(pow(myGridM->xM[1],2.)+pow(myGridM->yM[1],2.))-R)/overlap;
-  where (radius1 >= 1)
-    fieldValuesM[1] = 10000000;
-
-}
-
 doubleArray gridFunction::forcing(doubleArray (*infunc) (const doubleArray& x, const doubleArray& y, const double t, int grid, int side), int grid, double tadd, Index ix, Index iy)
 {
   if (ix == -1000) {
