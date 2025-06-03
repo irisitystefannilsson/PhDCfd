@@ -1188,9 +1188,9 @@ void gridFunction::neumann(int i, int k)
   double dx = myGridM->xM[k](3, 1) - myGridM->xM[k](1, 1);
   double dy = myGridM->yM[k](1, 3) - myGridM->yM[k](1, 1);
 
-  Index ixb(1,(myGridM->rDim(k)) - 2);
+  Index ixb(1, (myGridM->rDim(k)) - 2);
   int low_r(0), hi_r((myGridM->rDim(k)) - 1);
-  Index iyb(1,(myGridM->sDim(k)) - 2);
+  Index iyb(1, (myGridM->sDim(k)) - 2);
   int low_s(0), hi_s((myGridM->sDim(k)) - 1);
 
   if (i == 0) { // low r 
@@ -1799,12 +1799,12 @@ void gridFunction::interpolate(int gridToUpdate, gridFunction* target)
   for (p = 0; p < nrProcs; p++) {
     for (k = 0; k < myGridM->nrGrids(); k++) {
       displacements[k] = 0;
-      for (grid = 0; grid < k; grid++)
+      for (grid = 0; grid < k; grid++) {
 	displacements[k] += myGridM->myIntPointsM[grid].getLength(0);
-      
-      for (proc = 0; proc < p; proc++)
+      }
+      for (proc = 0; proc < p; proc++) {
 	displacements[k] += myGridM->myNrOfIntPointsM(k, proc);
-	  
+      }
       block_lengths[k] = myGridM->myNrOfIntPointsM(k, p);
     }
       
@@ -1814,25 +1814,28 @@ void gridFunction::interpolate(int gridToUpdate, gridFunction* target)
     recHandle = 4;
       
     double *rpoint = 0x0;
-    if (theReceiveArray == 0) // message of len=0
+    if (theReceiveArray == 0) { // message of len=0
       MPI_Irecv(rpoint, 1, myGridM->receiveTypeM[p], p, recHandle, myComm, &(Request2[p]));
-    else
+    } else {
       MPI_Irecv(theReceiveArray, 1, myGridM->receiveTypeM[p], p, recHandle, myComm, &(Request2[p]));
+    }
   }
   currIndex = 0;
   myGridM->offsetsM = 0;
   for (k = 0; k < myGridM->nrGrids(); k++) {
     for (p = 0; p < nrProcs; p++) {
       for (currGrid = 0; currGrid < myGridM->nrGrids(); currGrid++) {
-	for (grid = 0; grid < k; grid++)
+	for (grid = 0; grid < k; grid++) {
 	  myGridM->offsetsM(p, k, currGrid) += myGridM->intInterpolationLocationM[grid].getLength(0);
-	
-	for (proc = 0; proc < p; proc++)
-	  for (grid = 0; grid<myGridM->nrGrids(); grid++)
+	}
+	for (proc = 0; proc < p; proc++) {
+	  for (grid = 0; grid<myGridM->nrGrids(); grid++) {
 	    myGridM->offsetsM(p, k, currGrid) += myGridM->nrOfPointsToComputeM(k, grid, proc);
-	
-	for (grid = 0; grid < currGrid; grid++)
+	  }
+	}
+	for (grid = 0; grid < currGrid; grid++) {
 	  myGridM->offsetsM(p, k, currGrid) += myGridM->nrOfPointsToComputeM(k, grid, p);
+	}
       }
     }
     Index sendIndex(currIndex, (myGridM->intInterpolationLocationM[k]).getLength(0));
@@ -1857,12 +1860,12 @@ void gridFunction::interpolate(int gridToUpdate, gridFunction* target)
     
     sendHandle = 4;
     double *spoint = 0x0;
-    if (theSendArray == 0) // message of len=0
+    if (theSendArray == 0) { // message of len=0
       MPI_Isend(spoint, 1, myGridM->sendTypeM[p], p, sendHandle, myComm, &(Request1[p]));
-    else
+    } else {
       MPI_Isend(theSendArray, 1, myGridM->sendTypeM[p], p, sendHandle, myComm, &(Request1[p]));
+    }
   }
-  
   delete[] block_lengths;
   delete[] displacements;
   
@@ -1909,9 +1912,9 @@ void gridFunction::fillIntElements(doubleSerialArray& elementArray, gridFunction
       endElement = startElement;
       doubleSerialArray *U;
       U = target->fieldValuesM[k].getSerialArrayPointer();
-      for (int p = 0; p < nrProcs; p++)
+      for (int p = 0; p < nrProcs; p++) {
 	endElement += myGridM->myNrOfIntPointsM(k, p);
-      
+      }
       if (endElement > startElement) {
 	Range elementRange(startElement, endElement - 1);
 	(*U)(i_point, j_point) = elementArray(elementRange);

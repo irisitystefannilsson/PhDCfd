@@ -1,5 +1,5 @@
 //
-// time: Tue May  6 18:03:22 2025
+// time: Tue Jun  3 18:07:02 2025
 //
 // version: 3.2.0 (format), 4.4.4 (DX)
 //
@@ -8,11 +8,11 @@
 // macro reference (direct): XCOGCompGrid /home/stefan/LLNLfiles/Miniature/PhDCfd/OpenDXFiles/ReadCompGrid.net
 include "ReadCompGrid.net"
 //
-// macro reference (direct): divergence /home/stefan/LLNLfiles/Miniature/PhDCfd/OpenDXFiles/div.net
-include "div.net"
-//
 // macro reference (direct): curl /home/stefan/LLNLfiles/Miniature/PhDCfd/OpenDXFiles/curl.net
 include "curl.net"
+//
+// macro reference (direct): divergence /home/stefan/LLNLfiles/Miniature/PhDCfd/OpenDXFiles/div.net
+include "div.net"
 //
 // MODULE main
 // workspace: width = 701, height = 725
@@ -22,9 +22,9 @@ macro main(
 ) -> (
 ) {
     // 
-    // node FileSelector[1]: x = 18, y = 29, inputs = 0, label = FileSelector
-    // output[1]: visible = 1, type = 32, value = "/home/stefan/LLNLfiles/Miniature/CylinderInBox/INS_data_0.h5"
-    // output[2]: visible = 1, type = 32, value = "INS_data_0.h5"
+    // node FileSelector[1]: x = 19, y = 29, inputs = 0, label = FileSelector
+    // output[1]: visible = 1, type = 32, value = "/home/stefan/LLNLfiles/Miniature/CylinderInBox/Re1000/INS_data_127.h5"
+    // output[2]: visible = 1, type = 32, value = "INS_data_127.h5"
     //
     // 
     // node Integer[2]: x = 147, y = 30, inputs = 11, label = Integer
@@ -39,12 +39,12 @@ macro main(
     // 
     // node Integer[7]: x = 471, y = 6, inputs = 11, label = Integer
     // input[1]: defaulting = 0, visible = 0, type = 32, value = "Integer_7"
-    // input[3]: defaulting = 0, visible = 0, type = 1, value = 0 
+    // input[3]: defaulting = 0, visible = 0, type = 1, value = 2 
     // input[5]: defaulting = 1, visible = 0, type = 1, value = -1000000
     // input[6]: defaulting = 1, visible = 0, type = 1, value = 1000000
     // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
     // input[9]: defaulting = 1, visible = 0, type = 1, value = 0
-    // output[1]: visible = 1, type = 1, value = 0 
+    // output[1]: visible = 1, type = 1, value = 2 
     //
     // 
     // node ForEachN[1]: x = 483, y = 77, inputs = 3, label = ForEachN
@@ -207,23 +207,32 @@ main_Append_2_out_1 =
     main_Append_2_in_5
     ) [instance: 2, cache: 1];
     // 
-    // node divergence[1]: x = 413, y = 386, inputs = 1, label = divergence
+    // node Streamline[1]: x = 185, y = 452, inputs = 7, label = Streamline
+    // input[2]: defaulting = 0, visible = 1, type = 16777224, value = {[-0.75, 1.0], [-0.75, 0.9], [-0.75, 0.8], [-0.75, 0.7], [-0.75, 0.6], [-0.75, 0.5], [-0.75, 0.4], [-0.75, 0.30000000000000004], [-0.75, 0.19999999999999996], [-0.75, 0.09999999999999998], [-0.75, 0.0], [-0.75, -0.10000000000000009], [-0.75, -0.19999999999999996], [-0.75, -0.30000000000000004], [-0.75, -0.3999999999999999], [-0.75, -0.5], [-0.75, -0.6000000000000001], [-0.75, -0.7], [-0.75, -0.8], [-0.75, -0.8999999999999999]}
+    // input[3]: defaulting = 1, visible = 1, type = 16777221, value = NULL
+    // input[4]: defaulting = 1, visible = 1, type = 5, value = NULL
+    // input[6]: defaulting = 1, visible = 1, type = 3, value = 1
+    // input[7]: defaulting = 0, visible = 0, type = 29, value = 0.5
     //
-main_divergence_1_out_1 = 
-    divergence(
-    main_Append_1_out_1
+main_Streamline_1_out_1 = 
+    Streamline(
+    main_CollectMultiGrid_2_out_1,
+    main_Streamline_1_in_2,
+    main_Streamline_1_in_3,
+    main_Streamline_1_in_4,
+    main_Streamline_1_in_5,
+    main_Streamline_1_in_6,
+    main_Streamline_1_in_7
     ) [instance: 1, cache: 1];
     // 
-    // node RubberSheet[1]: x = 314, y = 531, inputs = 4, label = RubberSheet
-    // input[2]: visible = 0
+    // node Collect[9]: x = 472, y = 531, inputs = 3, label = Collect
     //
-main_RubberSheet_1_out_1 = 
-    RubberSheet(
-    main_divergence_1_out_1,
-    main_RubberSheet_1_in_2,
-    main_RubberSheet_1_in_3,
-    main_RubberSheet_1_in_4
-    ) [instance: 1, cache: 1];
+main_Collect_9_out_1 = 
+    Collect(
+    main_Append_2_out_1,
+    main_Streamline_1_out_1,
+    main_Collect_9_in_3
+    ) [instance: 9, cache: 1];
     // 
     // node AutoColor[2]: x = 191, y = 537, inputs = 10, label = AutoColor
     // input[7]: defaulting = 1, visible = 1, type = 5, value = -20.0
@@ -232,7 +241,7 @@ main_RubberSheet_1_out_1 =
 main_AutoColor_2_out_1,
 main_AutoColor_2_out_2 = 
     AutoColor(
-    main_RubberSheet_1_out_1,
+    main_Collect_9_out_1,
     main_AutoColor_2_in_2,
     main_AutoColor_2_in_3,
     main_AutoColor_2_in_4,
@@ -278,14 +287,13 @@ main_AutoColor_3_out_2 =
     main_AutoColor_3_in_10
     ) [instance: 3, cache: 1];
     // 
-    // node Collect[9]: x = 449, y = 526, inputs = 3, label = Collect
+    // node Collect[10]: x = 342, y = 625, inputs = 2, label = Collect
     //
-main_Collect_9_out_1 = 
+main_Collect_10_out_1 = 
     Collect(
-    main_Append_2_out_1,
-    main_Collect_9_in_2,
-    main_Collect_9_in_3
-    ) [instance: 9, cache: 1];
+    main_AutoColor_2_out_1,
+    main_Collect_10_in_2
+    ) [instance: 10, cache: 1];
     // 
     // node ColorBar[1]: x = 444, y = 630, inputs = 16, label = ColorBar
     //
@@ -309,14 +317,6 @@ main_ColorBar_1_out_1 =
     main_ColorBar_1_in_16
     ) [instance: 1, cache: 1];
     // 
-    // node Collect[10]: x = 342, y = 625, inputs = 2, label = Collect
-    //
-main_Collect_10_out_1 = 
-    Collect(
-    main_AutoColor_2_out_1,
-    main_ColorBar_1_out_1
-    ) [instance: 10, cache: 1];
-    // 
     // node Extract[8]: x = 64, y = 400, inputs = 2, label = Extract
     // input[2]: defaulting = 0, visible = 0, type = 32, value = "vector field"
     //
@@ -329,20 +329,20 @@ main_Extract_8_out_1 =
     // node Image[1]: x = 216, y = 660, inputs = 49, label = Image
     // input[1]: defaulting = 0, visible = 0, type = 67108863, value = "Image_1"
     // input[4]: defaulting = 0, visible = 0, type = 1, value = 1
-    // input[5]: defaulting = 0, visible = 0, type = 8, value = [0 0 -0.0316023]
-    // input[6]: defaulting = 0, visible = 0, type = 8, value = [0 0 9.37112]
-    // input[7]: defaulting = 0, visible = 0, type = 5, value = 5.03892
+    // input[5]: defaulting = 0, visible = 0, type = 8, value = [0.310761 -0.0137189 0]
+    // input[6]: defaulting = 0, visible = 0, type = 8, value = [0.310761 -0.0137189 29.542]
+    // input[7]: defaulting = 0, visible = 0, type = 5, value = 3.60807
     // input[8]: defaulting = 0, visible = 0, type = 1, value = 1154
     // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.569757
     // input[10]: defaulting = 0, visible = 0, type = 8, value = [0 1 0]
-    // input[11]: defaulting = 1, visible = 0, type = 5, value = 30.0001
+    // input[11]: defaulting = 1, visible = 0, type = 5, value = 6.98906
     // input[12]: defaulting = 0, visible = 0, type = 1, value = 0
     // input[14]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[15]: defaulting = 1, visible = 0, type = 32, value = "none"
     // input[16]: defaulting = 1, visible = 0, type = 32, value = "none"
     // input[17]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[18]: defaulting = 0, visible = 0, type = 1, value = 1
-    // input[19]: defaulting = 0, visible = 0, type = 3, value = 1
+    // input[19]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[29]: defaulting = 0, visible = 0, type = 3, value = 1
     // input[41]: defaulting = 0, visible = 0, type = 32, value = "panzoom"
     // depth: value = 24
@@ -407,24 +407,24 @@ main_Image_1_out_3 =
     // node Image[2]: x = 44, y = 663, inputs = 49, label = Image
     // input[1]: defaulting = 0, visible = 0, type = 67108863, value = "Image_2"
     // input[4]: defaulting = 0, visible = 0, type = 1, value = 1
-    // input[5]: defaulting = 0, visible = 0, type = 8, value = [0 0 0]
-    // input[6]: defaulting = 0, visible = 0, type = 8, value = [0 0 11.7041]
-    // input[7]: defaulting = 0, visible = 0, type = 5, value = 6.27224
+    // input[5]: defaulting = 0, visible = 0, type = 8, value = [-0.275538 -0.0400782 0]
+    // input[6]: defaulting = 0, visible = 0, type = 8, value = [-0.275538 -0.0400782 11.7041]
+    // input[7]: defaulting = 0, visible = 0, type = 5, value = 2.87561
     // input[8]: defaulting = 0, visible = 0, type = 1, value = 1252
-    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.455671
+    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.456
     // input[10]: defaulting = 0, visible = 0, type = 8, value = [0 1 0]
-    // input[11]: defaulting = 1, visible = 0, type = 5, value = 30.0001
+    // input[11]: defaulting = 1, visible = 0, type = 5, value = 14.007
     // input[12]: defaulting = 0, visible = 0, type = 1, value = 0
     // input[14]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[15]: defaulting = 1, visible = 0, type = 32, value = "none"
     // input[16]: defaulting = 1, visible = 0, type = 32, value = "none"
     // input[17]: defaulting = 1, visible = 0, type = 1, value = 1
     // input[18]: defaulting = 1, visible = 0, type = 1, value = 1
-    // input[19]: defaulting = 0, visible = 0, type = 3, value = 0
+    // input[19]: defaulting = 0, visible = 0, type = 1, value = 0
     // input[29]: defaulting = 0, visible = 0, type = 3, value = 1
     // input[41]: defaulting = 0, visible = 0, type = 32, value = "panzoom"
     // depth: value = 24
-    // window: position = (0.0500,0.1806), size = 0.6594x0.5667
+    // window: position = (0.0161,0.0287), size = 0.6594x0.5667
     // internal caching: 1
     //
 main_Image_2_out_1,
@@ -482,6 +482,17 @@ main_Image_2_out_3 =
     main_Image_2_in_49
     ) [instance: 2, cache: 1];
     // 
+    // node RubberSheet[1]: x = 364, y = 470, inputs = 4, label = RubberSheet
+    // input[2]: visible = 0
+    //
+main_RubberSheet_1_out_1 = 
+    RubberSheet(
+    main_RubberSheet_1_in_1,
+    main_RubberSheet_1_in_2,
+    main_RubberSheet_1_in_3,
+    main_RubberSheet_1_in_4
+    ) [instance: 1, cache: 1];
+    // 
     // node SetLocal[4]: x = 268, y = 345, inputs = 3, label = SetLocal
     //
     SetLocal(
@@ -498,24 +509,17 @@ main_Image_2_out_3 =
     main_SetLocal_5_in_3
     ) [instance: 5, cache: 1];
     // 
-    // node Streamline[1]: x = 185, y = 452, inputs = 7, label = Streamline
-    // input[2]: defaulting = 0, visible = 1, type = 16777224, value = {[-0.4, 0.1][-0.4, 0.4][-0.4,-0.4][-0.4,0.5][-0.4,-0.2][-0.4, 0.5][-0.5,-0.125][-0.5,0.6125][-0.5,-0.6125][-0.5,0.06125][-0.5,-0.06125][-0.5,0.02][-0.5,-0.02][0.5,0.02][0.5,-0.02][0.5,0.1][0.5,-0.1][0.4,0.03][0.4,-0.03][0.4,0.05][0.4,-0.05]}
-    //
-main_Streamline_1_out_1 = 
-    Streamline(
-    main_CollectMultiGrid_2_out_1,
-    main_Streamline_1_in_2,
-    main_Streamline_1_in_3,
-    main_Streamline_1_in_4,
-    main_Streamline_1_in_5,
-    main_Streamline_1_in_6,
-    main_Streamline_1_in_7
-    ) [instance: 1, cache: 1];
-    // 
     // node curl[1]: x = 369, y = 384, inputs = 1, label = curl
     //
 main_curl_1_out_1 = 
     curl(
+    main_Append_1_out_1
+    ) [instance: 1, cache: 1];
+    // 
+    // node divergence[1]: x = 413, y = 386, inputs = 1, label = divergence
+    //
+main_divergence_1_out_1 = 
+    divergence(
     main_Append_1_out_1
     ) [instance: 1, cache: 1];
     //
@@ -535,7 +539,7 @@ main_curl_1_out_1 =
 CacheScene(main_Image_1_in_1, main_Image_1_out_1, main_Image_1_out_2);
 CacheScene(main_Image_2_in_1, main_Image_2_out_1, main_Image_2_out_2);
 }
-main_FileSelector_1_out_1 = "/home/stefan/LLNLfiles/Miniature/CylinderInBox/INS_data_0.h5";
+main_FileSelector_1_out_1 = "/home/stefan/LLNLfiles/Miniature/CylinderInBox/Re1000/INS_data_127.h5";
 main_Integer_2_in_1 = "Integer_2";
 main_Integer_2_in_2 = NULL;
 main_Integer_2_in_3 = 4 ;
@@ -550,7 +554,7 @@ main_Integer_2_in_11 = NULL;
 main_Integer_2_out_1 = 4 ;
 main_Integer_7_in_1 = "Integer_7";
 main_Integer_7_in_2 = NULL;
-main_Integer_7_in_3 = 0 ;
+main_Integer_7_in_3 = 2 ;
 main_Integer_7_in_4 = NULL;
 main_Integer_7_in_5 = NULL;
 main_Integer_7_in_6 = NULL;
@@ -559,7 +563,7 @@ main_Integer_7_in_8 = NULL;
 main_Integer_7_in_9 = NULL;
 main_Integer_7_in_10 = NULL;
 main_Integer_7_in_11 = NULL;
-main_Integer_7_out_1 = 0 ;
+main_Integer_7_out_1 = 2 ;
 main_ForEachN_1_in_1 = 0;
 main_ForEachN_1_in_3 = NULL;
 main_ForEachN_1_out_1 = NULL;
@@ -633,11 +637,15 @@ main_Append_2_in_3 = NULL;
 main_Append_2_in_4 = NULL;
 main_Append_2_in_5 = NULL;
 main_Append_2_out_1 = NULL;
-main_divergence_1_out_1 = NULL;
-main_RubberSheet_1_in_2 = NULL;
-main_RubberSheet_1_in_3 = NULL;
-main_RubberSheet_1_in_4 = NULL;
-main_RubberSheet_1_out_1 = NULL;
+main_Streamline_1_in_2 = {[-0.75, 1.0], [-0.75, 0.9], [-0.75, 0.8], [-0.75, 0.7], [-0.75, 0.6], [-0.75, 0.5], [-0.75, 0.4], [-0.75, 0.30000000000000004], [-0.75, 0.19999999999999996], [-0.75, 0.09999999999999998], [-0.75, 0.0], [-0.75, -0.10000000000000009], [-0.75, -0.19999999999999996], [-0.75, -0.30000000000000004], [-0.75, -0.3999999999999999], [-0.75, -0.5], [-0.75, -0.6000000000000001], [-0.75, -0.7], [-0.75, -0.8], [-0.75, -0.8999999999999999]};
+main_Streamline_1_in_3 = NULL;
+main_Streamline_1_in_4 = NULL;
+main_Streamline_1_in_5 = NULL;
+main_Streamline_1_in_6 = NULL;
+main_Streamline_1_in_7 = 0.5;
+main_Streamline_1_out_1 = NULL;
+main_Collect_9_in_3 = NULL;
+main_Collect_9_out_1 = NULL;
 main_AutoColor_2_in_2 = NULL;
 main_AutoColor_2_in_3 = NULL;
 main_AutoColor_2_in_4 = NULL;
@@ -666,8 +674,8 @@ main_AutoColor_3_in_8 = NULL;
 main_AutoColor_3_in_9 = NULL;
 main_AutoColor_3_in_10 = NULL;
 main_AutoColor_3_out_1 = NULL;
-main_Collect_9_in_2 = NULL;
-main_Collect_9_in_3 = NULL;
+main_Collect_10_in_2 = NULL;
+main_Collect_10_out_1 = NULL;
 main_ColorBar_1_in_2 = NULL;
 main_ColorBar_1_in_3 = NULL;
 main_ColorBar_1_in_4 = NULL;
@@ -683,8 +691,6 @@ main_ColorBar_1_in_13 = NULL;
 main_ColorBar_1_in_14 = NULL;
 main_ColorBar_1_in_15 = NULL;
 main_ColorBar_1_in_16 = NULL;
-main_ColorBar_1_out_1 = NULL;
-main_Collect_10_out_1 = NULL;
 main_Extract_8_in_1 = NULL;
 main_Extract_8_in_2 = "vector field";
 macro Image(
@@ -1002,9 +1008,9 @@ macro Image(
 main_Image_1_in_1 = "Image_1";
 main_Image_1_in_3 = "X24,,";
 main_Image_1_in_4 = 1;
-main_Image_1_in_5 = [0 0 -0.0316023];
-main_Image_1_in_6 = [0 0 9.37112];
-main_Image_1_in_7 = 5.03892;
+main_Image_1_in_5 = [0.310761 -0.0137189 0];
+main_Image_1_in_6 = [0.310761 -0.0137189 29.542];
+main_Image_1_in_7 = 3.60807;
 main_Image_1_in_8 = 1154;
 main_Image_1_in_9 = 0.569757;
 main_Image_1_in_10 = [0 1 0];
@@ -1049,11 +1055,11 @@ main_Image_1_in_49 = NULL;
 main_Image_2_in_1 = "Image_2";
 main_Image_2_in_3 = "X24,,";
 main_Image_2_in_4 = 1;
-main_Image_2_in_5 = [0 0 0];
-main_Image_2_in_6 = [0 0 11.7041];
-main_Image_2_in_7 = 6.27224;
+main_Image_2_in_5 = [-0.275538 -0.0400782 0];
+main_Image_2_in_6 = [-0.275538 -0.0400782 11.7041];
+main_Image_2_in_7 = 2.87561;
 main_Image_2_in_8 = 1252;
-main_Image_2_in_9 = 0.455671;
+main_Image_2_in_9 = 0.456;
 main_Image_2_in_10 = [0 1 0];
 main_Image_2_in_11 = NULL;
 main_Image_2_in_12 = 0;
@@ -1093,14 +1099,12 @@ main_Image_2_in_46 = NULL;
 main_Image_2_in_47 = NULL;
 main_Image_2_in_48 = NULL;
 main_Image_2_in_49 = NULL;
+main_RubberSheet_1_in_1 = NULL;
+main_RubberSheet_1_in_2 = NULL;
+main_RubberSheet_1_in_3 = NULL;
+main_RubberSheet_1_in_4 = NULL;
 main_SetLocal_4_in_3 = NULL;
 main_SetLocal_5_in_3 = NULL;
-main_Streamline_1_in_2 = {[-0.4, 0.1][-0.4, 0.4][-0.4,-0.4][-0.4,0.5][-0.4,-0.2][-0.4, 0.5][-0.5,-0.125][-0.5,0.6125][-0.5,-0.6125][-0.5,0.06125][-0.5,-0.06125][-0.5,0.02][-0.5,-0.02][0.5,0.02][0.5,-0.02][0.5,0.1][0.5,-0.1][0.4,0.03][0.4,-0.03][0.4,0.05][0.4,-0.05]};
-main_Streamline_1_in_3 = NULL;
-main_Streamline_1_in_4 = NULL;
-main_Streamline_1_in_5 = NULL;
-main_Streamline_1_in_6 = NULL;
-main_Streamline_1_in_7 = NULL;
 Executive("product version 4 4 4");
 $sync
 main();

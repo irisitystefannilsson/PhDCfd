@@ -106,9 +106,13 @@ main(int argc, char** argv)
   char driverName[100];
   PetscOptionsGetString(PETSC_NULL, PETSC_NULL, "--inflow", driverName, 100, &flg);
   if (flg == PETSC_TRUE) {
-    if (!strcmp("parabolic", driverName)) inflow = ins::parabolicInflow;
-    else if (!strcmp("lid", driverName)) inflow = ins::drivenLid;
-    else if (!strcmp("constant", driverName)) inflow = ins::constantInflow;
+    if (!strcmp("parabolic", driverName)) {
+      inflow = ins::parabolicInflow;
+    } else if (!strcmp("lid", driverName)) {
+      inflow = ins::drivenLid;
+    } else if (!strcmp("constant", driverName)) {
+      inflow = ins::constantInflow;
+    }
   }
   // restart decides if we are
   // restarting the simulation
