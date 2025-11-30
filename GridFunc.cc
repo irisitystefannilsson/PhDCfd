@@ -1137,17 +1137,17 @@ void gridFunction::dirichlet(int i, int k)
   //cout << "hi_r = " << hi_r << endl;
   //cout << "hi_s = " << hi_s << endl;
   if (i == 0) { // low r 
-    //where (myGridM->flagValuesM[k](low_r, iyb) > 0)
-    fieldValuesM[k](low_r, iyb) = boundaryValue((myGridM->xM[k])(low_r, iyb), (myGridM->yM[k])(low_r, iyb), timeM, k, i);  
+    where (myGridM->flagValuesM[k](low_r, iyb) > 0)
+      fieldValuesM[k](low_r, iyb) = boundaryValue((myGridM->xM[k])(low_r, iyb), (myGridM->yM[k])(low_r, iyb), timeM, k, i);  
   } else if (i == 1) { // high r
-    //where (myGridM->flagValuesM[k](hi_r, iyb) > 0)
-    fieldValuesM[k](hi_r, iyb) = boundaryValue((myGridM->xM[k])(hi_r, iyb), (myGridM->yM[k])(hi_r, iyb), timeM, k, i);
+    where (myGridM->flagValuesM[k](hi_r, iyb) > 0)
+      fieldValuesM[k](hi_r, iyb) = boundaryValue((myGridM->xM[k])(hi_r, iyb), (myGridM->yM[k])(hi_r, iyb), timeM, k, i);
   } else if (i == 2) { // low s
-    //where (myGridM->flagValuesM[k](ixb, low_s) > 0)
-    fieldValuesM[k](ixb, low_s) = boundaryValue((myGridM->xM[k])(ixb, low_s), (myGridM->yM[k])(ixb, low_s), timeM, k, i);
+    where (myGridM->flagValuesM[k](ixb, low_s) > 0)
+      fieldValuesM[k](ixb, low_s) = boundaryValue((myGridM->xM[k])(ixb, low_s), (myGridM->yM[k])(ixb, low_s), timeM, k, i);
   } else if (i == 3) { // high s
-    //where (myGridM->flagValuesM[k](ixb, hi_s) > 0)
-    fieldValuesM[k](ixb, hi_s) = boundaryValue((myGridM->xM[k])(ixb, hi_s), (myGridM->yM[k])(ixb, hi_s), timeM, k, i);
+    where (myGridM->flagValuesM[k](ixb, hi_s) > 0)
+      fieldValuesM[k](ixb, hi_s) = boundaryValue((myGridM->xM[k])(ixb, hi_s), (myGridM->yM[k])(ixb, hi_s), timeM, k, i);
   }
 }
 
@@ -1159,17 +1159,17 @@ void gridFunction::dirichlet(int i, int k, gridFunction& F)
   int low_s(1), hi_s((myGridM->sDim(k)) - 2);
 
   if (i == 0) { // low r 
-    //where (myGridM->flagValuesM[k](low_r,iyb) > 0) 
-    F.fieldValuesM[k](low_r, iyb) = boundaryValue((myGridM->xM[k])(low_r, iyb), (myGridM->yM[k])(low_r, iyb), timeM, k, i);  
+    where (myGridM->flagValuesM[k](low_r,iyb) > 0) 
+      F.fieldValuesM[k](low_r, iyb) = boundaryValue((myGridM->xM[k])(low_r, iyb), (myGridM->yM[k])(low_r, iyb), timeM, k, i);  
   } else if (i == 1) { // high r
-    //where (myGridM->flagValuesM[k](hi_r,iyb) > 0)
-    F.fieldValuesM[k](hi_r, iyb) = boundaryValue((myGridM->xM[k])(hi_r, iyb), (myGridM->yM[k])(hi_r, iyb), timeM, k, i) * myGridM->maskM[k](hi_r, iyb);
+    where (myGridM->flagValuesM[k](hi_r,iyb) > 0)
+      F.fieldValuesM[k](hi_r, iyb) = boundaryValue((myGridM->xM[k])(hi_r, iyb), (myGridM->yM[k])(hi_r, iyb), timeM, k, i) * myGridM->maskM[k](hi_r, iyb);
   } else if (i == 2) { // low s
-    //where (myGridM->flagValuesM[k](ixb,low_s) > 0)
-    F.fieldValuesM[k](ixb, low_s) = boundaryValue((myGridM->xM[k])(ixb, low_s), (myGridM->yM[k])(ixb, low_s), timeM, k, i);
+    where (myGridM->flagValuesM[k](ixb,low_s) > 0)
+      F.fieldValuesM[k](ixb, low_s) = boundaryValue((myGridM->xM[k])(ixb, low_s), (myGridM->yM[k])(ixb, low_s), timeM, k, i);
   } else if (i == 3) { // high s
-    //where (myGridM->flagValuesM[k](ixb,hi_s) > 0)
-    F.fieldValuesM[k](ixb, hi_s) = boundaryValue((myGridM->xM[k])(ixb, hi_s), (myGridM->yM[k])(ixb, hi_s), timeM, k, i);
+    where (myGridM->flagValuesM[k](ixb,hi_s) > 0)
+      F.fieldValuesM[k](ixb, hi_s) = boundaryValue((myGridM->xM[k])(ixb, hi_s), (myGridM->yM[k])(ixb, hi_s), timeM, k, i);
   }
 }
 
@@ -2074,7 +2074,8 @@ void gridFunction::setFlagValues()
   int i, j, grid;
 
   for (grid = 0; grid < myGridM->nrGrids(); grid++) {
-    //      flagValuesM[grid].display();
+
+    // flagValuesM[grid].display();
     
     int low_i = flagValuesM[grid].getBase(0);
     int hi_i = flagValuesM[grid].getBound(0);
@@ -2082,7 +2083,7 @@ void gridFunction::setFlagValues()
     int hi_j = flagValuesM[grid].getBound(1);
     
     for (j = low_j + 1; j <= hi_j - 1; j++) {
-      if (flagValuesM[grid](low_i + 1, j) != 0) { // !=0 means it is not a hole point
+      if (flagValuesM[grid](low_i + 1, j) > 0) { // > means it is not a hole point or interpolation point 
 	if (getBoundaryType(grid, (Side) 0) == NEUMANN) { // Neumann condition
 	  flagValuesM[grid](low_i,j) = grid + 2 + 1000;
 	} else if (getBoundaryType(grid, (Side) 0) == DIRICHLET) { // Dirichlet condition
@@ -2097,7 +2098,7 @@ void gridFunction::setFlagValues()
 	  flagValuesM[grid](low_i, j) = grid + 4 +1000;
 	}
       }
-      if (flagValuesM[grid](hi_i - 1, j) != 0) { // !=0 means it is not a hole point
+      if (flagValuesM[grid](hi_i - 1, j) > 0) { // >0 means it is not a hole pointt or interpolation point 
 	if (getBoundaryType(grid, (Side) 1) == NEUMANN) { // Neumann condition
 	  flagValuesM[grid](hi_i, j) = grid + 2 + 2000;
 	} else if (getBoundaryType(grid, (Side) 1) == DIRICHLET) { // Dirichlet condition
@@ -2114,7 +2115,7 @@ void gridFunction::setFlagValues()
     }
       
     for (i = low_i + 1; i <= hi_i - 1; i++) {
-      if (flagValuesM[grid](i, low_j + 1) != 0) { // !=0 means it is not a hole point
+      if (flagValuesM[grid](i, low_j + 1) > 0) { // >0 means it is not a hole pointt or interpolation point 
 	if (getBoundaryType(grid,(Side) 2) == NEUMANN) { // Neumann condition
 	  flagValuesM[grid](i, low_j) = grid + 2 + 3000;
 	} else if (getBoundaryType(grid, (Side) 2) == DIRICHLET) { // Dirichlet condition
@@ -2128,7 +2129,7 @@ void gridFunction::setFlagValues()
 	  flagValuesM[grid](i, low_j) = grid + 4 + 3000;
 	}
       }
-      if (flagValuesM[grid](i, hi_j - 1) != 0) { // >0 means it is not a hole point
+      if (flagValuesM[grid](i, hi_j - 1) > 0) { // >0 means it is not a hole pointt or interpolation point 
 	if (getBoundaryType(grid, (Side) 3) == NEUMANN) { // Neumann condition
 	  flagValuesM[grid](i, hi_j) = grid + 2 + 4000;
 	} else if (getBoundaryType(grid, (Side) 3) == DIRICHLET) { // Dirichlet condition
@@ -2143,7 +2144,7 @@ void gridFunction::setFlagValues()
 	}
       }
     }
-      
+
     // (almost) lastly, mark the corners
     if (getBoundaryType(grid, (Side) 0) == PERIODIC) {
       flagValuesM[grid](low_i, low_j) = grid + 3 + 1000;
@@ -2173,6 +2174,9 @@ void gridFunction::setFlagValues()
     } else {
       flagValuesM[grid](hi_i, hi_j) = 40000;
     }
+
+    // flagValuesM[grid].display();
+
     //----------------------------------------
     // Fix the no-slip (Dirichlet) extremal
     // points

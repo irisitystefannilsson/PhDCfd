@@ -134,7 +134,7 @@ void DMSRMatrix::setupMatrix(CompositeGrid *Kimera,
     int sdim = Kimera->sdimM[grid];
 
     intSerialArray *Flag = flagValues[grid].getSerialArrayPointer();
-    
+
     doubleSerialArray *X = Kimera->xM[grid].getSerialArrayPointer();
     doubleSerialArray *Y = Kimera->yM[grid].getSerialArrayPointer();
     

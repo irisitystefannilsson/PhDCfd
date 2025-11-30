@@ -10,10 +10,10 @@ LDFLAGS=$(LDFLAGS_$(ARCH))
 
 # PPlusPlus is an environment variable that
 # points to the directory above the lib/include directories
-PPP_INCLUDE=-I$(HOME)/A++-P++-0.8.3/P++/install/include
-PPPLIB_DIR=$(HOME)/A++-P++-0.8.3/P++/install/lib
+PPP_INCLUDE=-I/tmp/A++-P++-0.8.3/P++/install/include
+PPPLIB_DIR=/tmp/A++-P++-0.8.3/P++/install/lib
 PPP_INCLUDE_G=-I$(HOME)/A++-P++-0.8.3-Debug/P++/install/include
-PPPLIB_DIR_G=$(HOME)/A++-P++-0.8.3-Debug/P++/install/lib
+PPPLIB_DIR_G=/tmp/A++-P++-0.8.3-Debug/P++/install/lib
 
 AZTEC_INCLUDE=-I$(HOME)/Aztec/lib
 AZTEC_LIB=$(HOME)/Aztec/lib
@@ -26,13 +26,13 @@ HDF5_LIB=-L/usr/lib/x86_64-linux-gnu
 
 LIBS_LINUX=-L$(PPPLIB_DIR) -L$(AZTEC_LIB) \
 	  -lPpp -lPpp_static -laztec \
-	  -L$(HDF5_LIB) -lhdf5_openmpi -lpthread /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0 -lm -lmpi -lmpi_cxx /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0
+	  -L$(HDF5_LIB) -lhdf5_openmpi -lpthread /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0 -lm -lmpi /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0
 LIBS_LINUX_G=-L$(PPPLIB_DIR_G) -L$(AZTEC_LIB) \
 	  -lPpp -lPpp_static -laztec \
-	  -L$(HDF5_LIB) -lhdf5_openmpi -lpthread /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0 -lm -lmpi -lmpi_cxx /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0
+	  -L$(HDF5_LIB) -lhdf5_openmpi -lpthread /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0 -lm -lmpi /usr/lib/x86_64-linux-gnu/openblas-serial/libopenblas.so.0
 # INCLUDE SEARCH PATH GIVEN BELOW
 
-INCLUDES= $(PPP_INCLUDE_G) $(AZTEC_INCLUDE) $(HDF5_INCLUDE) -I/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/include -I/usr/lib/x86_64-linux-gnu/openmpi/include/
+INCLUDES= $(PPP_INCLUDE_G) $(AZTEC_INCLUDE) $(HDF5_INCLUDE) -I/usr/lib/petscdir/petsc3.22/x86_64-linux-gnu-real/include -I/usr/lib/x86_64-linux-gnu/openmpi/include/
 
 CPPFLAGS_LINUX=${INCLUDES} -DHAVE_CONFIG_H -I. -DAZ_MPI
 CFLAGS_LINUX=-fpermissive -std=c++17 
@@ -40,8 +40,8 @@ CFLAGS_LINUX=-fpermissive -std=c++17
 CPPFLAGS=$(CPPFLAGS_$(ARCH))
 CFLAGS=$(CFLAGS_$(ARCH)) 
 
-LIBRARIES= $(LIBS_$(ARCH)) -L/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/lib -lpetsc_real
-LIBRARIES_G= $(LIBS_$(ARCH)_G) -L/usr/lib/petscdir/petsc3.18/x86_64-linux-gnu-real/lib -lpetsc_real
+LIBRARIES= $(LIBS_$(ARCH)) -L/usr/lib/petscdir/petsc3.122/x86_64-linux-gnu-real/lib -lpetsc_real
+LIBRARIES_G= $(LIBS_$(ARCH)_G) -L/usr/lib/petscdir/petsc3.22/x86_64-linux-gnu-real/lib -lpetsc_real
 
 # SOURCES GIVEN BELOW
 

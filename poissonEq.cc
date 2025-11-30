@@ -118,7 +118,7 @@ main(int argc, char** argv)
   // Initialize P++ and MPI 
   Optimization_Manager::Initialize_Virtual_Machine("", Number_of_Processors, argc, argv);
   // initialize PETSc
-  PetscInitialize(&argc, &argv, (char *)0, PETSC_NULL);
+  PetscInitialize(&argc, &argv, (char *)0, PETSC_NULLPTR);
   // We use a ghostCellWidth of 1 in both 
   // dimensions to make parallel interpolation possible
   // between the component grids
@@ -141,7 +141,7 @@ main(int argc, char** argv)
   // It can be read from an ASCII file...
   // ...or from an HDF5-file
   char filename[100];
-  PetscOptionsGetString(PETSC_NULL, PETSC_NULL, "--filename", filename, 100, &flg);
+  PetscOptionsGetString(PETSC_NULLPTR, PETSC_NULLPTR, "--filename", filename, 100, &flg);
   if (flg != PETSC_TRUE) {
     std::cerr << "Hey!, we need a grid from somewhere (no filename given, exiting...)... \n\n";
     MPI_Abort(MPI_COMM_WORLD, 1);
@@ -149,12 +149,12 @@ main(int argc, char** argv)
   CompositeGrid chimera(filename);
   // convergence check?
   bool twilightFlow = false;
-  PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--twilight", &flg);
+  PetscOptionsHasName(PETSC_NULLPTR, PETSC_NULLPTR, "--twilight", &flg);
   if (flg == PETSC_TRUE) {
     twilightFlow = true;
   }
   bool allNeumann = false;
-  PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--allNeumann", &flg);
+  PetscOptionsHasName(PETSC_NULLPTR, PETSC_NULLPTR, "--allNeumann", &flg);
   if (flg == PETSC_TRUE) {
     allNeumann = true;
   }

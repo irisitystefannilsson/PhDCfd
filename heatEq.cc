@@ -55,7 +55,7 @@ main(int argc, char** argv)
   Optimization_Manager::Initialize_Virtual_Machine("", Number_of_Processors, argc, argv);
 
   // initialize PETSc
-  PetscInitialize(&argc, &argv, (char *)0, PETSC_NULL);
+  PetscInitialize(&argc, &argv, (char *)0, PETSC_NULLPTR);
 
   // We use a ghostCellWidth of 1 in both 
   // dimensions to make parallel interpolation possible
@@ -83,7 +83,7 @@ main(int argc, char** argv)
   // It can be read from an ASCII file...
   // ...or from an HDF5-file
   char filename[100];
-  PetscOptionsGetString(PETSC_NULL, PETSC_NULL, "--filename", filename, 100, &flg);
+  PetscOptionsGetString(PETSC_NULLPTR, PETSC_NULLPTR, "--filename", filename, 100, &flg);
   if (flg != PETSC_TRUE) {
     std::cerr << "Hey!, we need a grid from somewhere (no filename given, exiting...)... \n\n";
     MPI_Abort(MPI_COMM_WORLD, 1);
@@ -97,10 +97,10 @@ main(int argc, char** argv)
   //
   double starttime = 0;
 
-  PetscOptionsGetInt(PETSC_NULL, PETSC_NULL, "--ingrid", &ins::grid, &flg);
-  PetscOptionsGetInt(PETSC_NULL, PETSC_NULL, "--inside", &ins::side, &flg);  
+  PetscOptionsGetInt(PETSC_NULLPTR, PETSC_NULLPTR, "--ingrid", &ins::grid, &flg);
+  PetscOptionsGetInt(PETSC_NULLPTR, PETSC_NULLPTR, "--inside", &ins::side, &flg);  
 
-  PetscOptionsGetReal(PETSC_NULL, PETSC_NULL, "--viscosity", &ins::viscosityG, &flg);
+  PetscOptionsGetReal(PETSC_NULLPTR, PETSC_NULLPTR, "--viscosity", &ins::viscosityG, &flg);
 
   // 
   //  Declare some gridfunctions living on the Kimera grid
@@ -152,13 +152,13 @@ main(int argc, char** argv)
   
   double stoptime = 0.1, startTime = MPI_Wtime();
   
-  PetscOptionsGetReal(PETSC_NULL, PETSC_NULL, "--stoptime", &stoptime, &flg);
+  PetscOptionsGetReal(PETSC_NULLPTR, PETSC_NULLPTR, "--stoptime", &stoptime, &flg);
 
-  PetscOptionsGetInt(PETSC_NULL, PETSC_NULL, "--maxNits", &maxNits, &flg); 
+  PetscOptionsGetInt(PETSC_NULLPTR, PETSC_NULLPTR, "--maxNits", &maxNits, &flg); 
 
-  PetscOptionsGetInt(PETSC_NULL, PETSC_NULL, "--saveIntervall", &saveIntervall, &flg); 
+  PetscOptionsGetInt(PETSC_NULLPTR, PETSC_NULLPTR, "--saveIntervall", &saveIntervall, &flg); 
 
-  PetscOptionsGetReal(PETSC_NULL, PETSC_NULL, "--cfl", &cfl, &flg);  
+  PetscOptionsGetReal(PETSC_NULLPTR, PETSC_NULLPTR, "--cfl", &cfl, &flg);  
 
   // Set options used for the solution of 
   // the velocity equations

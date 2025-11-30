@@ -57,7 +57,7 @@ main(int argc, char** argv)
   Optimization_Manager::Initialize_Virtual_Machine("", Number_of_Processors, argc, argv);
 
   // initialize PETSc
-  PetscInitialize(&argc, &argv, (char *)0, PETSC_NULL);
+  PetscInitialize(&argc, &argv, (char *)0, PETSC_NULLPTR);
 
   // We use a ghostCellWidth of 1 in both 
   // dimensions to make parallel interpolation possible
@@ -84,7 +84,7 @@ main(int argc, char** argv)
   // It can be read from an ASCII file...
   // ...or from an HDF5-file
   char filename[100];
-  PetscOptionsGetString(PETSC_NULL, PETSC_NULL, "--filename", filename, 100, &flg);
+  PetscOptionsGetString(PETSC_NULLPTR, PETSC_NULLPTR, "--filename", filename, 100, &flg);
   if (flg != PETSC_TRUE) {
     std::cerr << "Hey!, we need a grid from somewhere (no filename given, exiting...)... \n\n";
     MPI_Abort(MPI_COMM_WORLD, 1);
@@ -98,13 +98,13 @@ main(int argc, char** argv)
   double starttime = 0;
   // convergence check?
   bool twilightFlow = false;
-  PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--twilight", &flg);
+  PetscOptionsHasName(PETSC_NULLPTR, PETSC_NULLPTR, "--twilight", &flg);
   if (flg == PETSC_TRUE) {
     twilightFlow = true;
   }
   ins::drivers inflow = ins::constantInflow;
   char driverName[100];
-  PetscOptionsGetString(PETSC_NULL, PETSC_NULL, "--inflow", driverName, 100, &flg);
+  PetscOptionsGetString(PETSC_NULLPTR, PETSC_NULLPTR, "--inflow", driverName, 100, &flg);
   if (flg == PETSC_TRUE) {
     if (!strcmp("parabolic", driverName)) {
       inflow = ins::parabolicInflow;
@@ -112,17 +112,20 @@ main(int argc, char** argv)
       inflow = ins::drivenLid;
     } else if (!strcmp("constant", driverName)) {
       inflow = ins::constantInflow;
+    } else if (!strcmp("constant_1", driverName)) {
+      inflow = ins::constantInflow;
+      ins::grid = 1;
     }
   }
   // restart decides if we are
   // restarting the simulation
   // from an old result
   bool restart = false;
-  PetscOptionsGetReal(PETSC_NULL, PETSC_NULL, "--restart", &starttime, &flg);
+  PetscOptionsGetReal(PETSC_NULLPTR, PETSC_NULLPTR, "--restart", &starttime, &flg);
   if (flg == PETSC_TRUE) {
     restart = true;
   }
-  PetscOptionsGetReal(PETSC_NULL, PETSC_NULL, "--viscosity", &ins::viscosityG, &flg);
+  PetscOptionsGetReal(PETSC_NULLPTR, PETSC_NULLPTR, "--viscosity", &ins::viscosityG, &flg);
   if (twilightFlow) {
     ins::viscosityG = 1;
   }
@@ -167,7 +170,7 @@ main(int argc, char** argv)
 
   functionType pressureType = scalar;
 
-  PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--allDir", &flg);
+  PetscOptionsHasName(PETSC_NULLPTR, PETSC_NULLPTR, "--allDir", &flg);
   if (flg == PETSC_TRUE) {
     pressureType = DirichletAllOver;
   }
@@ -190,7 +193,7 @@ main(int argc, char** argv)
   // used for the pressure on all 
   // boundaries
   bool allNeumann = false;
-  PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--allNeumann", &flg);
+  PetscOptionsHasName(PETSC_NULLPTR, PETSC_NULLPTR, "--allNeumann", &flg);
   if (flg == PETSC_TRUE && !(pressureType == DirichletAllOver)) {
     allNeumann = true;
   }
@@ -231,8 +234,8 @@ main(int argc, char** argv)
   // Initialize the gridFunctions .
   // How depends on if we restart or not
   if (restart) {
-    U.readFromHDF5File(RESULTFILE, "U");
-    V.readFromHDF5File(RESULTFILE, "V");
+    //U.readFromHDF5File(RESULTFILE, "U");
+    //V.readFromHDF5File(RESULTFILE, "V");
   }
   else {
     U.initializeGridData();
@@ -253,15 +256,15 @@ main(int argc, char** argv)
   
   double stoptime = 0.1, startTime = MPI_Wtime();
   
-  PetscOptionsGetReal(PETSC_NULL, PETSC_NULL, "--stoptime", &stoptime, &flg);
+  PetscOptionsGetReal(PETSC_NULLPTR, PETSC_NULLPTR, "--stoptime", &stoptime, &flg);
 
-  PetscOptionsGetInt(PETSC_NULL, PETSC_NULL, "--maxNits", &maxNits, &flg); 
+  PetscOptionsGetInt(PETSC_NULLPTR, PETSC_NULLPTR, "--maxNits", &maxNits, &flg); 
 
-  PetscOptionsGetInt(PETSC_NULL, PETSC_NULL, "--saveIntervall", &saveIntervall, &flg); 
+  PetscOptionsGetInt(PETSC_NULLPTR, PETSC_NULLPTR, "--saveIntervall", &saveIntervall, &flg); 
 
-  PetscOptionsGetReal(PETSC_NULL, PETSC_NULL, "--cfl", &cfl, &flg);  
+  PetscOptionsGetReal(PETSC_NULLPTR, PETSC_NULLPTR, "--cfl", &cfl, &flg);  
 
-  PetscOptionsHasName(PETSC_NULL, PETSC_NULL, "--savematrix", &flg);
+  PetscOptionsHasName(PETSC_NULLPTR, PETSC_NULLPTR, "--savematrix", &flg);
   if (flg == PETSC_TRUE) {
     // We can save the matrix operators
     // in matlab-files if we want to
@@ -553,7 +556,7 @@ main(int argc, char** argv)
   //
   U.setDivergenceToZeroAtBoundaries(V, xComponentOfVector);
   V.setDivergenceToZeroAtBoundaries(U, yComponentOfVector);
-  for (k=0; k<Kimera.nrGrids(); k++) {
+  for (k = 0; k < Kimera.nrGrids(); k++) {
     Index ix = pressure.getDiscrBounds(0, k);
     Index iy = pressure.getDiscrBounds(1, k);
     
