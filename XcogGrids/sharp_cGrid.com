@@ -14,22 +14,22 @@ make-mapping square-grid-2
                 xmax 6.0
 		ymin -2.5
                 ymax 2.5
-		set-r-lines 263
-		set-s-lines 203
+		set-r-lines 523
+		set-s-lines 403
 	exit
 make-mapping square-grid
 	cartesian-mapping
 		xmin -1.0
 		ymin -1.0
-		set-r-lines 101
-		set-s-lines 101
+		set-r-lines 201
+		set-s-lines 201
 	exit
 make-mapping cylinder-grid
 	normal-curve-mapping cylinder
 		reverse-curve-parametrization
 		constant-width .5
-		set-r-lines 201
-		set-s-lines 51
+		set-r-lines 401
+		set-s-lines 101
 	exit
 curve-label cylinder-grid
 	low-s 1
@@ -37,11 +37,11 @@ curve-label cylinder-grid
 	low-r 3
 	high-r 3
 exit
-#curve-label square-grid
-#	low-r 0
-#	high-r 0
-#	low-s 0
-#	high-s 0
+curve-label square-grid
+	low-r 0
+	high-r 0
+	low-s 0
+	high-s 0
 exit
 curve-label square-grid-2
 	low-r 2
@@ -51,6 +51,9 @@ curve-label square-grid-2
 exit
 boundary-condition square-grid
 	low-r 0
+	high-r 0
+	low-s 0
+	high-s 0 
 exit
 boundary-condition square-grid-2
 	low-r 1
@@ -70,6 +73,6 @@ overlap-parameters
 	exit
 compute-overlap
 save-overlapping-grid
-	hdf-format sharp_cGrid_2.hdf
+	hdf-format sharp_cGrid_3.hdf
 #	ascii-format sharp_cGrid_2.acg
 	yes

@@ -6,8 +6,8 @@ make-mapping square-grid
                 xmax 1.0
 		ymin -1.0
                 ymax 3.0
-		set-r-lines 221
-		set-s-lines 421
+		set-r-lines 441
+		set-s-lines 841
 	exit
 curve-label square-grid
 	low-r 1
@@ -28,6 +28,6 @@ overlap-parameters
 	exit
 compute-overlap
 save-overlapping-grid
-	hdf-format lid_221x421.hdf
+	hdf-format lid_441x841.hdf
 #	ascii-format lid_221x421.acg
 	yes
